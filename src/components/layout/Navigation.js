@@ -1,30 +1,32 @@
 import React from "react";
-import { BottomNavigation, Box, Container, BottomNavigationAction } from '@mui/material';
-import { Login, Favorite, Sell } from '@mui/icons-material';
-import ExploreIcon from '@mui/icons-material/Explore';
-import { useNavigate } from "react-router-dom";
-
+import { useLocation, useNavigate } from "react-router-dom";
+import { MdOutlineFavorite, MdExplore, MdLogin, MdOutlineLoyalty } from "react-icons/md";
 
 
 function Navigation() {
-    const [value, setValue] = React.useState('Explore');
+    const { pathname } = useLocation();
+
     const navigate = useNavigate();
 
-    const handleChange = (event, value) => {
-        setValue(value)
-    }
-
     return (
-        <Box sx={{ padding: "2em 1em" }} className="menuBottom" >
-            <Container >
-                <BottomNavigation sx={{ width: 600, margin: "0 auto" }} value={value} onChange={handleChange} showLabels >
-                    <BottomNavigationAction label="Explore" value="explore" icon={<ExploreIcon className="menuIcons" />} onClick={() => navigate("/explore")} />
-                    <BottomNavigationAction label="Sell" value="sell" icon={<Sell className="menuIcons" />} onClick={() => navigate("/sell")} />
-                    <BottomNavigationAction label="Favorite" value="favorite" icon={<Favorite className="menuIcons" />} onClick={() => navigate("/favorite")} />
-                    <BottomNavigationAction label="Login" value="login" icon={<Login className="menuIcons" />} onClick={() => navigate("/login")} />
-                </BottomNavigation>
-            </Container >
-        </Box >
+        <header className="p-2 flex justify-center ">
+            <nav className="shadow-xl p-1 px-6 max-w-md  ">
+                <ul className="flex gap-10 justify-center items-center p-4">
+                    <li onClick={() => navigate("/")} className={pathname === "/" ? "text-primary nav-link" : "nav-link"}>
+                        <MdExplore size={32} />Explore
+                    </li>
+                    <li onClick={() => navigate("/sell")} className={pathname === "/sell" ? "text-primary  nav-link" : "nav-link"} >
+                        <MdOutlineLoyalty size={32} />Sell
+                    </li>
+                    <li onClick={() => navigate("/favorite")} className={pathname === "/favorite" ? "text-primary  nav-link" : "nav-link"} >
+                        <MdOutlineFavorite size={32} />Favourite
+                    </li>
+                    <li onClick={() => navigate("/login")} className={pathname === "/login" ? "text-primary  nav-link" : "nav-link"} >
+                        <MdLogin size={32} />Login
+                    </li>
+                </ul>
+            </nav>
+        </header>
     )
 }
 

@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
 	margin: 0;
 	padding: 0;
@@ -18,13 +22,13 @@ body {
 }
 main {
 	flex: 1 0 auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-code {
-	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
-}
 .menuBottom {
-	box-shadow: -4px -4px 16px rgba(0, 0, 0, 0.3) !important;
+	box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.3) !important;
 }
 .menuIcons {
 	margin-bottom: 0.3em !important;
@@ -35,4 +39,28 @@ code {
 }
 a {
 	text-decoration: none !important;
+}
+
+@layer base {
+	h1 {
+		@apply text-4xl  mb-8 leading-loose lg:text-5xl;
+	}
+	h2 {
+		@apply text-4xl  mb-14 relative;
+	}
+	h3 {
+		@apply text-2xl mb-3;
+	}
+	h4 {
+		@apply text-xl font-bold mb-2;
+	}
+}
+
+@layer components {
+	.nav-link {
+		@apply flex  flex-col items-center justify-center gap-1 cursor-pointer text-center text-lg text-zinc-500;
+	}
+	.btn {
+		@apply text-neutral-content rounded-none shadow-2xl;
+	}
 }

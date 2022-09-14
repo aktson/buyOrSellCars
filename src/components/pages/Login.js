@@ -38,6 +38,7 @@ function Login() {
     }
 
     return (
+
         <Container sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", maxWidth: "sm", padding: "2em" }} >
             <Paper sx={{ padding: "2em" }} elevation={5} >
                 <form onSubmit={handleSubmit}>
@@ -82,30 +83,8 @@ function Login() {
                 <Link to="/sign-up">Sign up Instead</Link>
             </Paper>
         </Container>
+
     )
 }
 
 export default Login
-
-{/* <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-password"
-            type={values.showPassword ? 'text' : 'password'}
-            value={values.password}
-            onChange={handleChange('password')}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Password"
-          />
-        </FormControl> */}
