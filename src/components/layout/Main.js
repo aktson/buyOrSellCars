@@ -4,6 +4,8 @@ import Login from '../pages/Login';
 import Sell from '../pages/Sell';
 import Explore from '../pages/Explore';
 import Favorite from '../pages/Favorite';
+import Signup from '../pages/Signup';
+import ForgotPassword from '../pages/ForgotPassword';
 
 function Main() {
     return (
@@ -13,6 +15,8 @@ function Main() {
                 <Route path="/sell" element={<Sell />} />
                 <Route path="/favorite" element={<Favorite />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/sign-up" element={<Signup />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
             </Routes>
         </main>
     )
