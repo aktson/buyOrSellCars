@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Navigation from "./components/layout/Navigation";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Footer from './components/layout/Footer';
 import Explore from "./components/pages/Explore";
@@ -8,11 +7,13 @@ import Favorite from "./components/pages/Favorite";
 import Login from "./components/pages/Login";
 import Signup from "./components/pages/Signup";
 import ForgotPassword from "./components/pages/ForgotPassword";
+import Nav from "./components/layout/Nav"
 
 function App() {
   return (
     <Router>
-      <Navigation />
+      {/* <Navigation /> */}
+      <Nav />
       <main>
         <Routes>
           <Route exact path="/" element={<Explore />} />

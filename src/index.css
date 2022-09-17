@@ -34,9 +34,7 @@ main {
 	margin-bottom: 0.3em !important;
 	font-size: 2.2em !important;
 }
-.active {
-	background-color: red !important;
-}
+
 a {
 	text-decoration: none !important;
 }
@@ -58,9 +56,15 @@ a {
 
 @layer components {
 	.nav-link {
-		@apply flex  flex-col items-center justify-center gap-1 cursor-pointer text-center text-lg text-zinc-500;
+		@apply flex p-1 font-normal gap-1 items-center cursor-pointer;
+	}
+	.active {
+		@apply text-teal-500;
 	}
 	.btn {
 		@apply text-neutral-content rounded-none shadow-2xl;
 	}
+}
+.nav-link {
+	display: flex;
 }
