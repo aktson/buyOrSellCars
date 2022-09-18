@@ -1,18 +1,36 @@
-import { useState, useEffect } from "react";
-import { Navbar, MobileNav, Typography, Button, IconButton, Avatar } from "@material-tailwind/react";
-import img1 from "../../images/20220808_213916.jpg"
+import React from "react";
+import { Navbar, MobileNav, Typography, Avatar, IconButton, Button } from "@material-tailwind/react";
 import NavList from "./NavList";
-import { MdMenuOpen, MdOutlineClose } from "react-icons/md";
+import { MdMenuOpen, MdOutlineClose, MdAccountCircle } from "react-icons/md";
+import { useNavigate, useLocation } from "react-router-dom";
+import { getAuth } from "firebase/auth";
 
 export default function Nav() {
-    const [openNav, setOpenNav] = useState(false);
+    const auth = getAuth();
 
-    useEffect(() => {
+    const [user, setUser] = React.useState(null)
+
+    React.useEffect(() => {
+        setUser(auth.currentUser)
+    })
+
+    const navigate = useNavigate();
+    const { pathname } = useLocation();
+
+    const [openNav, setOpenNav] = React.useState(false);
+
+    React.useEffect(() => {
         window.addEventListener(
             "resize",
             () => window.innerWidth >= 960 && setOpenNav(false)
         );
     }, []);
+
+    const onLogout = () => {
+        auth.signOut();
+        navigate("/")
+        setUser(null)
+    }
 
     return (
 
@@ -27,7 +45,18 @@ export default function Nav() {
                     <span>Buy/sell</span>
                 </Typography>
                 <div className="hidden lg:block"><NavList /></div>
-                <Avatar src={img1} alt="avatar" variant="circular" className="hidden lg:block" />
+
+                <div className="flex gap-4">
+                    <IconButton
+                        variant="text"
+                        className={pathname === "/profile" ? "hidden lg:block cursor-pointer text-primary-medium " : "hidden lg:block cursor-pointer text-dark "}
+                        onClick={() => navigate("/profile")} >
+                        <MdAccountCircle size={32} /> {user ? user.displayName : null}
+                    </IconButton>
+                    {user && <Button size="sm" className="bg-primary-dark" onClick={onLogout}>Log Out</Button>}
+                    {!user && <Button size="sm" className="bg-primary-dark" onClick={() => navigate("/sign-in")}>Sign In</Button>}
+                </div>
+
 
                 <MdMenuOpen variant="text" onClick={() => setOpenNav(!openNav)} className="ml-auto h-6 w-6 text-dark  focus:bg-transparent active:bg-transparent lg:hidden " >
                     {openNav ? (
@@ -40,7 +69,7 @@ export default function Nav() {
             </div>
             <MobileNav open={openNav}>
                 <NavList />
-                <Avatar src={img1} alt="avatar" variant="circular" />
+                <Avatar alt="avatar" variant="circular" />
 
             </MobileNav>
         </Navbar>

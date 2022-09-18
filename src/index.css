@@ -22,9 +22,6 @@ body {
 }
 main {
 	flex: 1 0 auto;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 }
 
 .menuBottom {
@@ -63,6 +60,9 @@ a {
 	}
 	.btn {
 		@apply text-neutral-content rounded-none shadow-2xl;
+	}
+	.icon-button {
+		@apply cursor-default pointer-events-none text-dark;
 	}
 }
 .nav-link {

@@ -1,29 +1,24 @@
 import React from 'react'
 import { Link, useNavigate } from "react-router-dom";
-import { MdVisibility, MdVisibilityOff, MdMailOutline, MdPersonOutline } from "react-icons/md";
+import { MdVisibility, MdVisibilityOff, MdMailOutline } from "react-icons/md";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
 import { Card, CardHeader, CardBody, CardFooter, Typography, Input, Button, IconButton } from "@material-tailwind/react";
-import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { fireStoreDb } from "../../firebase.config";
-import { setDoc, doc, serverTimestamp } from "firebase/firestore"
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify"
 
 
-function Login() {
+function SignIn() {
 
     const navigate = useNavigate();
 
 
     const [showPassword, setShowPassword] = React.useState(false);
     const [formdata, setFormdata] = React.useState({
-        fullName: "",
         email: "",
         password: ""
     })
 
 
-    const { fullName, email, password } = formdata;
-
-
+    const { email, password } = formdata;
     const handleInputChange = (e) => {
         setFormdata((prevState) => ({
             ...prevState,
@@ -37,56 +32,30 @@ function Login() {
     }
 
     const handleSubmit = async () => {
-        try {
 
+        try {
             const auth = getAuth();
 
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
-            const user = userCredential.user;
-
-            updateProfile(auth.currentUser, {
-                displayName: fullName
-            })
-            navigate("/")
-
-            // save user to firestore
-            const formDataCopy = { ...formdata }
-            delete formDataCopy.password;
-            formDataCopy.timestamp = serverTimestamp();
-
-            await setDoc(doc(fireStoreDb, "users", user.uid), formDataCopy)
-
+            if (userCredential.user) {
+                navigate("/")
+            }
 
         } catch (error) {
-            toast.error("Something went wrong with registration")
+            toast.error("Bad user Credentials")
+
         }
-
-
     }
 
-
     return (
-
-        <Card className="w-96 mt-16 mb-4 mx-auto">
-            <CardHeader className="mb-4 grid h-28 place-items-center bg-primary-medium">
+        <Card className="w-96 mx-auto mt-16 mb-4">
+            <CardHeader className="mb-4 grid h-28 place-items-center bg-primary-medium" >
                 <Typography variant="h3" color="white">
-                    Sign Up
+                    Sign In
                 </Typography>
             </CardHeader>
             <CardBody className="flex flex-col gap-8 mb-6">
-                <div className='flex'>
-                    <Input
-                        label="full name"
-                        variant="standard"
-                        color='teal'
-                        id="fullName"
-                        value={fullName}
-                        onChange={handleInputChange} />
-                    <IconButton onClick={handleClickShowPassword} variant="text" className='icon-button text-dark'>
-                        <MdPersonOutline size={18} />
-                    </IconButton>
-                </div>
                 <div className='flex'>
                     <Input
                         label="email"
@@ -95,7 +64,7 @@ function Login() {
                         id="email"
                         value={email}
                         onChange={handleInputChange} />
-                    <IconButton onClick={handleClickShowPassword} variant="text" className='icon-button text-dark'>
+                    <IconButton onClick={handleClickShowPassword} color="teal" variant="text" className='icon-button text-dark'>
                         <MdMailOutline size={18} />
                     </IconButton>
                 </div>
@@ -109,26 +78,23 @@ function Login() {
                         onChange={handleInputChange}
                         type={showPassword ? "text" : "password"}
                     />
-                    <IconButton onClick={handleClickShowPassword} variant="text" className='text-dark' >
+                    <IconButton onClick={handleClickShowPassword} className="text-dark" variant="text" >
                         {showPassword ? <MdVisibility size={18} /> : <MdVisibilityOff size={18} />}
                     </IconButton>
                 </div>
             </CardBody>
-
             <CardFooter className="pt-0">
                 <Button className='bg-primary-medium' fullWidth onClick={handleSubmit}>
-                    Sign Up
+                    Sign In
                 </Button>
                 <Typography variant="small" className="mt-6 flex justify-center">
-                    Already have an account?
-                    <Link to="/sign-in" className="ml-1 font-bold text-secondary-medium">Sign in </Link>
+                    Don't have an account?
+                    <Link to="/sign-up" className="ml-1 font-bold text-secondary-medium">Sign up</Link>
                 </Typography>
             </CardFooter>
-
-        </Card >
-
+        </Card>
     );
 }
 
 
-export default Login
+export default SignIn
