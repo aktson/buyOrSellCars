@@ -11,18 +11,20 @@ import Signup from "./components/pages/Signup";
 import ForgotPassword from "./components/pages/ForgotPassword";
 import Nav from "./components/layout/Nav"
 import Profile from './components/pages/Profile';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
   return (
     <Router>
-      {/* <Navigation /> */}
       <Nav />
       <main>
         <Routes>
           <Route exact path="/" element={<Explore />} />
           <Route path="/sell" element={<Sell />} />
           <Route path="/favorite" element={<Favorite />} />
-          <Route path='/profile' element={<Profile />} />
+          <Route path='/profile' element={<PrivateRoute />}>
+            <Route path='/profile' element={<Profile />} />
+          </Route>
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<Signup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />

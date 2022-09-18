@@ -5,6 +5,7 @@ import { MdMenuOpen, MdOutlineClose, MdAccountCircle } from "react-icons/md";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 
+
 export default function Nav() {
     const auth = getAuth();
 
@@ -53,8 +54,9 @@ export default function Nav() {
                         onClick={() => navigate("/profile")} >
                         <MdAccountCircle size={32} /> {user ? user.displayName : null}
                     </IconButton>
-                    {user && <Button size="sm" className="bg-primary-dark" onClick={onLogout}>Log Out</Button>}
-                    {!user && <Button size="sm" className="bg-primary-dark" onClick={() => navigate("/sign-in")}>Sign In</Button>}
+                    {user && <Button onClick={onLogout} className="bg-secondary-light">Log Out</Button>}
+                    {/* {!user && <Button onClick={() => navigate("/sign-in")} className="bg-primary-light">Log In</Button>} */}
+
                 </div>
 
 
