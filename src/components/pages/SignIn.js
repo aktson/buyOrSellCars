@@ -4,6 +4,7 @@ import { MdVisibility, MdVisibilityOff, MdMailOutline } from "react-icons/md";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
 import { Card, CardHeader, CardBody, CardFooter, Typography, Input, IconButton, Button } from "@material-tailwind/react";
 import { toast } from "react-toastify"
+import GoogleOAuth from '../GoogleOAuth';
 
 
 function SignIn() {
@@ -85,11 +86,13 @@ function SignIn() {
             </CardBody>
             <CardFooter className="pt-0 ">
                 <Button fullWidth onClick={handleSubmit} className="bg-primary-dark"> Sign In</Button>
-                <Link to="/forgot-password" className=" text-sm text-secondary-medium flex  justify-center mt-2">Forgot Password?</Link>
+                <p className='text-center my-2'>or</p>
+                <GoogleOAuth />
                 <Typography variant="small" className="mt-6 flex justify-center">
                     Don't have an account?
                     <Link to="/sign-up" className="ml-1 font-bold text-secondary-medium">Sign up</Link>
                 </Typography>
+                <Link to="/forgot-password" className=" text-sm text-secondary-medium flex  justify-center mt-2">Forgot Password?</Link>
             </CardFooter>
         </Card>
     );

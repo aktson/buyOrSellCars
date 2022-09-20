@@ -6,6 +6,7 @@ import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase
 import { fireStoreDb } from "../../firebase.config";
 import { setDoc, doc, serverTimestamp } from "firebase/firestore"
 import { toast } from 'react-toastify';
+import GoogleOAuth from '../GoogleOAuth';
 
 
 function Login() {
@@ -119,6 +120,8 @@ function Login() {
                 <Button className='bg-primary-medium' fullWidth onClick={handleSubmit}>
                     Sign Up
                 </Button>
+                <p className='text-center my-2'>or</p>
+                <GoogleOAuth />
                 <Typography variant="small" className="mt-6 flex justify-center">
                     Already have an account?
                     <Link to="/sign-in" className="ml-1 font-bold text-secondary-medium">Sign in </Link>

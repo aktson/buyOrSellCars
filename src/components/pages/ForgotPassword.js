@@ -3,7 +3,7 @@ import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify"
 import { MdArrowForward, MdMailOutline } from "react-icons/md";
-import { Card, CardHeader, CardBody, CardFooter, Typography, Input, IconButton, Button } from "@material-tailwind/react";
+import { Card, CardHeader, CardBody, CardFooter, Typography, Input, Button } from "@material-tailwind/react";
 
 
 function ForgotPassword() {
