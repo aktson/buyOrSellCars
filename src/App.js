@@ -12,6 +12,7 @@ import ForgotPassword from "./components/pages/ForgotPassword";
 import Nav from "./components/layout/Nav"
 import Profile from './components/pages/Profile';
 import PrivateRoute from './components/PrivateRoute';
+import ListingSpecific from './components/ListingSpecific';
 
 function App() {
   return (
@@ -20,14 +21,17 @@ function App() {
       <main>
         <Routes>
           <Route exact path="/" element={<Explore />} />
-          <Route path="/sell" element={<Sell />} />
           <Route path="/favorite" element={<Favorite />} />
           <Route path='/profile' element={<PrivateRoute />}>
             <Route path='/profile' element={<Profile />} />
           </Route>
+          <Route path='/sell' element={<PrivateRoute />}>
+            <Route path='/sell' element={<Sell />} />
+          </Route>
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<Signup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/listing-specific/:id" element={<ListingSpecific />} />
         </Routes>
       </main>
       <Footer />

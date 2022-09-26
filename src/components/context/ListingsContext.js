@@ -1,8 +1,7 @@
 import React from 'react'
-import { useParams } from "react-router-dom";
-import { collection, getDocs, query, where, orderBy, limit, startAfter } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { fireStoreDb } from "../../firebase.config";
-import { toast } from "react-toastify";
+
 
 const ListingsContext = React.createContext();
 
@@ -10,6 +9,7 @@ export function ListingsProvider({ children }) {
 
     const [listings, setListings] = React.useState(null);
     const [loading, setLoading] = React.useState(true);
+    const [error, setError] = React.useState(null)
 
     const fetchListings = async () => {
         try {
@@ -27,11 +27,12 @@ export function ListingsProvider({ children }) {
                 })
             })
             setListings(listings)
-            setLoading(false)
 
         } catch (error) {
-            toast.error("Unknown error occured")
+            setError("Unknown error occured")
             console.log(error)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -39,7 +40,7 @@ export function ListingsProvider({ children }) {
         fetchListings();
     }, [])
     return <ListingsContext.Provider value={{
-        listings, setListings, loading, setLoading
+        listings, setListings, loading, setLoading, error
     }}>{children}</ListingsContext.Provider>
 }
 

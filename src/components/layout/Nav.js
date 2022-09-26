@@ -13,7 +13,7 @@ export default function Nav() {
 
     React.useEffect(() => {
         setUser(auth.currentUser)
-    })
+    }, [auth.currentUser])
 
     const navigate = useNavigate();
     const { pathname } = useLocation();
@@ -40,22 +40,23 @@ export default function Nav() {
                 <Typography
                     as="a"
                     href="#"
-                    variant="large"
+                    variant="h5"
                     className="mr-4 cursor-pointer py-1.5  text-secondary-dark"
                 >
                     <span>Buy/sell</span>
                 </Typography>
                 <div className="hidden lg:block"><NavList /></div>
 
-                <div className="flex gap-4">
-                    <IconButton
-                        variant="text"
-                        className={pathname === "/profile" ? "hidden lg:block cursor-pointer text-primary-medium " : "hidden lg:block cursor-pointer text-dark "}
-                        onClick={() => navigate("/profile")} >
-                        <MdAccountCircle size={32} /> {user ? user.displayName : null}
-                    </IconButton>
+                <div className="flex gap-3 ">
+                    <div className="flex items-center">
+                        <Typography variant="lead" className="text-dark cursor-pointer " onClick={() => navigate("/profile")} >{user ? user.displayName : null}</Typography>
+                        <IconButton
+                            variant="text"
+                            className={pathname === "/profile" ? " cursor-pointer text-primary-medium  " : "cursor-pointer text-dark  "}
+                            onClick={() => navigate("/profile")} >
+                            <MdAccountCircle size={32} />
+                        </IconButton></div>
                     {user && <Button onClick={onLogout} className="bg-secondary-light">Log Out</Button>}
-                    {/* {!user && <Button onClick={() => navigate("/sign-in")} className="bg-primary-light">Log In</Button>} */}
 
                 </div>
 

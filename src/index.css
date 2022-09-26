@@ -64,6 +64,9 @@ a {
 	.icon-button {
 		@apply cursor-default pointer-events-none text-dark;
 	}
+	.select {
+		@apply w-full h-full text-blue-gray-700 outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border  text-sm px-3 py-2.5 border-blue-gray-200 focus:border-teal-500 rounded-md;
+	}
 }
 .nav-link {
 	display: flex;
