@@ -9,11 +9,13 @@ import { Button } from '@material-tailwind/react';
 
 function GoogleOAuth() {
 
+
     const navigate = useNavigate();
     const location = useLocation();
 
 
     const onGoogleClick = async () => {
+
         try {
             const auth = getAuth();
             const provider = new GoogleAuthProvider();
@@ -44,9 +46,9 @@ function GoogleOAuth() {
     }
 
     return (
-        <Button className='flex justify-center items-center my-2 p-2' fullWidth variant="outlined" color='teal'>
+        <Button className='flex justify-center items-center my-2 p-2' fullWidth variant="outlined" color='teal' onClick={onGoogleClick} >
             Sign {location.pathname === "/sign-in" ? "In" : "Up"} with
-            <FcGoogle size={18} className="cursor-pointer ml-2" onClick={onGoogleClick} />
+            <FcGoogle size={18} className="cursor-pointer ml-2" />
         </Button>
     )
 }

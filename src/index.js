@@ -5,13 +5,16 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ThemeProvider } from "@material-tailwind/react";
 import { ListingsProvider } from './components/context/ListingsContext';
+import { AuthProvider } from './components/hooks/AuthContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <ThemeProvider >
       <ListingsProvider>
-        <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </ListingsProvider>
     </ThemeProvider>
   </React.StrictMode>

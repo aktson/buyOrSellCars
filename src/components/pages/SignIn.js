@@ -9,6 +9,7 @@ import { Card, CardHeader, CardBody, CardFooter, Typography, Input, IconButton, 
 import { toast } from "react-toastify"
 import GoogleOAuth from '../GoogleOAuth';
 import ErrorSpan from '../ErrorSpan';
+import AuthContext from '../hooks/AuthContext';
 
 const schema = yup.object().shape({
     email: yup.string().required("Email is required").email("Please enter valid email address"),
@@ -18,6 +19,9 @@ const schema = yup.object().shape({
 
 
 function SignIn() {
+
+    const { setUser } = React.useContext(AuthContext);
+
     const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(schema) })
 
     const navigate = useNavigate();
@@ -36,6 +40,8 @@ function SignIn() {
             const auth = getAuth();
 
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
+
+            setUser(auth.currentUser);
 
             if (userCredential.user) {
                 navigate("/")

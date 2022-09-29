@@ -4,16 +4,15 @@ import NavList from "./NavList";
 import { MdMenuOpen, MdOutlineClose, MdAccountCircle } from "react-icons/md";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getAuth } from "firebase/auth";
+import useLocalStorage from "../hooks/useLocalStorage";
+import AuthContext from "../hooks/AuthContext";
+
 
 
 export default function Nav() {
     const auth = getAuth();
 
-    const [user, setUser] = React.useState(null)
-
-    React.useEffect(() => {
-        setUser(auth.currentUser)
-    }, [auth.currentUser])
+    const { user, setUser } = React.useContext(AuthContext);
 
     const navigate = useNavigate();
     const { pathname } = useLocation();
@@ -43,13 +42,13 @@ export default function Nav() {
                     variant="h5"
                     className="mr-4 cursor-pointer py-1.5  text-secondary-dark"
                 >
-                    <span>Buy/sell</span>
+                    Buy/sell
                 </Typography>
                 <div className="hidden lg:block"><NavList /></div>
 
                 <div className="flex gap-3 ">
                     <div className="flex items-center">
-                        <Typography variant="lead" className="text-dark cursor-pointer " onClick={() => navigate("/profile")} >{user ? user.displayName : null}</Typography>
+                        <p className={pathname === "/profile" ? " cursor-pointer text-primary-medium  " : "cursor-pointer text-dark  "} onClick={() => navigate("/profile")} >{user ? user.displayName : null}</p>
                         <IconButton
                             variant="text"
                             className={pathname === "/profile" ? " cursor-pointer text-primary-medium  " : "cursor-pointer text-dark  "}

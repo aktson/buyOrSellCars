@@ -33,14 +33,7 @@ function NavList() {
             >
                 <MdOutlineFavorite size={28} />Favourite
             </Typography>
-            {/* <Typography
-                as="li"
-                variant="small"
-                className={pathname === "/sign-in" ? "text-primary-medium  nav-link" : "nav-link"}
-                onClick={() => navigate("/sign-in")}
-            >
-                <MdLogin size={28} />Sign In
-            </Typography> */}
+
         </ul>
     )
 }
