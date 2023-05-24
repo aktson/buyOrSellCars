@@ -13,7 +13,7 @@ export const Footer: FC<FooterProps> = (): JSX.Element => {
 	return (
 		<footer style={{ borderTop: "0.5px solid #D3D3D3" }}>
 			<Container size="lg">
-				<Flex justify="space-between" p="xl">
+				<Flex justify="space-between" p="md">
 					<Text>LOGO</Text>
 					<Text variant="p" size="sm">
 						<MdCopyright /> 2023 Designed & Developed by AnkSon

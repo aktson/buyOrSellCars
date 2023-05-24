@@ -9,9 +9,10 @@ export interface FirebaseUser {
 	providerId: string;
 }
 export interface IListings {
-	bathrooms?: string;
-	bedrooms?: string;
+	bathrooms?: number;
+	bedrooms?: number;
 	imgUrls?: Array<string>;
+	mainImage?: string;
 	description?: string;
 	furnished: boolean;
 	title: string;
@@ -22,7 +23,7 @@ export interface IListings {
 	};
 	address: string;
 	userRef: string;
-	type: string;
+	type: string | null;
 	id: string;
 	city: string;
 	parking?: boolean;

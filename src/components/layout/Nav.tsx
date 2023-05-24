@@ -57,7 +57,7 @@ export const Nav: FC<NavProps> = ({ closeDrawer }): JSX.Element => {
 	 * @returns {void}
 	 */
 	function getActivePath(path: string) {
-		return pathname === path ? "blue" : "gray";
+		return pathname === path ? "indigo" : "gray";
 	}
 	/*** Return statement ***/
 	return (
@@ -78,8 +78,8 @@ export const Nav: FC<NavProps> = ({ closeDrawer }): JSX.Element => {
 					<Menu.Target>
 						<Paper shadow="sm" radius="xl">
 							<Flex align="center" sx={{ cursor: "pointer" }}>
-								<Avatar color="teal">{username || <MdAccountCircle size={18} />}</Avatar>
-								<ActionIcon size={36} color="teal">
+								<Avatar color="indigo">{username || <MdAccountCircle size={18} />}</Avatar>
+								<ActionIcon size={36} color="indigo">
 									<MdKeyboardArrowDown size={22} />
 								</ActionIcon>
 							</Flex>

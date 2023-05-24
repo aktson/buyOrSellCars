@@ -18,6 +18,7 @@ import { FcGoogle } from "react-icons/fc";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "../../../firebase.config";
 import { ULink } from "@/components/common/ULink";
+import { GoogleLogin } from "@/components/GoogleLogin";
 
 /***** TYPES *****/
 interface SignUpProps {}
@@ -83,13 +84,13 @@ const SignUp: FC<SignUpProps> = (): JSX.Element => {
 		<Container my="xl">
 			<Card mx="auto" width="400px">
 				<form onSubmit={handleSubmit(handleFormSubmit)}>
-					<Stack spacing="xl">
+					<Stack spacing="sm">
 						<h1>Sign Up</h1>
 						<TextInput
 							{...register("name")}
 							id="name"
 							label="Name"
-							placeholder="Your full name "
+							placeholder="Your full name"
 							radius="md"
 							error={errors.name && (errors.name.message as string)}
 						/>
@@ -112,14 +113,12 @@ const SignUp: FC<SignUpProps> = (): JSX.Element => {
 						/>
 					</Stack>
 
-					<Button fullWidth={true} loading={isSubmitting} mt={"xl"} type="submit">
+					<Button fullWidth={true} loading={isSubmitting} mt={"md"} type="submit">
 						{isSubmitting ? "Signing up.." : "Sign Up"}
 					</Button>
-					<Divider label="Or" labelPosition="center" my="lg" />
-					<Button fullWidth={true} mt="xl" mb="sm" variant="light" rightIcon={<FcGoogle size={20} />}>
-						Sign Up with
-					</Button>
-					<Group>
+					<Divider label="Or" labelPosition="center" my="md" />
+					<GoogleLogin />
+					<Group mt={8}>
 						<Text fz="xs" ml="auto">
 							Already have an account?
 							<ULink href="/signin">Sign In</ULink>

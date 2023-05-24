@@ -1,8 +1,9 @@
 import { MantineThemeOverride } from "@mantine/core";
 
 export const myTheme: MantineThemeOverride = {
+	loader: "bars",
 	fontFamily: "Open Sans, sans serif",
-	spacing: { xs: "1rem", sm: "1.2rem", md: "1.8rem", lg: "2.2rem", xl: "2.8rem" },
+	spacing: { xs: "0.5rem", sm: "1rem", md: "1.5rem", lg: "2rem", xl: "2.5rem" },
 	headings: {
 		fontFamily: "Roboto, sans-serif",
 		sizes: {
@@ -13,4 +14,11 @@ export const myTheme: MantineThemeOverride = {
 			h5: { fontSize: "2rem" },
 		},
 	},
+	colorScheme: "light",
+	colors: {
+		brand: ["#E1F5FE", "#B3E5FC", "#81D4FA", "#4FC3F7", "#29B6F6", "#03A9F4", "#039BE5", "#0288D1", "#0277BD", "#01579B"],
+	},
+	primaryColor: "indigo",
+	primaryShade: { light: 6, dark: 9 },
+	defaultGradient: { deg: 60, from: "indigo", to: "indigo.3" },
 };

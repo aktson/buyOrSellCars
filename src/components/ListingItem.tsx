@@ -2,7 +2,7 @@
 import React, { FC, useState } from "react";
 import { capitalize } from "@/functions/functions";
 import { IListings } from "@/types/types";
-import { Paper, Text, Stack, ActionIcon, Chip } from "@mantine/core";
+import { Paper, Text, Stack, ActionIcon, Chip, Badge } from "@mantine/core";
 import Image from "next/image";
 import Link from "next/link";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
@@ -15,10 +15,7 @@ interface ListingItemProps {
 
 /***** COMPONENT-FUNCTION *****/
 export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
-	/*** States ***/
-	const [isFavourite, setIsFavourite] = useState<boolean>(false);
-
-	// console.log(item);
+	/*** Variables ***/
 	const data = item?.data as IListings;
 
 	const { title, imgUrls, price, description, city, type, address } = data;
@@ -34,10 +31,8 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 				<FavouriteButton style={{ position: "absolute", top: "1rem", right: "1rem" }} />
 			</figure>
 
-			<Stack p="xl" spacing={0}>
-				<Chip variant="light" color="cyan">
-					{type === "rent" ? "For Rent" : "For Sale"}
-				</Chip>
+			<Stack p="md" spacing={0}>
+				<Badge sx={{ width: "max-content" }}>{type === "rent" ? "For rent" : "For sale"}</Badge>
 
 				<Text weight={500} size="lg" my={4}>
 					{capitalize(description)}
@@ -47,7 +42,7 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 					{capitalize(address)}, {capitalize(city)}
 				</Text>
 
-				<Text color="cyan" size="xl" mt={12}>
+				<Text color="indigo" size="xl" mt={12}>
 					NOK {convertedPrice},-
 				</Text>
 			</Stack>

@@ -23,7 +23,11 @@ export const ShareButton: FC<ShareButtonProps> = (): JSX.Element => {
 
 	/*** Return statement ***/
 	return (
-		<ActionIcon variant="outline" color="gray" onClick={handleShareLink} sx={{ position: "relative", width: "max-content", padding: "1em" }}>
+		<ActionIcon
+			variant="outline"
+			color="gray"
+			onClick={handleShareLink}
+			sx={{ position: "relative", width: "max-content", padding: "1em", display: "flex", gap: "0.5em", alignItems: "center" }}>
 			Share
 			<MdShare size={18} />
 			{isShareLinkCopied && (

@@ -10,10 +10,12 @@ import React, { FC } from "react";
 import { FcGoogle } from "react-icons/fc";
 
 /***** TYPES *****/
-interface GoogleLoginProps {}
+interface GoogleLoginProps {
+	style?: React.CSSProperties;
+}
 
 /***** COMPONENT-FUNCTION *****/
-export const GoogleLogin: FC<GoogleLoginProps> = (): JSX.Element => {
+export const GoogleLogin: FC<GoogleLoginProps> = ({ style }): JSX.Element => {
 	/***Variables ***/
 	const router = useRouter();
 	const pathname = usePathname();
@@ -53,7 +55,7 @@ export const GoogleLogin: FC<GoogleLoginProps> = (): JSX.Element => {
 
 	/*** Return statement ***/
 	return (
-		<Button fullWidth={true} mt="xl" mb="sm" variant="light" rightIcon={<FcGoogle size={20} />} onClick={onGoogleClick}>
+		<Button fullWidth={true} style={style} variant="light" rightIcon={<FcGoogle size={20} />} onClick={onGoogleClick}>
 			Sign {pathname === "/signin" ? "In" : "Up"} with
 		</Button>
 	);

@@ -2,6 +2,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { FirebaseUser } from "@/types/types";
 import { auth } from "@firebaseConfig";
+import { MantineProvider } from "@mantine/core";
+import { myTheme } from "@/app/styles/theme";
+import { MultiStepFormProvider } from "./MultiStepFormContext";
 
 interface AuthContextProps {
 	currentUser: FirebaseUser | null;
@@ -15,13 +18,20 @@ export function useAuth() {
 }
 export function AuthProvider({ children }: any) {
 	const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		const unsubscribe = auth.onAuthStateChanged((user) => {
-			setCurrentUser(user);
+			if (user) {
+				setCurrentUser(user);
+			} else {
+				setCurrentUser(null);
+			}
+			setLoading(false);
 		});
-		return unsubscribe;
+
+		return () => unsubscribe();
 	}, []);
 
-	return <AuthContext.Provider value={{ currentUser, setCurrentUser }}>{children}</AuthContext.Provider>;
+	return <AuthContext.Provider value={{ currentUser, setCurrentUser }}>{loading ? null : children}</AuthContext.Provider>;
 }

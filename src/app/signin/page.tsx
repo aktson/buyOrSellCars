@@ -11,11 +11,12 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "@/yup/schema";
 import dynamic from "next/dynamic";
-import { signInWithEmailAndPassword } from "firebase/auth";
+// import { signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { auth } from "@firebaseConfig";
 import { GoogleLogin } from "@/components/GoogleLogin";
 import { ULink } from "@/components/common/ULink";
+import { getAuth, setPersistence, signInWithEmailAndPassword, browserSessionPersistence } from "firebase/auth";
 
 /***** COMPONENT-FUNCTION *****/
 const Signin: FC = (): JSX.Element => {
@@ -43,8 +44,9 @@ const Signin: FC = (): JSX.Element => {
 		const { email, password } = data;
 
 		try {
+			setPersistence(auth, browserSessionPersistence);
 			const userCredential = await signInWithEmailAndPassword(auth, email, password);
-
+			console.log(auth.currentUser);
 			setCurrentUser(auth.currentUser);
 
 			if (userCredential.user) {
@@ -65,15 +67,15 @@ const Signin: FC = (): JSX.Element => {
 
 	/** Effects */
 	useEffect(() => {
-		if (currentUser || auth.currentUser) return router.push("/");
-	}, [currentUser, auth.currentUser]);
+		if (currentUser) return router.push("/");
+	}, [currentUser]);
 
 	/*** Return statement ***/
 	return (
 		<Container my="xl">
 			<Card mx="auto" width="400px">
 				<form onSubmit={handleSubmit(handleFormSubmit)}>
-					<Stack spacing="xl">
+					<Stack spacing="sm">
 						<h1>Sign In</h1>
 						<TextInput
 							{...register("email")}
@@ -93,16 +95,16 @@ const Signin: FC = (): JSX.Element => {
 							error={errors.password && (errors.password.message as string)}
 						/>
 					</Stack>
-					<Text align="end" size="xs" color="blue" mt="xs">
+					<Text align="end" size="xs" color="indigo" mt="xs">
 						<Link href="/forgotPassword">forgot Password?</Link>
 					</Text>
 
-					<Button fullWidth={true} loading={isSubmitting} mt={"xl"} type="submit">
+					<Button fullWidth={true} loading={isSubmitting} mt={"md"} type="submit">
 						{isSubmitting ? "signing in" : "Sign In"}
 					</Button>
-					<Divider label="Or" labelPosition="center" my="lg" />
+					<Divider label="Or" labelPosition="center" my="md" />
 					<GoogleLogin />
-					<Group>
+					<Group mt={8}>
 						<Text fz="xs" ml="auto">
 							Don&apos;t have an account?
 							<ULink href="/signup">Sign Up</ULink>

@@ -13,17 +13,17 @@ interface ULinkProps {
 }
 
 /***** COMPONENT-FUNCTION *****/
-export const ULink: FC<ULinkProps> = ({ children, icon, color = "blue", href, styles }): JSX.Element => {
+export const ULink: FC<ULinkProps> = ({ children, icon, color, href, styles }): JSX.Element => {
 	/*** Return statement ***/
 	return (
 		<Link href={href}>
 			<NavLink
 				label={children}
 				icon={icon}
-				color={color}
+				color={color ? color : "indigo"}
 				variant="subtle"
 				style={styles}
-				sx={{ width: "max-content", display: "inline-flex", padding: "0", paddingLeft: "0.2em" }}></NavLink>
+				sx={{ width: "max-content", display: "inline-flex", padding: "0", paddingLeft: "0.2em", color: "indigo" }}></NavLink>
 		</Link>
 	);
 };

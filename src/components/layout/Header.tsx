@@ -45,7 +45,10 @@ const Header: FC<HeaderProps> = (): JSX.Element => {
 			<Container size={"lg"}>
 				<Group position="apart" sx={{ padding: "1em" }}>
 					<Link href="/">
-						<h1> LOGO</h1>
+						<Text variant="gradient" component="h1">
+							{" "}
+							TRADE
+						</Text>
 					</Link>
 					<Group spacing={16} className={classes.hiddenMobile}>
 						<Nav />
