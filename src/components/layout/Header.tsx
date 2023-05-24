@@ -1,6 +1,6 @@
 "use client";
 /***** IMPORTS *****/
-import { Burger, Button, Container, Divider, Drawer, Group, ScrollArea, Stack, Text, createStyles, rem } from "@mantine/core";
+import { Burger, Container, Divider, Drawer, Group, ScrollArea, Stack, Text, createStyles, rem, Box } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import Link from "next/link";
 import React, { FC } from "react";
@@ -41,12 +41,11 @@ const Header: FC<HeaderProps> = (): JSX.Element => {
 
 	/** return statement */
 	return (
-		<header style={{ boxShadow: "2px 2px 2px rgba(0,0,0,0.1)" }}>
-			<Container size={"lg"}>
-				<Group position="apart" sx={{ padding: "1em" }}>
+		<Box component="header" sx={{ boxShadow: theme.colorScheme === "dark" ? `0px 2px 8px ${theme.colors.dark[5]}` : theme.shadows.xs }}>
+			<Container size="lg">
+				<Group position="apart" p="md" align="center">
 					<Link href="/">
 						<Text variant="gradient" component="h1">
-							{" "}
 							TRADE
 						</Text>
 					</Link>
@@ -72,7 +71,7 @@ const Header: FC<HeaderProps> = (): JSX.Element => {
 					</ScrollArea>
 				</Drawer>
 			</Container>
-		</header>
+		</Box>
 	);
 };
 export default dynamic(() => Promise.resolve(Header), { ssr: false });

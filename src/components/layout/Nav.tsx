@@ -2,13 +2,14 @@
 import React, { FC, MouseEventHandler } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { getInitials } from "@/functions/functions";
-import { ActionIcon, Avatar, Button, Flex, Menu, Paper, createStyles } from "@mantine/core";
+import { ActionIcon, Avatar, Button, Flex, Menu, Paper, createStyles, useMantineTheme } from "@mantine/core";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { MdAccountCircle, MdFavorite, MdHome, MdKeyboardArrowDown, MdLogin, MdLogout, MdOutlineAddCircleOutline } from "react-icons/md";
 import { auth } from "@firebaseConfig";
 import path from "path";
+import { ThemeToggler } from "../common/ThemeToggler";
 
 /***** TYPES *****/
 interface NavProps {
@@ -18,6 +19,7 @@ interface NavProps {
 const useStyles = createStyles((theme) => ({
 	nav: {
 		display: "flex",
+		alignItems: "center",
 		[theme.fn.smallerThan("sm")]: {
 			flexDirection: "column",
 			gap: "1em",
@@ -41,6 +43,7 @@ export const Nav: FC<NavProps> = ({ closeDrawer }): JSX.Element => {
 	const router = useRouter();
 
 	const username = getInitials(currentUser?.displayName || "");
+	const theme = useMantineTheme();
 
 	/**
 	 * Function that logs out user and redirects to home firstName and lastName from fullName
@@ -57,7 +60,7 @@ export const Nav: FC<NavProps> = ({ closeDrawer }): JSX.Element => {
 	 * @returns {void}
 	 */
 	function getActivePath(path: string) {
-		return pathname === path ? "indigo" : "gray";
+		return pathname === path ? "indigo" : `${theme.colorScheme === "dark" ? "gray.3" : "gray"}`;
 	}
 	/*** Return statement ***/
 	return (
@@ -96,7 +99,7 @@ export const Nav: FC<NavProps> = ({ closeDrawer }): JSX.Element => {
 						</Menu.Item>
 
 						<Menu.Divider />
-						<Menu.Item icon={<MdLogout size={18} />} onClick={handleLogout} color="gray">
+						<Menu.Item icon={<MdLogout size={18} />} onClick={handleLogout} color="dimmed">
 							Sign Out
 						</Menu.Item>
 					</Menu.Dropdown>
@@ -112,6 +115,7 @@ export const Nav: FC<NavProps> = ({ closeDrawer }): JSX.Element => {
 					<Link href="/signin">Sign In</Link>
 				</Button>
 			)}
+			<ThemeToggler />
 		</nav>
 	);
 };

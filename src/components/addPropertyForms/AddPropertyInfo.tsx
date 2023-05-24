@@ -68,7 +68,7 @@ export const AddPropertyInfo: FC<AddPropertyInfoProps> = (): JSX.Element => {
 					withAsterisk
 					error={errors?.description && (errors.description.message as string)}
 				/>
-				<Flex gap="md">
+				<Flex gap="md" direction={{ base: "column", sm: "row" }}>
 					<TextInput
 						{...register("address")}
 						label="Address"
@@ -85,7 +85,7 @@ export const AddPropertyInfo: FC<AddPropertyInfoProps> = (): JSX.Element => {
 						placeholder="Add city of property"
 						radius="md"
 						defaultValue={formData?.city}
-						sx={{ width: "50%" }}
+						sx={{ base: { width: "100%" }, sm: { width: "50%" } }}
 						withAsterisk
 						error={errors?.city && (errors.city.message as string)}
 					/>
