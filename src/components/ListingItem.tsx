@@ -2,7 +2,7 @@
 import React, { FC, useState } from "react";
 import { capitalize } from "@/functions/functions";
 import { IListings } from "@/types/types";
-import { Paper, Text, Stack, Badge, useMantineTheme, ActionIcon, Box, Flex } from "@mantine/core";
+import { Paper, Text, Stack, Badge, useMantineTheme, ActionIcon, Box, Flex, Modal } from "@mantine/core";
 import Image from "next/image";
 import Link from "next/link";
 import { FavouriteButton } from "./common/FavouriteButton";
@@ -11,6 +11,8 @@ import { auth, db } from "@firebaseConfig";
 import { deleteDoc, doc } from "firebase/firestore";
 import { notifications } from "@mantine/notifications";
 import { FirebaseError } from "firebase/app";
+import { useDisclosure } from "@mantine/hooks";
+import { EditProperty } from "./EditProperty";
 
 /***** TYPES *****/
 interface ListingItemProps {
@@ -27,6 +29,7 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 	const { title, imgUrls, price, city, type, address } = item?.data!;
 	const convertedPrice = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	const isAdmin = auth.currentUser?.uid === item?.data.userRef;
+	const [opened, { open, close }] = useDisclosure(false);
 
 	/*** Functions */
 	/** Deletes listing
@@ -85,7 +88,7 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 							<ActionIcon variant="light" onClick={() => handleDeleteListing(item?.id || "")}>
 								<MdDelete size={16} />
 							</ActionIcon>
-							<ActionIcon variant="light">
+							<ActionIcon variant="light" onClick={open}>
 								<MdModeEdit size={16} />
 							</ActionIcon>
 						</Flex>
@@ -99,6 +102,11 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 					NOK {convertedPrice},- {type === "rent" && " " + "/ month"}
 				</Text>
 			</Stack>
+
+			<Modal opened={opened} onClose={close} title="Edit Property" centered size="xl">
+				{/* Modal content */}
+				<EditProperty listingId={item?.id || ""} />
+			</Modal>
 		</Paper>
 	);
 };

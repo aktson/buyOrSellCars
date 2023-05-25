@@ -8,8 +8,8 @@ type JustifyValue = "center" | "flex-start" | "flex-end" | "space-around" | "spa
 
 interface RowFlexBoxProps {
 	children: React.ReactNode;
-	align?: AlignValue | { base: AlignValue; sm: AlignValue; md: AlignValue };
-	justify?: JustifyValue | { base: JustifyValue; sm: JustifyValue; md: AlignValue };
+	align?: AlignValue | { base?: AlignValue; sm?: AlignValue; md?: AlignValue };
+	justify?: JustifyValue | { base?: JustifyValue; sm?: JustifyValue; md?: AlignValue };
 	columnOnSmall?: boolean;
 }
 
