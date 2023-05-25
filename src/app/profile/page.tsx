@@ -1,19 +1,19 @@
 "use client";
+/***** IMPORTS *****/
 import { ListingItem } from "@/components/ListingItem";
 import { authenticate } from "@/components/authenticate";
-/***** IMPORTS *****/
 import { Card } from "@/components/common/Card";
 import { RowFlexBox } from "@/components/common/FlexBox/RowFlexBox";
 import { useAuth } from "@/context/AuthContext";
 import { useListings } from "@/context/ListingsContext";
 import { auth, db } from "@firebaseConfig";
-import { ActionIcon, Container, Flex, Stack, TextInput } from "@mantine/core";
+import { ActionIcon, Container, Stack, TextInput } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { FirebaseError } from "firebase/app";
 import { getAuth, updateProfile } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import dynamic from "next/dynamic";
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import { MdBorderColor, MdCheck } from "react-icons/md";
 
 /***** TYPES *****/
