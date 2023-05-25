@@ -50,6 +50,7 @@ const ForgotPassword: FC<ForgotPasswordProps> = (): JSX.Element => {
 	//returns if user is alreadu logged in
 	useEffect(() => {
 		if (auth.currentUser) return router.push("/");
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [auth.currentUser]);
 
 	/*** Return statement ***/
