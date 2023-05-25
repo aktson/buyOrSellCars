@@ -1,6 +1,6 @@
 # Trade
 
-![image](https://github.com/aktson/trade/master/public/propertyImage.png)
+![image](https://github.com/aktson/trade/blob/master/public/propertyImage.png)
 
 ## Description
 Trade is platform(hobby project) where peopple can put property for sale and rent.  Firebase is used to create api and firebase auth for authentication. Registerd user can favourite property and can updated profile and and can perform all CRUD operation for property.
