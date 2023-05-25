@@ -3,6 +3,7 @@ import { ListingItem } from "@/components/ListingItem";
 import { authenticate } from "@/components/authenticate";
 /***** IMPORTS *****/
 import { Card } from "@/components/common/Card";
+import { RowFlexBox } from "@/components/common/FlexBox/RowFlexBox";
 import { useAuth } from "@/context/AuthContext";
 import { useListings } from "@/context/ListingsContext";
 import { auth, db } from "@firebaseConfig";
@@ -24,6 +25,7 @@ export const Profile: FC<ProfileProps> = (): JSX.Element => {
 	const auth = getAuth();
 	const { currentUser } = useAuth();
 	const { listings } = useListings();
+	const filterListings = listings?.filter((listing) => listing.data.userRef === auth.currentUser?.uid);
 
 	/*** States */
 	const [changeDetails, setChangeDetails] = React.useState<boolean>(false);
@@ -32,7 +34,6 @@ export const Profile: FC<ProfileProps> = (): JSX.Element => {
 		email: currentUser?.email,
 	});
 
-	const filterListings = listings?.filter((listing) => listing.data.userRef !== auth.currentUser?.uid);
 	/*** Functions ***/
 
 	/** Sets formdata onchange event
@@ -85,7 +86,7 @@ export const Profile: FC<ProfileProps> = (): JSX.Element => {
 			<Stack>
 				<h1>My Profile</h1>
 				<Card width="500px">
-					<Flex justify="space-between" align="center">
+					<RowFlexBox justify="space-between" align="center" columnOnSmall={false}>
 						<h2>Edit</h2>
 						<ActionIcon
 							variant="light"
@@ -96,7 +97,7 @@ export const Profile: FC<ProfileProps> = (): JSX.Element => {
 							}}>
 							{!changeDetails ? <MdBorderColor size={20} /> : <MdCheck size={20} />}
 						</ActionIcon>
-					</Flex>
+					</RowFlexBox>
 					<form onSubmit={handleSubmit}>
 						<Stack mt="xl">
 							<TextInput
@@ -116,14 +117,14 @@ export const Profile: FC<ProfileProps> = (): JSX.Element => {
 
 				{filterListings?.length === 0 ? (
 					<Card width="500px">
-						<p>No listings available</p>
+						<p>No listings Found</p>
 					</Card>
 				) : (
-					<Flex>
+					<RowFlexBox>
 						{filterListings?.map((item) => {
 							return <ListingItem key={item.id} item={item} />;
 						})}
-					</Flex>
+					</RowFlexBox>
 				)}
 			</Stack>
 		</Container>

@@ -21,10 +21,19 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 
 	/*** Return statement ***/
 	return (
-		<Paper sx={{ boxShadow: theme.colorScheme === "dark" ? `2px 2px 0px ${theme.colors.dark[6]}` : theme.shadows.xs }}>
+		<Paper
+			sx={{
+				boxShadow: theme.colorScheme === "dark" ? `2px 2px 0px ${theme.colors.dark[6]}` : theme.shadows.xs,
+				borderRadius: theme.radius.md,
+			}}>
 			<figure style={{ width: "100%", height: "200px", position: "relative" }}>
 				<Link href={`/listingSpecific/${item?.id}`}>
-					<Image src={imgUrls?.[0] || ""} alt="No way!" fill={true} style={{ objectFit: "cover" }} />
+					<Image
+						src={imgUrls?.[0] || ""}
+						alt="No way!"
+						fill={true}
+						style={{ objectFit: "cover", borderTopLeftRadius: theme.radius.md, borderTopRightRadius: theme.radius.md }}
+					/>
 				</Link>
 				<FavouriteButton style={{ position: "absolute", top: "1rem", right: "1rem" }} />
 			</figure>
@@ -40,8 +49,8 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 					{capitalize(address)}, {capitalize(city)}
 				</Text>
 
-				<Text color="indigo" size="xl" mt={12}>
-					NOK {convertedPrice},-
+				<Text color="indigo" mt={8}>
+					NOK {convertedPrice},- {type === "rent" && " " + "/ month"}
 				</Text>
 			</Stack>
 		</Paper>

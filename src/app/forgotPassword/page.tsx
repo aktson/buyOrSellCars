@@ -31,7 +31,6 @@ const ForgotPassword: FC<ForgotPasswordProps> = (): JSX.Element => {
 		setIsSubmitting(true);
 		try {
 			await sendPasswordResetEmail(auth, email);
-
 			notifications.show({ message: "Email was sent", color: "green" });
 		} catch (error) {
 			console.log(error);
@@ -62,6 +61,7 @@ const ForgotPassword: FC<ForgotPasswordProps> = (): JSX.Element => {
 						<h1>Forgot Password</h1>
 						<TextInput
 							onChange={(e) => setEmail(e.target.value)}
+							label="Email"
 							id="email"
 							placeholder="Enter Your email address"
 							radius="md"
