@@ -1,20 +1,8 @@
 /***** IMPORTS *****/
-import {
-	Accordion,
-	Button,
-	Divider,
-	FileInput,
-	Flex,
-	LoadingOverlay,
-	NativeSelect,
-	Stack,
-	Switch,
-	Text,
-	TextInput,
-	Textarea,
-	useMantineTheme,
-} from "@mantine/core";
 import React, { FC, useState } from "react";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "@firebaseConfig";
+import { Accordion, Button, Divider, FileInput, Flex, LoadingOverlay, NativeSelect, Stack, Switch, TextInput, Textarea } from "@mantine/core";
 import { RowFlexBox } from "./common/FlexBox/RowFlexBox";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -22,6 +10,10 @@ import { editPropertySchema } from "@/yup/schema";
 import { useListings } from "@/context/ListingsContext";
 import { IListings } from "@/types/types";
 import { MdFileUpload } from "react-icons/md";
+import { notifications } from "@mantine/notifications";
+import { FirebaseError } from "firebase/app";
+import { useRouter } from "next/navigation";
+import { useImageUploadFirebase } from "@/hooks/useImageUploadFirebase";
 
 /***** TYPES *****/
 interface EditPropertyProps {
@@ -33,26 +25,59 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId }): JSX.Element 
 	/*** States */
 	const [images, setImages] = useState<File[]>([]);
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [newImgUrls, setnewImgUrls] = useState<String[]>([]);
 
+	/*** Variables */
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 	} = useForm({ resolver: yupResolver(editPropertySchema) });
-	const theme = useMantineTheme();
 
 	const { listings } = useListings();
+	const router = useRouter();
 
 	const listing = listings?.find((item) => item.id === listingId) as IListings;
 
-	const handleFormSubmit = () => {
-		console.log("editing");
+	const handleFormSubmit = async (data: any) => {
+		setIsSubmitting(true);
+
+		try {
+			const docRef = await doc(db, "listings", listingId);
+			const updatedData = { ...data, imgUrls: [...(listing?.data?.imgUrls || []), ...newImgUrls] };
+			await updateDoc(docRef, updatedData);
+			notifications.show({ message: "Successfully updated!", color: "green" });
+			router.push(`/listingSpecific/${listingId}`);
+		} catch (error) {
+			if (error instanceof FirebaseError) {
+				notifications.show({ message: error.message, color: "red" });
+				console.log(error);
+			} else {
+				notifications.show({ message: "An error occurred", color: "red" });
+				console.log(error);
+			}
+		} finally {
+			setIsSubmitting(false);
+		}
 	};
 
-	const handleImageUpload = () => {};
+	/** Keeps previous states and Updates fields onChange, goes to nextstep
+	 * @param {fields} <IListings> fields
+	 * @return {void}
+	 */
+	const handleImageUpload = async () => {
+		const newImgUrls = (await Promise.all([...images].map((image) => useImageUploadFirebase(image))).catch(() => {
+			notifications.show({ message: "Images could not be uploaded", color: "red" });
+			return;
+		})) as string[];
+
+		setnewImgUrls(newImgUrls);
+	};
+
+	if (!listingId) return <p>No Listing found to update!</p>;
 	/*** Return statement ***/
 	return (
-		<form onSubmit={handleFormSubmit}>
+		<form onSubmit={handleSubmit(handleFormSubmit)}>
 			{/* Property info */}
 			<Accordion defaultValue="details" variant="filled">
 				<Accordion.Item value="details">
@@ -128,8 +153,8 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId }): JSX.Element 
 						<Stack spacing="sm">
 							<Stack spacing="md">
 								<RowFlexBox columnOnSmall={false}>
-									<Switch label="Parking" defaultChecked={listing?.data?.parking} />
-									<Switch label="Furnished" defaultChecked={listing?.data?.furnished} />
+									<Switch label="Parking" defaultChecked={listing?.data?.parking} {...register("parking")} />
+									<Switch label="Furnished" defaultChecked={listing?.data?.furnished} {...register("furnished")} />
 								</RowFlexBox>
 								<TextInput
 									{...register("price")}

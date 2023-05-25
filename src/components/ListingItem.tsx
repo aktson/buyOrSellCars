@@ -2,7 +2,7 @@
 import React, { FC, useState } from "react";
 import { capitalize } from "@/functions/functions";
 import { IListings } from "@/types/types";
-import { Paper, Text, Stack, Badge, useMantineTheme, ActionIcon, Box, Flex, Modal } from "@mantine/core";
+import { Paper, Text, Stack, Badge, useMantineTheme, ActionIcon, Box, Flex, Modal, LoadingOverlay } from "@mantine/core";
 import Image from "next/image";
 import Link from "next/link";
 import { FavouriteButton } from "./common/FavouriteButton";
@@ -103,10 +103,16 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 				</Text>
 			</Stack>
 
-			<Modal opened={opened} onClose={close} title="Edit Property" centered size="xl">
-				{/* Modal content */}
+			<Modal
+				opened={opened}
+				onClose={close}
+				title="Edit Property"
+				centered
+				size="xl"
+				styles={{ title: { fontWeight: "bold", fontSize: "1.2em" } }}>
 				<EditProperty listingId={item?.id || ""} />
 			</Modal>
+			<LoadingOverlay visible={isSubmitting} overlayBlur={1} />
 		</Paper>
 	);
 };

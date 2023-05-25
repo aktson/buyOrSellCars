@@ -21,13 +21,14 @@ interface ListingSpecificProps {
 /***** COMPONENT-FUNCTION *****/
 export const ListingSpecific: FC<ListingSpecificProps> = ({ params }): JSX.Element => {
 	/*** States */
-	const [listing, setListing] = useState<{} | IListings>({} as IListings);
+	const [listing, setListing] = useState<IListings["data"] | {}>({});
 	const [loading, setLoading] = useState<boolean>(false);
 
 	/*** Variables */
 	const { id } = params;
+	const { title, imgUrls, address, city, price, description, type, bathrooms, bedrooms, parking, furnished, userRef } =
+		listing as IListings["data"];
 
-	const { title, imgUrls, address, city, price, description, type, bathrooms, bedrooms, parking, furnished, userRef } = listing as IListings;
 	/*** Functions */
 
 	async function getListing() {

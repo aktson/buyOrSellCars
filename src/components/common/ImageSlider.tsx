@@ -3,11 +3,11 @@ import React, { FC } from "react";
 import { IListings } from "@/types/types";
 import { Carousel } from "@mantine/carousel";
 import Image from "next/image";
-import { createStyles } from "@mantine/core";
+import ImageMissing from "public/image-missing.jpg";
 
 /***** TYPES *****/
 interface ImageSliderProps {
-	imgUrls?: IListings["imgUrls"];
+	imgUrls?: IListings["data"]["imgUrls"];
 }
 
 /***** COMPONENT-FUNCTION *****/
@@ -39,13 +39,17 @@ export const ImageSlider: FC<ImageSliderProps> = ({ imgUrls }): JSX.Element => {
 					},
 				},
 			}}>
-			{imgUrls?.map((img) => {
-				return (
-					<Carousel.Slide key={img}>
-						<Image src={img} alt="img" fill={true} style={{ objectFit: "cover", pointerEvents: "none" }} />
-					</Carousel.Slide>
-				);
-			})}
+			{imgUrls?.length === 0 ? (
+				<Image src={ImageMissing} alt="image missing" fill={true} style={{ objectFit: "cover", pointerEvents: "none" }} />
+			) : (
+				imgUrls?.map((img: string) => {
+					return (
+						<Carousel.Slide key={img}>
+							<Image src={img || ImageMissing} alt="img" fill={true} style={{ objectFit: "cover", pointerEvents: "none" }} />
+						</Carousel.Slide>
+					);
+				})
+			)}
 		</Carousel>
 	);
 };

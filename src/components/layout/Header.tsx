@@ -6,6 +6,7 @@ import Link from "next/link";
 import React, { FC } from "react";
 import { Nav } from "./Nav";
 import dynamic from "next/dynamic";
+import { Logo } from "../common/Logo";
 
 /***** TYPES *****/
 interface HeaderProps {}
@@ -44,11 +45,7 @@ const Header: FC<HeaderProps> = (): JSX.Element => {
 		<Box component="header" sx={{ boxShadow: theme.colorScheme === "dark" ? `0px 2px 8px ${theme.colors.dark[5]}` : theme.shadows.xs }}>
 			<Container size="lg">
 				<Group position="apart" p="md" align="center">
-					<Link href="/">
-						<Text variant="gradient" component="h1">
-							TRADE
-						</Text>
-					</Link>
+					<Logo component="h1" />
 					<Group spacing={16} className={classes.hiddenMobile}>
 						<Nav />
 					</Group>

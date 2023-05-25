@@ -34,7 +34,7 @@ export const Summary: FC<SummaryProps> = (): JSX.Element => {
 				notifications.show({ message: "Listing successfully published", color: "green" });
 			}
 
-			router.push("/");
+			// router.push(`/listingSpecific/${listingId}`);
 		} catch (error) {
 			if (error instanceof FirebaseError) {
 				notifications.show({ message: error.message, color: "red" });
