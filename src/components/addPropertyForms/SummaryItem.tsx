@@ -12,7 +12,7 @@ interface SummaryItemProps {
 export const SummaryItem: FC<SummaryItemProps> = ({ label, text }): JSX.Element => {
 	/*** Return statement ***/
 	return (
-		<Stack spacing="xs" sx={{ width: "100%", background: "rgba(211, 211, 211, 0.1)", borderRadius: "0.5em" }} py="xs" px="lg">
+		<Stack spacing="xs" sx={(theme) => ({ width: "100%", background: theme.colors.gray[1], borderRadius: "0.5em" })} py="xs" px="lg">
 			<Text fw={500}>{label}</Text>
 			<Text color="dimmed">{text}</Text>
 		</Stack>

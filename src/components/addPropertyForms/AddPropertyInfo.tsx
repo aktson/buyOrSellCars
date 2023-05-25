@@ -2,10 +2,11 @@
 import { useMultiStepForm } from "@/context/MultiStepFormContext";
 import { propertyInfo } from "@/yup/schema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, Flex, NativeSelect, Stack, TextInput, Textarea } from "@mantine/core";
-import React, { FC, useState } from "react";
+import { Button, NativeSelect, Stack, TextInput, Textarea } from "@mantine/core";
+import React, { FC } from "react";
 import { useForm } from "react-hook-form";
 import { MdChevronRight } from "react-icons/md";
+import { RowFlexBox } from "../common/FlexBox/RowFlexBox";
 
 /***** TYPES *****/
 interface AddPropertyInfoProps {
@@ -68,7 +69,7 @@ export const AddPropertyInfo: FC<AddPropertyInfoProps> = (): JSX.Element => {
 					withAsterisk
 					error={errors?.description && (errors.description.message as string)}
 				/>
-				<Flex gap="md" direction={{ base: "column", sm: "row" }}>
+				<RowFlexBox>
 					<TextInput
 						{...register("address")}
 						label="Address"
@@ -89,12 +90,12 @@ export const AddPropertyInfo: FC<AddPropertyInfoProps> = (): JSX.Element => {
 						withAsterisk
 						error={errors?.city && (errors.city.message as string)}
 					/>
-				</Flex>
-				<Flex justify="flex-end">
+				</RowFlexBox>
+				<RowFlexBox justify="flex-end">
 					<Button type="submit" rightIcon={<MdChevronRight size={18} />}>
 						Next
 					</Button>
-				</Flex>
+				</RowFlexBox>
 			</Stack>
 		</form>
 	);

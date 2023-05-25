@@ -8,15 +8,15 @@ import { ReactNode, createContext, useContext, useState } from "react";
 
 /***** TYPES *****/
 interface MultiStepFormContextProps {
-	formData: Partial<IListings> | null;
-	setFormData: React.Dispatch<React.SetStateAction<Partial<IListings> | null>>;
+	formData: Partial<IListings["data"]> | null;
+	setFormData: React.Dispatch<React.SetStateAction<Partial<IListings["data"]> | null>>;
 	nextStep: Function;
 	prevStep: Function;
 	currentIndex: number;
 	formSteps: JSX.Element[];
 }
 
-const INITIAL_FORMDATA: Partial<IListings> = {
+const INITIAL_FORMDATA: Partial<IListings["data"]> = {
 	title: "",
 	description: "",
 	city: "",

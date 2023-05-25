@@ -9,24 +9,26 @@ export interface FirebaseUser {
 	providerId: string;
 }
 export interface IListings {
-	bathrooms?: number;
-	bedrooms?: number;
-	imgUrls?: Array<string>;
-	mainImage?: string;
-	description?: string;
-	furnished: boolean;
-	title: string;
-	price: string;
-	timestamp: {
-		seconds: string;
-		nanoseconds: string;
-	};
-	address: string;
-	userRef: string;
-	type: string | null;
 	id: string;
-	city: string;
-	parking?: boolean;
+	data: {
+		bathrooms?: number;
+		bedrooms?: number;
+		imgUrls?: Array<string>;
+		mainImage?: string;
+		description?: string;
+		furnished: boolean;
+		title: string;
+		price: string;
+		timestamp: {
+			seconds: string;
+			nanoseconds: string;
+		};
+		address: string;
+		userRef: string;
+		type: string | null;
+		city: string;
+		parking?: boolean;
+	};
 }
 
 export interface SignUpFormData {

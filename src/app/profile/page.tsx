@@ -1,8 +1,10 @@
 "use client";
+import { ListingItem } from "@/components/ListingItem";
 import { authenticate } from "@/components/authenticate";
 /***** IMPORTS *****/
 import { Card } from "@/components/common/Card";
 import { useAuth } from "@/context/AuthContext";
+import { useListings } from "@/context/ListingsContext";
 import { auth, db } from "@firebaseConfig";
 import { ActionIcon, Container, Flex, Stack, TextInput } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
@@ -21,6 +23,7 @@ export const Profile: FC<ProfileProps> = (): JSX.Element => {
 	/*** Variables */
 	const auth = getAuth();
 	const { currentUser } = useAuth();
+	const { listings } = useListings();
 
 	/*** States */
 	const [changeDetails, setChangeDetails] = React.useState<boolean>(false);
@@ -29,6 +32,7 @@ export const Profile: FC<ProfileProps> = (): JSX.Element => {
 		email: currentUser?.email,
 	});
 
+	const filterListings = listings?.filter((listing) => listing.data.userRef !== auth.currentUser?.uid);
 	/*** Functions ***/
 
 	/** Sets formdata onchange event
@@ -78,26 +82,50 @@ export const Profile: FC<ProfileProps> = (): JSX.Element => {
 	/*** Return statement ***/
 	return (
 		<Container size="lg" my="xl">
-			<Card width="500px" mx="auto">
-				<Flex justify="space-between" align="center">
-					<h1>My Profile</h1>
-					<ActionIcon
-						variant="light"
-						color="blue"
-						onClick={() => {
-							changeDetails && handleSubmit();
-							setChangeDetails((prevState) => !prevState);
-						}}>
-						{!changeDetails ? <MdBorderColor size={20} /> : <MdCheck size={20} />}
-					</ActionIcon>
-				</Flex>
-				<form onSubmit={handleSubmit}>
-					<Stack mt="xl">
-						<TextInput id="name" radius="md" defaultValue={formData.name || ""} onChange={handleInputChange} disabled={!changeDetails} />
-						<TextInput id="email" radius="md" defaultValue={formData.email || ""} disabled />
-					</Stack>
-				</form>
-			</Card>
+			<Stack>
+				<h1>My Profile</h1>
+				<Card width="500px">
+					<Flex justify="space-between" align="center">
+						<h2>Edit</h2>
+						<ActionIcon
+							variant="light"
+							color="blue"
+							onClick={() => {
+								changeDetails && handleSubmit();
+								setChangeDetails((prevState) => !prevState);
+							}}>
+							{!changeDetails ? <MdBorderColor size={20} /> : <MdCheck size={20} />}
+						</ActionIcon>
+					</Flex>
+					<form onSubmit={handleSubmit}>
+						<Stack mt="xl">
+							<TextInput
+								id="name"
+								radius="md"
+								defaultValue={formData.name || ""}
+								onChange={handleInputChange}
+								disabled={!changeDetails}
+							/>
+							<TextInput id="email" radius="md" defaultValue={formData.email || ""} disabled />
+						</Stack>
+					</form>
+				</Card>
+			</Stack>
+			<Stack my="xl">
+				<h2>My Listings</h2>
+
+				{filterListings?.length === 0 ? (
+					<Card width="500px">
+						<p>No listings available</p>
+					</Card>
+				) : (
+					<Flex>
+						{filterListings?.map((item) => {
+							return <ListingItem key={item.id} item={item} />;
+						})}
+					</Flex>
+				)}
+			</Stack>
 		</Container>
 	);
 };

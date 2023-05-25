@@ -2,10 +2,11 @@
 import { useMultiStepForm } from "@/context/MultiStepFormContext";
 import { propertyFacilities } from "@/yup/schema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, Flex, Stack, Switch, TextInput } from "@mantine/core";
+import { Button, Stack, Switch, TextInput } from "@mantine/core";
 import React, { FC } from "react";
 import { useForm } from "react-hook-form";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import { RowFlexBox } from "../common/FlexBox/RowFlexBox";
 
 /***** COMPONENT-FUNCTION *****/
 export const AddPropertyFacilities: FC = (): JSX.Element => {
@@ -32,7 +33,7 @@ export const AddPropertyFacilities: FC = (): JSX.Element => {
 	return (
 		<form onSubmit={handleSubmit(handleFormSubmit)}>
 			<Stack spacing="md">
-				<Flex gap="md" align="center">
+				<RowFlexBox align={{ base: "flex-start", sm: "center" }}>
 					<TextInput
 						{...register("price")}
 						label="Price"
@@ -42,11 +43,13 @@ export const AddPropertyFacilities: FC = (): JSX.Element => {
 						sx={{ width: "100%" }}
 						error={errors.price && (errors.price.message as string)}
 					/>
-					<Switch {...register("parking")} label="Parking" defaultChecked={formData?.parking} />
-					<Switch {...register("furnished")} label="Furnished" defaultChecked={formData?.furnished} />
-				</Flex>
+					<RowFlexBox columnOnSmall={false}>
+						<Switch {...register("parking")} label="Parking" defaultChecked={formData?.parking} />
+						<Switch {...register("furnished")} label="Furnished" defaultChecked={formData?.furnished} />
+					</RowFlexBox>
+				</RowFlexBox>
 
-				<Flex gap="md">
+				<RowFlexBox>
 					<TextInput
 						{...register("bedrooms")}
 						defaultValue={formData?.bedrooms}
@@ -65,16 +68,16 @@ export const AddPropertyFacilities: FC = (): JSX.Element => {
 						sx={{ width: "100%" }}
 						error={errors.bathrooms && (errors.bathrooms.message as string)}
 					/>
-				</Flex>
+				</RowFlexBox>
 
-				<Flex justify="flex-end" gap="sm">
+				<RowFlexBox justify="flex-end" columnOnSmall={false}>
 					<Button type="button" onClick={() => prevStep()} leftIcon={<MdChevronLeft size={18} />}>
 						Previous
 					</Button>
 					<Button type="submit" rightIcon={<MdChevronRight size={18} />}>
 						Next
 					</Button>
-				</Flex>
+				</RowFlexBox>
 			</Stack>
 		</form>
 	);
