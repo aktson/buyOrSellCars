@@ -1,7 +1,6 @@
 /***** IMPORTS *****/
-import React, { FC, useRef, useState } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { auth, db, storage } from "@firebaseConfig";
+import { auth, storage } from "@firebaseConfig";
 import { v4 as uuidv4 } from "uuid";
 import { notifications } from "@mantine/notifications";
 
@@ -9,7 +8,7 @@ import { notifications } from "@mantine/notifications";
  * @param {image}
  * @return {string} imgUrl
  */
-export const useImageUploadFirebase = async (image: any) => {
+export const storeImageToFirebase = async (image: any) => {
 	return new Promise((resolve, reject) => {
 		const fileName = `${auth?.currentUser?.uid}-name=${image.name}-${uuidv4()}`;
 

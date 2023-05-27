@@ -13,7 +13,7 @@ import { MdFileUpload } from "react-icons/md";
 import { notifications } from "@mantine/notifications";
 import { FirebaseError } from "firebase/app";
 import { useRouter } from "next/navigation";
-import { useImageUploadFirebase } from "@/hooks/useImageUploadFirebase";
+import { storeImageToFirebase } from "@/functions/storeImageToFirebase";
 
 /***** TYPES *****/
 interface EditPropertyProps {
@@ -66,7 +66,7 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId }): JSX.Element 
 	 * @return {void}
 	 */
 	const handleImageUpload = async () => {
-		const newImgUrls = (await Promise.all([...images].map((image) => useImageUploadFirebase(image))).catch(() => {
+		const newImgUrls = (await Promise.all([...images].map((image) => storeImageToFirebase(image))).catch(() => {
 			notifications.show({ message: "Images could not be uploaded", color: "red" });
 			return;
 		})) as string[];

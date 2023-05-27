@@ -45,7 +45,15 @@ export const ImageSlider: FC<ImageSliderProps> = ({ imgUrls }): JSX.Element => {
 				imgUrls?.map((img: string) => {
 					return (
 						<Carousel.Slide key={img}>
-							<Image src={img || ImageMissing} alt="img" fill={true} style={{ objectFit: "cover", pointerEvents: "none" }} />
+							<Image
+								src={img || ImageMissing}
+								alt="img"
+								fill={true}
+								style={{ objectFit: "cover", pointerEvents: "none" }}
+								onClick={(e) => {
+									e.stopPropagation();
+								}}
+							/>
 						</Carousel.Slide>
 					);
 				})

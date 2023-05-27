@@ -4,17 +4,20 @@ import { ListingItem } from "@/components/ListingItem";
 import { authenticate } from "@/components/authenticate";
 import { Card } from "@/components/common/Card";
 import { RowFlexBox } from "@/components/common/FlexBox/RowFlexBox";
+import { UpdateAvatar } from "@/components/editProfile/UpdateAvatar";
 import { useAuth } from "@/context/AuthContext";
 import { useListings } from "@/context/ListingsContext";
+import { storeImageToFirebase } from "@/functions/storeImageToFirebase";
 import { auth, db } from "@firebaseConfig";
-import { ActionIcon, Container, Stack, TextInput } from "@mantine/core";
+import { ActionIcon, Avatar, Box, Button, Container, FileButton, FileInput, Stack, TextInput, Text, Flex } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { FirebaseError } from "firebase/app";
 import { getAuth, updateProfile } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import dynamic from "next/dynamic";
-import React, { FC } from "react";
-import { MdBorderColor, MdCheck } from "react-icons/md";
+import Image from "next/image";
+import React, { FC, useState } from "react";
+import { MdAddCircle, MdCheck, MdEdit, MdFileUpload } from "react-icons/md";
 
 /***** TYPES *****/
 interface ProfileProps {}
@@ -29,6 +32,9 @@ export const Profile: FC<ProfileProps> = (): JSX.Element => {
 
 	/*** States */
 	const [changeDetails, setChangeDetails] = React.useState<boolean>(false);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [image, setImage] = useState<File | null>(null);
+	const [photoURL, setPhotoUrl] = useState(auth.currentUser?.photoURL);
 	const [formData, setFormData] = React.useState({
 		name: currentUser?.displayName,
 		email: currentUser?.email,
@@ -54,6 +60,7 @@ export const Profile: FC<ProfileProps> = (): JSX.Element => {
 	 * @return {void}
 	 */
 	const handleSubmit = async () => {
+		setIsSubmitting(true);
 		try {
 			if (auth?.currentUser?.displayName !== formData.name) {
 				// update displayName in firebase
@@ -77,6 +84,8 @@ export const Profile: FC<ProfileProps> = (): JSX.Element => {
 				notifications.show({ message: "Coud not update profile details", color: "red" });
 				console.log(error);
 			}
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
@@ -85,31 +94,35 @@ export const Profile: FC<ProfileProps> = (): JSX.Element => {
 		<Container size="lg" my="xl">
 			<Stack>
 				<h1>My Profile</h1>
-				<Card width="500px">
-					<RowFlexBox justify="space-between" align="center" columnOnSmall={false}>
-						<h2>Edit</h2>
-						<ActionIcon
-							variant="light"
-							color="blue"
-							onClick={() => {
-								changeDetails && handleSubmit();
-								setChangeDetails((prevState) => !prevState);
-							}}>
-							{!changeDetails ? <MdBorderColor size={20} /> : <MdCheck size={20} />}
-						</ActionIcon>
+				<Card width="700px">
+					<RowFlexBox>
+						<UpdateAvatar />
+						<form onSubmit={handleSubmit} style={{ width: "100%" }}>
+							<Stack mt="xl">
+								<div style={{ position: "relative" }}>
+									<TextInput
+										id="name"
+										radius="md"
+										sx={{ width: "100%" }}
+										defaultValue={formData.name || ""}
+										onChange={handleInputChange}
+										disabled={!changeDetails}
+									/>
+									<ActionIcon
+										variant="subtle"
+										color="gray"
+										sx={{ position: "absolute", right: 4, top: 4 }}
+										onClick={() => {
+											changeDetails && handleSubmit();
+											setChangeDetails((prevState) => !prevState);
+										}}>
+										{!changeDetails ? <MdEdit size={20} /> : <MdCheck size={20} />}
+									</ActionIcon>
+								</div>
+								<TextInput id="email" radius="md" defaultValue={formData.email || ""} disabled />
+							</Stack>
+						</form>
 					</RowFlexBox>
-					<form onSubmit={handleSubmit}>
-						<Stack mt="xl">
-							<TextInput
-								id="name"
-								radius="md"
-								defaultValue={formData.name || ""}
-								onChange={handleInputChange}
-								disabled={!changeDetails}
-							/>
-							<TextInput id="email" radius="md" defaultValue={formData.email || ""} disabled />
-						</Stack>
-					</form>
 				</Card>
 			</Stack>
 			<Stack my="xl">

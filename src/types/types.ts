@@ -57,3 +57,10 @@ export interface ButtonProps {
 	compact?: boolean;
 	variant?: "red";
 }
+export interface IUserCollection {
+	email: string;
+	name?: string;
+	photoUrl?: string;
+	favourites?: { id: string }[];
+	timeStamp: string;
+}

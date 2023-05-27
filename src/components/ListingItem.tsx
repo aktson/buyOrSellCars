@@ -13,6 +13,7 @@ import { notifications } from "@mantine/notifications";
 import { FirebaseError } from "firebase/app";
 import { useDisclosure } from "@mantine/hooks";
 import { EditProperty } from "./EditProperty";
+import { UImage } from "./common/UImage";
 
 /***** TYPES *****/
 interface ListingItemProps {
@@ -66,14 +67,13 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 			}}>
 			<figure style={{ width: "100%", height: "200px", position: "relative" }}>
 				<Link href={`/listingSpecific/${item?.id}`}>
-					<Image
+					<UImage
 						src={imgUrls?.[0] || ""}
 						alt="No way!"
-						fill={true}
-						style={{ objectFit: "cover", borderTopLeftRadius: theme.radius.md, borderTopRightRadius: theme.radius.md }}
+						style={{ borderTopLeftRadius: theme.radius.md, borderTopRightRadius: theme.radius.md }}
 					/>
 				</Link>
-				<FavouriteButton style={{ position: "absolute", top: "1rem", right: "1rem" }} />
+				<FavouriteButton style={{ position: "absolute", top: "1rem", right: "1rem" }} listingId={item?.id || ""} />
 			</figure>
 
 			<Stack p="md" spacing={0} sx={{ position: "relative" }}>

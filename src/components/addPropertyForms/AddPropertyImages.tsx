@@ -5,10 +5,9 @@ import { useMultiStepForm } from "@/context/MultiStepFormContext";
 import { ActionIcon, Button, FileInput, Flex, Stack } from "@mantine/core";
 import { MdChevronLeft, MdChevronRight, MdDelete, MdFileUpload } from "react-icons/md";
 import { auth } from "@firebaseConfig";
-
 import { notifications } from "@mantine/notifications";
 import { serverTimestamp } from "firebase/firestore";
-import { useImageUploadFirebase } from "@/hooks/useImageUploadFirebase";
+import { storeImageToFirebase } from "@/functions/storeImageToFirebase";
 
 /***** TYPES *****/
 interface AddPropertyImagesProps {
@@ -32,7 +31,7 @@ export const AddPropertyImages: FC<AddPropertyImagesProps> = ({ showButtons = tr
 	 * @return {void}
 	 */
 	const handleImageUpload = async () => {
-		const newImgUrls = (await Promise.all([...images].map((image) => useImageUploadFirebase(image))).catch(() => {
+		const newImgUrls = (await Promise.all([...images].map((image) => storeImageToFirebase(image))).catch(() => {
 			notifications.show({ message: "Images could not be uploaded", color: "red" });
 			return;
 		})) as string[];
