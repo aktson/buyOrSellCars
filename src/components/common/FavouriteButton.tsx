@@ -1,4 +1,5 @@
 /***** IMPORTS *****/
+import { useAuth } from "@/context/AuthContext";
 import { auth, db } from "@firebaseConfig";
 import { ActionIcon } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
@@ -28,12 +29,13 @@ export const FavouriteButton: FC<FavouriteButtonProps> = ({ text = false, style,
 
 	/*** Variables */
 	const router = useRouter();
+	const { currentUser } = useAuth();
 
 	useEffect(() => {
-		if (!auth) return;
+		if (!currentUser) return setIsFavourite(false);
 		const isFavouriteExist = user?.favourites.some((item: { id: string }) => item?.id === listingId);
 		setIsFavourite(isFavouriteExist);
-	}, [listingId, user, auth.currentUser]);
+	}, [listingId, user, currentUser]);
 
 	/*** Functions */
 	const fetchUser = async () => {
@@ -69,9 +71,9 @@ export const FavouriteButton: FC<FavouriteButtonProps> = ({ text = false, style,
 	/*** Effects */
 	React.useEffect(() => {
 		fetchUser();
-	}, []);
+	}, [currentUser]);
 	const handleOnClick = async () => {
-		if (!auth) router.push("/signin");
+		if (!currentUser) return router.push("/signin");
 		try {
 			// update in firestore
 			const userRef = doc(db, "users", auth?.currentUser?.uid || "");

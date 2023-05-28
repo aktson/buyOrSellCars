@@ -38,28 +38,31 @@ export const AddPropertyInfo: FC<AddPropertyInfoProps> = (): JSX.Element => {
 	return (
 		<form onSubmit={handleSubmit(handleFormSubmit)}>
 			<Stack spacing="md">
-				<NativeSelect
-					{...register("type")}
-					label="Type"
-					placeholder="Select type of Property"
-					defaultValue={formData?.type || ""}
-					sx={{ width: "100%" }}
-					data={[
-						{ value: "rent", label: "For Rent" },
-						{ value: "sale", label: "For Sale" },
-					]}
-					withAsterisk
-				/>
+				<RowFlexBox>
+					<NativeSelect
+						{...register("type")}
+						label="Type"
+						placeholder="Select type of Property"
+						sx={{ width: "100%" }}
+						defaultValue={formData?.type || ""}
+						data={[
+							{ value: "rent", label: "For Rent" },
+							{ value: "sale", label: "For Sale" },
+						]}
+						withAsterisk
+					/>
 
-				<TextInput
-					{...register("title")}
-					label="Heading"
-					placeholder="Add advertisement headline"
-					defaultValue={formData?.title}
-					radius="md"
-					withAsterisk
-					error={errors?.title && (errors.title.message as string)}
-				/>
+					<TextInput
+						{...register("title")}
+						label="Heading"
+						sx={{ width: "100%" }}
+						placeholder="Add advertisement headline"
+						defaultValue={formData?.title}
+						radius="md"
+						withAsterisk
+						error={errors?.title && (errors.title.message as string)}
+					/>
+				</RowFlexBox>
 				<Textarea
 					{...register("description")}
 					label="Description"
