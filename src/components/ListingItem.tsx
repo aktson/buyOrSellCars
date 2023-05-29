@@ -14,6 +14,7 @@ import { FirebaseError } from "firebase/app";
 import { useDisclosure } from "@mantine/hooks";
 import { EditProperty } from "./EditProperty";
 import { UImage } from "./common/UImage";
+import { useListings } from "@/context/ListingsContext";
 
 /***** TYPES *****/
 interface ListingItemProps {
@@ -26,6 +27,7 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	/*** Variables ***/
+	const { listings, setListings } = useListings();
 	const theme = useMantineTheme();
 	const { title, imgUrls, price, city, type, address } = item?.data!;
 	const convertedPrice = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -43,8 +45,9 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 
 		if (confirm) {
 			try {
-				const response = await deleteDoc(doc(db, "listings", id));
-				console.log(response);
+				await deleteDoc(doc(db, "listings", id));
+				const filterItems = listings?.filter((item) => item.id !== id);
+				if (filterItems) setListings(filterItems);
 			} catch (error) {
 				if (error instanceof FirebaseError) {
 					notifications.show({ message: error.message, color: "red" });
@@ -76,7 +79,7 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 				<FavouriteButton style={{ position: "absolute", top: "1rem", right: "1rem" }} listingId={item?.id || ""} />
 			</figure>
 
-			<Stack p="md" spacing={0} sx={{ position: "relative" }}>
+			<Stack p="md" spacing={0} sx={{ position: "relative", minHeight: "200px" }}>
 				<Badge sx={{ width: "max-content" }}>{type === "rent" ? "For rent" : "For sale"}</Badge>
 
 				<Text weight={500} size="lg" my={4}>

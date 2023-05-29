@@ -19,7 +19,6 @@ export const AddPropertyImages: FC<AddPropertyImagesProps> = ({ showButtons = tr
 	/*** States */
 	const [images, setImages] = useState<File[]>([]);
 
-	const imageInputRef = useRef<HTMLButtonElement>(null);
 
 	/*** Variables */
 	const { prevStep, nextStep, formData, setFormData } = useMultiStepForm();
@@ -57,16 +56,20 @@ export const AddPropertyImages: FC<AddPropertyImagesProps> = ({ showButtons = tr
 			<Stack>
 				<FileInput
 					label="Images"
-					placeholder="Add image or multiple images"
+					placeholder="Add atleat an image or multiple images to continue"
 					accept="image/png,image/jpeg"
 					value={images}
 					onChange={setImages}
 					multiple
-					ref={imageInputRef}
-					clearable
+						clearable
 				/>
 				<Flex>
-					<Button type="submit" rightIcon={<MdFileUpload size={18} />} onClick={handleImageUpload} color="dark">
+					<Button
+						type="submit"
+						rightIcon={<MdFileUpload size={18} />}
+						onClick={handleImageUpload}
+						color="dark"
+						disabled={images.length < 1}>
 						Add
 					</Button>
 				</Flex>

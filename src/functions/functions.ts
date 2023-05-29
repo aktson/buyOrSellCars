@@ -47,3 +47,11 @@ export function getInitials(fullName: string) {
 	const lastNameInitial = lastName.charAt(0);
 	return firstNameInitial + lastNameInitial || firstNameInitial || lastNameInitial;
 }
+
+/** convert price(amount) with commas
+ * @param {number} price
+ * @return {string}
+ */
+export const convertedPrice = (price: number | string): string => {
+	return price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || "";
+};

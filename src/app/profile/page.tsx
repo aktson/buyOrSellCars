@@ -7,9 +7,8 @@ import { RowFlexBox } from "@/components/common/FlexBox/RowFlexBox";
 import { UpdateAvatar } from "@/components/editProfile/UpdateAvatar";
 import { useAuth } from "@/context/AuthContext";
 import { useListings } from "@/context/ListingsContext";
-import { storeImageToFirebase } from "@/functions/storeImageToFirebase";
 import { auth, db } from "@firebaseConfig";
-import { ActionIcon, Avatar, Box, Button, Container, FileButton, FileInput, Stack, TextInput, Text, Flex } from "@mantine/core";
+import { ActionIcon, Avatar, Box, Button, Container, FileButton, FileInput, Stack, TextInput, Text, Flex, Grid } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { FirebaseError } from "firebase/app";
 import { getAuth, updateProfile } from "firebase/auth";
@@ -32,9 +31,6 @@ export const Profile: FC<ProfileProps> = (): JSX.Element => {
 
 	/*** States */
 	const [changeDetails, setChangeDetails] = React.useState<boolean>(false);
-	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [image, setImage] = useState<File | null>(null);
-	const [photoURL, setPhotoUrl] = useState(auth.currentUser?.photoURL);
 	const [formData, setFormData] = React.useState({
 		name: currentUser?.displayName,
 		email: currentUser?.email,
@@ -60,7 +56,6 @@ export const Profile: FC<ProfileProps> = (): JSX.Element => {
 	 * @return {void}
 	 */
 	const handleSubmit = async () => {
-		setIsSubmitting(true);
 		try {
 			if (auth?.currentUser?.displayName !== formData.name) {
 				// update displayName in firebase
@@ -84,8 +79,6 @@ export const Profile: FC<ProfileProps> = (): JSX.Element => {
 				notifications.show({ message: "Coud not update profile details", color: "red" });
 				console.log(error);
 			}
-		} finally {
-			setIsSubmitting(false);
 		}
 	};
 
@@ -133,11 +126,15 @@ export const Profile: FC<ProfileProps> = (): JSX.Element => {
 						<p>No listings Found</p>
 					</Card>
 				) : (
-					<RowFlexBox>
+					<Grid grow>
 						{filterListings?.map((item) => {
-							return <ListingItem key={item.id} item={item} />;
+							return (
+								<Grid.Col span={4} key={item.id}>
+									<ListingItem item={item} />
+								</Grid.Col>
+							);
 						})}
-					</RowFlexBox>
+					</Grid>
 				)}
 			</Stack>
 		</Container>

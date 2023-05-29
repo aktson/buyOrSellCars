@@ -69,6 +69,7 @@ export const AddPropertyInfo: FC<AddPropertyInfoProps> = (): JSX.Element => {
 					placeholder="Add description of property"
 					defaultValue={formData?.description}
 					radius="md"
+					minRows={6}
 					withAsterisk
 					error={errors?.description && (errors.description.message as string)}
 				/>

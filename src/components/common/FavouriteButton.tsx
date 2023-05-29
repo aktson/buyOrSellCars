@@ -4,7 +4,7 @@ import { auth, db } from "@firebaseConfig";
 import { ActionIcon } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { FirebaseError } from "firebase/app";
-import { DocumentData, arrayUnion, collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import { DocumentData, arrayRemove, arrayUnion, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import React, { FC, useEffect, useState } from "react";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
@@ -33,7 +33,7 @@ export const FavouriteButton: FC<FavouriteButtonProps> = ({ text = false, style,
 
 	useEffect(() => {
 		if (!currentUser) return setIsFavourite(false);
-		const isFavouriteExist = user?.favourites.some((item: { id: string }) => item?.id === listingId);
+		const isFavouriteExist = user?.favourites?.some((item: { id: string }) => item?.id === listingId);
 		setIsFavourite(isFavouriteExist);
 	}, [listingId, user, currentUser]);
 
@@ -78,9 +78,9 @@ export const FavouriteButton: FC<FavouriteButtonProps> = ({ text = false, style,
 			// update in firestore
 			const userRef = doc(db, "users", auth?.currentUser?.uid || "");
 			if (isFavourite) {
-				const filteredFavourites = user?.favourites.filter((item: { id: string }) => item.id !== listingId);
+				// const filteredFavourites = user?.favourites.filter((item: { id: string }) => item.id !== listingId); alternative to arrayRemove remove item from favourite
 				await updateDoc(userRef, {
-					favourites: filteredFavourites,
+					favourites: arrayRemove({ id: listingId }),
 				});
 				setIsFavourite((prev: boolean) => !prev);
 			} else {
@@ -98,8 +98,8 @@ export const FavouriteButton: FC<FavouriteButtonProps> = ({ text = false, style,
 			variant={variant ? variant : "transparent"}
 			onClick={handleOnClick}
 			style={{ ...style, width: "max-content", display: "flex", gap: "0.5em" }}
-			color={color}>
-			{text && (isFavourite ? "Added to Favourite" : "Add to favourite")}
+			color={isFavourite ? "red" : color}>
+			{text && (isFavourite ? "Favourited" : "Add to favourite")}
 			{isFavourite ? <MdFavorite size={22} fill="red" /> : <MdFavoriteBorder size={22} fill={color ? color : "white"} />}
 		</ActionIcon>
 	);

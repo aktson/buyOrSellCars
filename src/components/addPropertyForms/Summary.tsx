@@ -2,11 +2,11 @@
 import { useMultiStepForm } from "@/context/MultiStepFormContext";
 import { IListings } from "@/types/types";
 import { Button, Divider, Flex, LoadingOverlay, Stack, Text } from "@mantine/core";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { MdChevronLeft, MdPublish } from "react-icons/md";
 import { SummaryItem } from "./SummaryItem";
 import Image from "next/image";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, setDoc, doc } from "firebase/firestore";
 import { db } from "@firebaseConfig";
 import { notifications } from "@mantine/notifications";
 import { FirebaseError } from "firebase/app";
@@ -22,19 +22,22 @@ export const Summary: FC<SummaryProps> = (): JSX.Element => {
 
 	/*** Variables */
 	const router = useRouter();
-	const { prevStep, formData } = useMultiStepForm();
+	const { prevStep, formData, setFormData } = useMultiStepForm();
 
-	const handleFormSubmit = async () => {
+	const handleFormSubmit = async (event: React.FormEvent) => {
+		event.preventDefault();
 		setIsSubmitting(true);
 
 		try {
-			const docRef = await addDoc(collection(db, "listings"), formData);
+			const docRef = doc(collection(db, "listings"));
+			await setDoc(docRef, formData);
 
 			if (docRef) {
 				notifications.show({ message: "Listing successfully published", color: "green" });
 			}
 
-			// router.push(`/listingSpecific/${listingId}`);
+			router.push(`/listingSpecific/${docRef.id}`);
+			setFormData(null);
 		} catch (error) {
 			if (error instanceof FirebaseError) {
 				notifications.show({ message: error.message, color: "red" });
@@ -48,7 +51,9 @@ export const Summary: FC<SummaryProps> = (): JSX.Element => {
 		}
 	};
 
-	if (!formData) return <p>Nothing here</p>;
+	useEffect(() => {
+		if (!formData) return router.push("/createNew");
+	}, []);
 	/*** Return statement ***/
 	return (
 		<form onSubmit={handleFormSubmit}>
@@ -56,12 +61,12 @@ export const Summary: FC<SummaryProps> = (): JSX.Element => {
 				<Text component="h2">Property Details</Text>
 				<Flex gap="md">
 					<SummaryItem label="Type" text={formData?.type} />
-					<SummaryItem label="Heading" text={formData.title} />
+					<SummaryItem label="Heading" text={formData?.title} />
 				</Flex>
-				<SummaryItem label="Description" text={formData.description} />
+				<SummaryItem label="Description" text={formData?.description} />
 				<Flex gap="md">
-					<SummaryItem label="Address" text={formData.address} />
-					<SummaryItem label="City" text={formData.city} />
+					<SummaryItem label="Address" text={formData?.address} />
+					<SummaryItem label="City" text={formData?.city} />
 				</Flex>
 			</Stack>
 			<Stack spacing="sm" mb="xl">
@@ -70,11 +75,11 @@ export const Summary: FC<SummaryProps> = (): JSX.Element => {
 
 				<Flex gap="md">
 					<SummaryItem label="Parking" text={formData?.parking ? "Yes" : "No"} />
-					<SummaryItem label="Furnished" text={formData.furnished ? "Yes" : "No"} />
+					<SummaryItem label="Furnished" text={formData?.furnished ? "Yes" : "No"} />
 				</Flex>
 				<Flex gap="md">
-					<SummaryItem label="Bedrooms" text={formData.bedrooms} />
-					<SummaryItem label="Bathrooms" text={formData.bathrooms} />
+					<SummaryItem label="Bedrooms" text={formData?.bedrooms} />
+					<SummaryItem label="Bathrooms" text={formData?.bathrooms} />
 				</Flex>
 			</Stack>
 			<Stack spacing="sm" mb="xl">

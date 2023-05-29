@@ -8,7 +8,7 @@ import { IListings } from "@/types/types";
 import { LoadingSkeleton } from "@/components/common/LoadingSkeleton";
 import { ShareButton } from "@/components/common/ShareButton";
 import { ImageSlider } from "@/components/common/ImageSlider";
-import { capitalize } from "@/functions/functions";
+import { capitalize, convertedPrice } from "@/functions/functions";
 import { FavouriteButton } from "@/components/common/FavouriteButton";
 import { MdBathroom, MdOutlineBedroomChild, MdLocalParking, MdChair } from "react-icons/md";
 import Link from "next/link";
@@ -64,33 +64,33 @@ export const ListingSpecific: FC<ListingSpecificProps> = ({ params }): JSX.Eleme
 			<ImageSlider imgUrls={imgUrls} />
 
 			{/* favourite and share button */}
-			<Flex mt="2em" gap="md">
-				<FavouriteButton style={{ padding: "1em" }} variant="outline" color="gray" text={true} />
-				<ShareButton />
+			<Flex mt="2em" justify="space-between" align="flex-end">
+				<Badge sx={{ maxWidth: "max-content" }} size="xl">
+					{type === "rent" ? "For rent" : "For sale"}
+				</Badge>
+				<Flex gap="md">
+					<FavouriteButton style={{ padding: "1em" }} variant="outline" color="gray" text={true} listingId={id} />
+					<ShareButton />
+				</Flex>
 			</Flex>
 
 			{/* title and price of property */}
-			<Flex justify="space-between" align="center" mt="sm">
-				<Stack spacing="0">
-					<Text size="3rem">
-						{title}
-						<Badge>{type === "rent" ? "For rent" : "For sale"}</Badge>
-					</Text>
-
-					<Text>
-						{capitalize(address)}, {capitalize(city)}
-					</Text>
-				</Stack>
-				<Stack>
-					<Text size="2rem">NOK {price}</Text>
-					{auth?.currentUser?.uid !== userRef && (
-						<Link href={`/contact/${userRef}?listingName=${title}&listingLocation=${location}`}>
-							<Button>Contact</Button>
-						</Link>
-					)}
-				</Stack>
+			<Stack mt="xs" spacing={0}>
+				<Text size="3rem">{title}</Text>
+				<Text>
+					{capitalize(address)}, {capitalize(city)}
+				</Text>
+			</Stack>
+			<Flex justify="space-between" mt="md">
+				<Text size="2rem">
+					NOK {convertedPrice(price)},- {type === "rent" && " " + "/ month"}
+				</Text>
+				{auth?.currentUser?.uid !== userRef && (
+					<Link href={`/contact/${userRef}?listingName=${title}&listingLocation=${location}`}>
+						<Button>Contact</Button>
+					</Link>
+				)}
 			</Flex>
-
 			{/* facilities */}
 			<Stack mt="3em">
 				<Text size="xl" fw={500}>
@@ -138,12 +138,12 @@ export const ListingSpecific: FC<ListingSpecificProps> = ({ params }): JSX.Eleme
 			</Stack>
 
 			{/* description of property */}
-			<Stack spacing="xs" mt="3em">
+			<Stack mt="3em">
 				<Text size="xl" fw={500}>
 					About Property
 				</Text>
 				<Divider />
-				<Text>{description}</Text>
+				<p>{description}</p>
 			</Stack>
 		</Container>
 	);

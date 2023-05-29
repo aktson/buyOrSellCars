@@ -12,13 +12,14 @@ interface RowFlexBoxProps {
 	justify?: JustifyValue | { base?: JustifyValue; sm?: JustifyValue; md?: AlignValue };
 	columnOnSmall?: boolean;
 	style?: CSSProperties;
+	wrap?: "wrap" | "wrap-reverse" | "inherit" | "nowrap";
 }
 
 /***** COMPONENT-FUNCTION *****/
-export const RowFlexBox: FC<RowFlexBoxProps> = ({ children, align, justify, columnOnSmall = true, style }): JSX.Element => {
+export const RowFlexBox: FC<RowFlexBoxProps> = ({ children, align, justify, columnOnSmall = true, style, wrap }): JSX.Element => {
 	/*** Return statement ***/
 	return (
-		<Flex gap="md" direction={{ base: columnOnSmall ? "column" : "row", sm: "row" }} align={align} justify={justify} style={style}>
+		<Flex gap="md" direction={{ base: columnOnSmall ? "column" : "row", sm: "row" }} align={align} justify={justify} style={style} wrap={wrap}>
 			{children}
 		</Flex>
 	);
