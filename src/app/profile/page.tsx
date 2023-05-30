@@ -1,6 +1,5 @@
 "use client";
 /***** IMPORTS *****/
-import { ListingItem } from "@/components/listings/ListingItem";
 import { authenticate } from "@/functions/authenticate";
 import { Card } from "@/components/common/Card";
 import { RowFlexBox } from "@/components/common/FlexBox/RowFlexBox";
@@ -8,15 +7,14 @@ import { UpdateAvatar } from "@/components/edit/UpdateAvatar";
 import { useAuth } from "@/context/AuthContext";
 import { useListings } from "@/context/ListingsContext";
 import { auth, db } from "@firebaseConfig";
-import { ActionIcon, Avatar, Box, Button, Container, FileButton, FileInput, Stack, TextInput, Text, Flex, Grid } from "@mantine/core";
+import { ActionIcon, Container, Stack, TextInput, Text } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { FirebaseError } from "firebase/app";
-import { getAuth, updateProfile } from "firebase/auth";
+import { updateProfile } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import dynamic from "next/dynamic";
-import Image from "next/image";
-import React, { FC, useState } from "react";
-import { MdAddCircle, MdCheck, MdEdit, MdFileUpload } from "react-icons/md";
+import React, { FC } from "react";
+import { MdCheck, MdEdit } from "react-icons/md";
 import { IListings } from "@/types/types";
 import { Listings } from "@/components/listings/Listings";
 
@@ -26,7 +24,6 @@ interface ProfileProps {}
 /***** COMPONENT-FUNCTION *****/
 export const Profile: FC<ProfileProps> = (): JSX.Element => {
 	/*** Variables */
-	const auth = getAuth();
 	const { currentUser } = useAuth();
 	const { listings } = useListings();
 	const filterListings = listings?.filter((listing: IListings) => listing.data.userRef === auth.currentUser?.uid);
@@ -121,7 +118,9 @@ export const Profile: FC<ProfileProps> = (): JSX.Element => {
 				</Card>
 			</Stack>
 			<Stack my="xl">
-				<h2>My Listings</h2>
+				<Text component="h2" size="xl">
+					My Listings
+				</Text>
 				<Listings listingsData={filterListings} />
 			</Stack>
 		</Container>

@@ -23,8 +23,6 @@ interface FavouriteButtonProps {
 export const FavouriteButton: FC<FavouriteButtonProps> = ({ text = false, style, variant, color, listingId }): JSX.Element => {
 	/*** States ***/
 	const [user, setUser] = useState<DocumentData | null>(null);
-	const [loading, setLoading] = useState<boolean>(true);
-	const [error, setError] = useState<boolean | string | null>(null);
 	const [isFavourite, setIsFavourite] = useState<boolean>(false);
 
 	/*** Variables */
@@ -39,7 +37,6 @@ export const FavouriteButton: FC<FavouriteButtonProps> = ({ text = false, style,
 
 	/*** Functions */
 	const fetchUser = async () => {
-		setLoading(true);
 		const userId = auth?.currentUser?.uid;
 		if (!userId) return;
 		try {
@@ -59,13 +56,10 @@ export const FavouriteButton: FC<FavouriteButtonProps> = ({ text = false, style,
 			console.log(error);
 
 			if (error instanceof FirebaseError) {
-				setError(error?.message);
 				notifications.show({ message: error.message, color: "red" });
 			} else {
 				notifications.show({ message: "An error occurred", color: "red" });
 			}
-		} finally {
-			setLoading(false);
 		}
 	};
 	/*** Effects */

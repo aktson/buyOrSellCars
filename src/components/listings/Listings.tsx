@@ -13,10 +13,11 @@ interface ListingsProps {
 	forSale?: boolean;
 	forRent?: boolean;
 	listingsData?: IListings[] | DocumentData | null;
+	grow?: boolean;
 }
 
 /***** COMPONENT-FUNCTION *****/
-export const Listings: FC<ListingsProps> = ({ forSale, forRent, listingsData }): JSX.Element => {
+export const Listings: FC<ListingsProps> = ({ forSale, forRent, listingsData, grow = true }): JSX.Element => {
 	/*** Variables */
 	const { isLoading, error, listings } = useListings();
 	let listingToRender = [] as IListings[] | DocumentData | null;
@@ -35,7 +36,7 @@ export const Listings: FC<ListingsProps> = ({ forSale, forRent, listingsData }):
 	if (error) return <AlertBox text={error} />;
 	return (
 		<Container size="lg" mx="auto" my="xl">
-			<Grid grow>
+			<Grid grow={grow}>
 				{listingToRender?.map((item: IListings) => {
 					return (
 						<Grid.Col span={4} key={item?.id}>
