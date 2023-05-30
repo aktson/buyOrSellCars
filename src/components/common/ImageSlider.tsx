@@ -4,14 +4,16 @@ import { IListings } from "@/types/types";
 import { Carousel } from "@mantine/carousel";
 import Image from "next/image";
 import ImageMissing from "public/image-missing.jpg";
+import { ULink } from "./ULink";
 
 /***** TYPES *****/
 interface ImageSliderProps {
 	imgUrls?: IListings["data"]["imgUrls"];
+	href?: string;
 }
 
 /***** COMPONENT-FUNCTION *****/
-export const ImageSlider: FC<ImageSliderProps> = ({ imgUrls }): JSX.Element => {
+export const ImageSlider: FC<ImageSliderProps> = ({ imgUrls, href }): JSX.Element => {
 	/***Variables */
 
 	/*** Return statement ***/

@@ -1,9 +1,9 @@
 "use client";
 /***** IMPORTS *****/
-import React, { FC } from "react";
+import React, { FC, useRef } from "react";
 import { useListings } from "@/context/ListingsContext";
 import dynamic from "next/dynamic";
-import { Container, Flex, Stack, Text } from "@mantine/core";
+import { Container, Flex, Space, Stack, Text } from "@mantine/core";
 import { ULink } from "@/components/common/ULink";
 import { ImageSlider } from "@/components/common/ImageSlider";
 import { IListings } from "@/types/types";
@@ -11,6 +11,11 @@ import { Listings } from "@/components/listings/Listings";
 import { MdTrendingFlat } from "react-icons/md";
 import { Loading } from "@/components/common/Loading";
 import { AlertBox } from "@/components/common/AlertBox";
+import { Carousel } from "@mantine/carousel";
+import Image from "next/image";
+
+import Link from "next/link";
+import { FrontPageSlider } from "@/components/common/FrontPageSlider";
 
 /***** COMPONENT-FUNCTION *****/
 const Home: FC = (): JSX.Element => {
@@ -31,7 +36,8 @@ const Home: FC = (): JSX.Element => {
 	return (
 		<section>
 			<Container size="lg" mx="auto">
-				<ImageSlider imgUrls={imgUrls} />
+				<FrontPageSlider />
+				<Space h="xl" />
 				<Stack my="xl" spacing={0}>
 					<Flex justify="space-between" align="center" px="md">
 						<Text component="h2" size="xl">
