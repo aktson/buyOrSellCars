@@ -2,7 +2,6 @@
 /***** IMPORTS *****/
 import React, { FC, useEffect, useState } from "react";
 import { Container, Text } from "@mantine/core";
-import { useRouter } from "next/navigation";
 import { auth, db } from "@firebaseConfig";
 import { notifications } from "@mantine/notifications";
 import { FirebaseError } from "firebase/app";
@@ -13,6 +12,8 @@ import { Listings } from "@/components/listings/Listings";
 import { Card } from "@/components/common/Card";
 import { Loading } from "@/components/common/Loading";
 import { AlertBox } from "@/components/common/AlertBox";
+import { authenticate } from "@/functions/authenticate";
+import dynamic from "next/dynamic";
 
 /***** TYPES *****/
 interface pageProps {}
@@ -68,6 +69,7 @@ const Favourite: FC<pageProps> = (): JSX.Element => {
 	useEffect(() => {
 		fetchUser();
 	}, []);
+
 	/*** Return statement ***/
 	if (loading) return <Loading />;
 	if (error) return <AlertBox text={error} />;
@@ -81,4 +83,4 @@ const Favourite: FC<pageProps> = (): JSX.Element => {
 	);
 };
 
-export default Favourite;
+export default dynamic(() => Promise.resolve(authenticate(Favourite)), { ssr: false });
