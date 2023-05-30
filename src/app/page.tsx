@@ -8,6 +8,9 @@ import { Container, Grid } from "@mantine/core";
 import { IListings } from "@/types/types";
 import { AlertBox } from "@/components/common/AlertBox";
 import { Loading } from "@/components/common/Loading";
+import { Listings } from "@/components/Listings";
+import { ULink } from "@/components/common/ULink";
+import { Card } from "@/components/common/Card";
 
 /***** TYPES *****/
 interface pageProps {}
@@ -17,22 +20,16 @@ const Home: FC<pageProps> = (): JSX.Element => {
 	const { listings, error, isLoading } = useListings();
 
 	/*** Return statement ***/
-
-	if (listings?.length === 0) return <AlertBox text="No listings found" />;
-	if (isLoading) return <Loading />;
-	if (error) return <AlertBox text={error} />;
 	return (
 		<section>
-			<Container size="lg" mx="auto" my="xl">
-				<Grid>
-					{listings?.map((item: IListings) => {
-						return (
-							<Grid.Col span={4} key={item?.id}>
-								<ListingItem item={item} />
-							</Grid.Col>
-						);
-					})}
-				</Grid>
+			<Container>
+				{/* <Listings listings={listings} isLoading={isLoading} error={error} /> */}
+				<ULink href="/forRent">
+					<Card>For Rent </Card>
+				</ULink>
+				<ULink href="/forSale">
+					<Card>For Sale </Card>
+				</ULink>
 			</Container>
 		</section>
 	);
