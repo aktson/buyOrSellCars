@@ -8,7 +8,7 @@ import { IListings } from "@/types/types";
 import { LoadingSkeleton } from "@/components/common/LoadingSkeleton";
 import { ShareButton } from "@/components/common/ShareButton";
 import { ImageSlider } from "@/components/common/ImageSlider";
-import { capitalize, convertedPrice } from "@/functions/functions";
+import { capitalize, convertPrice } from "@/functions/functions";
 import { FavouriteButton } from "@/components/common/FavouriteButton";
 import { MdBathroom, MdOutlineBedroomChild, MdLocalParking, MdChair } from "react-icons/md";
 import Link from "next/link";
@@ -83,7 +83,7 @@ export const ListingSpecific: FC<ListingSpecificProps> = ({ params }): JSX.Eleme
 			</Stack>
 			<Flex justify="space-between" mt="md">
 				<Text size="2rem">
-					NOK {convertedPrice(price)},- {type === "rent" && " " + "/ month"}
+					NOK {convertPrice(price)},- {type === "rent" && " " + "/ month"}
 				</Text>
 				{auth?.currentUser?.uid !== userRef && (
 					<Link href={`/contact/${userRef}?listingName=${title}&listingLocation=${location}`}>

@@ -49,7 +49,7 @@ export const ImageSlider: FC<ImageSliderProps> = ({ imgUrls }): JSX.Element => {
 								src={img || ImageMissing}
 								alt="img"
 								fill={true}
-								style={{ objectFit: "cover", pointerEvents: "none" }}
+								style={{ objectFit: "cover", pointerEvents: "none", objectPosition: "center" }}
 								onClick={(e) => {
 									e.stopPropagation();
 								}}

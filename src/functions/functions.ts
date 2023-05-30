@@ -52,6 +52,6 @@ export function getInitials(fullName: string) {
  * @param {number} price
  * @return {string}
  */
-export const convertedPrice = (price: number | string): string => {
+export const convertPrice = (price: number | string): string => {
 	return price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || "";
 };

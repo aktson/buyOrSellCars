@@ -68,6 +68,7 @@ export const Nav: FC<NavProps> = ({ closeDrawer }): JSX.Element => {
 			<Button leftIcon={<MdHome size={20} />} color={getActivePath("/")} variant="subtle" className={homePath ? classes.activeButton : ""}>
 				<Link href="/"> Home</Link>
 			</Button>
+
 			<Button
 				leftIcon={<MdOutlineAddCircleOutline size={20} />}
 				color={getActivePath("/createNew")}

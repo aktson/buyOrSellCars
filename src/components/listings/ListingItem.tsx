@@ -1,6 +1,6 @@
 /***** IMPORTS *****/
 import React, { FC, useState } from "react";
-import { capitalize } from "@/functions/functions";
+import { capitalize, convertPrice } from "@/functions/functions";
 import { IListings } from "@/types/types";
 import { Paper, Text, Stack, Badge, useMantineTheme, ActionIcon, Box, Flex, Modal, LoadingOverlay } from "@mantine/core";
 import Link from "next/link";
@@ -27,7 +27,6 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 	/*** Variables ***/
 	const theme = useMantineTheme();
 	const { title, imgUrls, price, city, type, address } = item?.data!;
-	const convertedPrice = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	const isAdmin = auth.currentUser?.uid === item?.data.userRef;
 	const [opened, { open, close }] = useDisclosure(false);
 
@@ -75,7 +74,9 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 			</figure>
 
 			<Stack p="md" spacing={0} sx={{ position: "relative", minHeight: "200px" }}>
-				<Badge sx={{ width: "max-content" }}>{type === "rent" ? "For rent" : "For sale"}</Badge>
+				<Badge sx={{ width: "max-content" }} color={type === "rent" ? "green" : "default"}>
+					{type === "rent" ? "For rent" : "For sale"}
+				</Badge>
 
 				<Text weight={500} size="lg" my={4}>
 					{capitalize(title)}
@@ -97,7 +98,7 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 				</Text>
 
 				<Text color="indigo" mt={8}>
-					NOK {convertedPrice},- {type === "rent" && " " + "/ month"}
+					NOK {convertPrice(price)},- {type === "rent" && " " + "/ month"}
 				</Text>
 			</Stack>
 

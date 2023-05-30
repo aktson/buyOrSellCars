@@ -1,7 +1,7 @@
 "use client";
 /***** IMPORTS *****/
 import React, { FC, useEffect, useState } from "react";
-import { TextInput, PasswordInput, Text, Group, Stack, Container, LoadingOverlay, Button, Divider } from "@mantine/core";
+import { TextInput, PasswordInput, Text, Group, Stack, Container, LoadingOverlay, Button, Divider, Flex } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
@@ -95,10 +95,10 @@ const Signin: FC = (): JSX.Element => {
 							error={errors.password && (errors.password.message as string)}
 						/>
 					</Stack>
-					<Text align="end" size="xs" color="indigo" mt="xs">
-						<Link href="/forgotPassword">forgot Password?</Link>
-					</Text>
 
+					<Flex justify="flex-end" mt="xs">
+						<ULink href="/forgotPassword">forgot Password?</ULink>
+					</Flex>
 					<Button fullWidth={true} loading={isSubmitting} mt={"md"} type="submit">
 						{isSubmitting ? "signing in" : "Sign In"}
 					</Button>
@@ -107,7 +107,7 @@ const Signin: FC = (): JSX.Element => {
 					<Group mt={8}>
 						<Text fz="xs" ml="auto">
 							Don&apos;t have an account?
-							<ULink href="/signup">Sign Up</ULink>
+							<ULink href="/signup">sign up</ULink>
 						</Text>
 					</Group>
 				</form>

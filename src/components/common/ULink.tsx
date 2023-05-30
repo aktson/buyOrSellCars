@@ -1,5 +1,5 @@
 /***** IMPORTS *****/
-import { NavLink } from "@mantine/core";
+import { Button } from "@mantine/core";
 import Link from "next/link";
 import React, { CSSProperties, FC } from "react";
 
@@ -9,21 +9,16 @@ interface ULinkProps {
 	icon?: JSX.Element;
 	color?: string;
 	href: string;
-	styles?: CSSProperties;
+	style?: CSSProperties;
+	rightIcon?: JSX.Element;
 }
 
 /***** COMPONENT-FUNCTION *****/
-export const ULink: FC<ULinkProps> = ({ children, icon, color, href, styles }): JSX.Element => {
+export const ULink: FC<ULinkProps> = ({ children, icon, href, style, rightIcon }): JSX.Element => {
 	/*** Return statement ***/
 	return (
-		<Link href={href}>
-			<NavLink
-				label={children}
-				icon={icon}
-				color={color ? color : "indigo"}
-				variant="subtle"
-				style={styles}
-				sx={{ width: "max-content", display: "inline-flex", padding: "0", paddingLeft: "0.2em", color: "indigo" }}></NavLink>
-		</Link>
+		<Button size="xs" color="indigo" variant="subtle" compact leftIcon={icon} style={style} rightIcon={rightIcon}>
+			<Link href={href}>{children}</Link>
+		</Button>
 	);
 };
