@@ -20,7 +20,7 @@ interface ListingSpecificProps {
 }
 
 /***** COMPONENT-FUNCTION *****/
-export const ListingSpecific: FC<ListingSpecificProps> = ({ params }): JSX.Element => {
+const ListingSpecific: FC<ListingSpecificProps> = ({ params }): JSX.Element => {
 	/*** States */
 	const [listing, setListing] = useState<IListings["data"] | {}>({});
 	const [loading, setLoading] = useState<boolean>(false);
