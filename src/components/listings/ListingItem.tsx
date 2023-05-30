@@ -5,7 +5,7 @@ import { IListings } from "@/types/types";
 import { Paper, Text, Stack, Badge, useMantineTheme, ActionIcon, Box, Flex, Modal, LoadingOverlay } from "@mantine/core";
 import Link from "next/link";
 import { FavouriteButton } from "../common/FavouriteButton";
-import { MdDelete, MdModeEdit } from "react-icons/md";
+import { MdDelete, MdModeEdit, MdOutlineLocationOn, MdPlace } from "react-icons/md";
 import { auth, db } from "@firebaseConfig";
 import { deleteDoc, doc } from "firebase/firestore";
 import { notifications } from "@mantine/notifications";
@@ -93,10 +93,12 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 						</Flex>
 					</Box>
 				)}
-				<Text color="dimmed">
-					{capitalize(address)}, {capitalize(city)}
-				</Text>
-
+				<Flex align="center" gap="xs">
+					<MdOutlineLocationOn />
+					<Text color="dimmed">
+						{capitalize(address)}, {capitalize(city)}
+					</Text>
+				</Flex>
 				<Text color="indigo" mt={8}>
 					NOK {convertPrice(price)},- {type === "rent" && " " + "/ month"}
 				</Text>
