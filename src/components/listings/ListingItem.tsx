@@ -5,7 +5,7 @@ import { IListings } from "@/types/types";
 import { Paper, Text, Stack, Badge, useMantineTheme, ActionIcon, Box, Flex, Modal, LoadingOverlay } from "@mantine/core";
 import Link from "next/link";
 import { FavouriteButton } from "../common/FavouriteButton";
-import { MdDelete, MdModeEdit, MdOutlineLocationOn, MdPlace } from "react-icons/md";
+import { MdDelete, MdModeEdit, MdOutlineLocationOn } from "react-icons/md";
 import { auth, db } from "@firebaseConfig";
 import { deleteDoc, doc } from "firebase/firestore";
 import { notifications } from "@mantine/notifications";

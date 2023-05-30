@@ -2,7 +2,7 @@
 /***** IMPORTS *****/
 import { Listings } from "@/components/listings/Listings";
 import { BreadCrumb } from "@/components/common/BreadCrumb";
-import { Container } from "@mantine/core";
+import { Box, Container } from "@mantine/core";
 import React, { FC } from "react";
 
 /***** TYPES *****/
@@ -19,7 +19,9 @@ const ForSale: FC<ForSaleProps> = (): JSX.Element => {
 	/*** Return statement ***/
 	return (
 		<Container size="lg" mx="auto" my="xl">
-			<BreadCrumb items={breadcrumbItems} />
+			<Box px="sm">
+				<BreadCrumb items={breadcrumbItems} />
+			</Box>
 			<Listings forSale={true} />
 		</Container>
 	);

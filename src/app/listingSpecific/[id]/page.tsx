@@ -12,6 +12,7 @@ import { capitalize, convertPrice } from "@/functions/functions";
 import { FavouriteButton } from "@/components/common/FavouriteButton";
 import { MdBathroom, MdOutlineBedroomChild, MdLocalParking, MdChair } from "react-icons/md";
 import Link from "next/link";
+import { BreadCrumb } from "@/components/common/BreadCrumb";
 
 /***** TYPES *****/
 interface ListingSpecificProps {
@@ -30,7 +31,10 @@ export const ListingSpecific: FC<ListingSpecificProps> = ({ params }): JSX.Eleme
 		listing as IListings["data"];
 
 	/*** Functions */
-
+	/** Fetch listing to pre fill edit form
+	 * @param {event}
+	 * @return {void}
+	 */
 	async function getListing() {
 		try {
 			const docRef = doc(db, "listings", id);
@@ -51,6 +55,13 @@ export const ListingSpecific: FC<ListingSpecificProps> = ({ params }): JSX.Eleme
 		getListing();
 	}, [id]);
 
+	// render breadcrumbItems
+	const breadcrumbItems = [
+		{ title: "Home", href: "/" },
+		{ title: `Properties for ${type === "rent" ? "rent" : "sale"}`, href: `${type === "rent" ? "/forRent" : "/forSale"}` },
+		{ title: title, href: "#" },
+	];
+
 	/*** Return statement ***/
 	if (loading)
 		return (
@@ -60,6 +71,8 @@ export const ListingSpecific: FC<ListingSpecificProps> = ({ params }): JSX.Eleme
 		);
 	return (
 		<Container size="md" mx="auto" my="xl">
+			<BreadCrumb items={breadcrumbItems} style={{ marginBottom: "0.5em" }} />
+
 			{/* image slider  */}
 			<ImageSlider imgUrls={imgUrls} />
 

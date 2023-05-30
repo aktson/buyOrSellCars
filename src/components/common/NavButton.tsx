@@ -11,11 +11,12 @@ interface NavButtonProps {
 	children: React.ReactNode;
 }
 
-const useStyles = createStyles((theme) => ({
+/*** Styles */
+const useStyles = createStyles({
 	activeButton: {
 		pointerEvents: "none",
 	},
-}));
+});
 
 /***** COMPONENT-FUNCTION *****/
 export const NavButton: FC<NavButtonProps> = ({ icon, href, children }): JSX.Element => {

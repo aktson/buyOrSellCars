@@ -3,23 +3,20 @@
 import React, { FC } from "react";
 import { useListings } from "@/context/ListingsContext";
 import dynamic from "next/dynamic";
-import { Container, Flex, Grid, Slider, Stack, Text } from "@mantine/core";
+import { Container, Flex, Stack, Text } from "@mantine/core";
 import { ULink } from "@/components/common/ULink";
-import { Card } from "@/components/common/Card";
 import { ImageSlider } from "@/components/common/ImageSlider";
 import { IListings } from "@/types/types";
-import { RowFlexBox } from "@/components/common/FlexBox/RowFlexBox";
 import { Listings } from "@/components/listings/Listings";
-import { ColumnFlexBox } from "@/components/common/FlexBox/ColumnFlexBox";
-import { MdOutlineHouse, MdTrendingFlat } from "react-icons/md";
-
-/***** TYPES *****/
-interface pageProps {}
+import { MdTrendingFlat } from "react-icons/md";
+import { Loading } from "@/components/common/Loading";
+import { AlertBox } from "@/components/common/AlertBox";
 
 /***** COMPONENT-FUNCTION *****/
-const Home: FC<pageProps> = (): JSX.Element => {
+const Home: FC = (): JSX.Element => {
 	const { listings, error, isLoading } = useListings();
 
+	// image urls to render for Imageslider HERO section
 	const imgUrls = listings?.map((item: IListings) => {
 		return item.data.imgUrls?.find((image) => image[0]);
 	});
@@ -29,23 +26,11 @@ const Home: FC<pageProps> = (): JSX.Element => {
 	const recentForSale = listings?.filter((item: IListings) => item.data.type === "sale").slice(0, 3);
 
 	/*** Return statement ***/
+	if (isLoading) return <Loading />;
+	if (error) return <AlertBox text={error} />;
 	return (
 		<section>
 			<Container size="lg" mx="auto">
-				{/* <RowFlexBox align="center" style={{ margin: "2em auto", padding: "2em", borderRadius: "0.5em" }} justify="center">
-					<Card>
-						<Stack spacing={0} align="center">
-							<MdOutlineHouse size={100} />
-							Properties for sale
-						</Stack>
-					</Card>
-					<Card>
-						<Stack spacing={0} align="center">
-							<MdOutlineHouse size={100} />
-							Properties for Rent
-						</Stack>
-					</Card>
-				</RowFlexBox> */}
 				<ImageSlider imgUrls={imgUrls} />
 				<Stack my="xl" spacing={0}>
 					<Flex justify="space-between" align="center" px="md">
