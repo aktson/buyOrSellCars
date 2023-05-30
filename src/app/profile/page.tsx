@@ -1,10 +1,10 @@
 "use client";
 /***** IMPORTS *****/
-import { ListingItem } from "@/components/ListingItem";
-import { authenticate } from "@/components/authenticate";
+import { ListingItem } from "@/components/listings/ListingItem";
+import { authenticate } from "@/functions/authenticate";
 import { Card } from "@/components/common/Card";
 import { RowFlexBox } from "@/components/common/FlexBox/RowFlexBox";
-import { UpdateAvatar } from "@/components/editProfile/UpdateAvatar";
+import { UpdateAvatar } from "@/components/edit/UpdateAvatar";
 import { useAuth } from "@/context/AuthContext";
 import { useListings } from "@/context/ListingsContext";
 import { auth, db } from "@firebaseConfig";
@@ -17,6 +17,8 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import React, { FC, useState } from "react";
 import { MdAddCircle, MdCheck, MdEdit, MdFileUpload } from "react-icons/md";
+import { IListings } from "@/types/types";
+import { Listings } from "@/components/listings/Listings";
 
 /***** TYPES *****/
 interface ProfileProps {}
@@ -27,7 +29,7 @@ export const Profile: FC<ProfileProps> = (): JSX.Element => {
 	const auth = getAuth();
 	const { currentUser } = useAuth();
 	const { listings } = useListings();
-	const filterListings = listings?.filter((listing) => listing.data.userRef === auth.currentUser?.uid);
+	const filterListings = listings?.filter((listing: IListings) => listing.data.userRef === auth.currentUser?.uid);
 
 	/*** States */
 	const [changeDetails, setChangeDetails] = React.useState<boolean>(false);
@@ -120,22 +122,7 @@ export const Profile: FC<ProfileProps> = (): JSX.Element => {
 			</Stack>
 			<Stack my="xl">
 				<h2>My Listings</h2>
-
-				{filterListings?.length === 0 ? (
-					<Card width="500px">
-						<p>No listings Found</p>
-					</Card>
-				) : (
-					<Grid grow>
-						{filterListings?.map((item) => {
-							return (
-								<Grid.Col span={4} key={item.id}>
-									<ListingItem item={item} />
-								</Grid.Col>
-							);
-						})}
-					</Grid>
-				)}
+				<Listings listingsData={filterListings} />
 			</Stack>
 		</Container>
 	);

@@ -1,6 +1,6 @@
 "use client";
 /***** IMPORTS *****/
-import { Listings } from "@/components/Listings";
+import { Listings } from "@/components/listings/Listings";
 import { Container } from "@mantine/core";
 import React, { FC } from "react";
 

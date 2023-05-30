@@ -1,36 +1,41 @@
 /***** IMPORTS *****/
+import React, { FC } from "react";
 import { IListings } from "@/types/types";
 import { Container, Grid } from "@mantine/core";
-import React, { FC } from "react";
-import { ListingItem } from "./ListingItem";
-import { AlertBox } from "./common/AlertBox";
-import { Loading } from "./common/Loading";
+import { AlertBox } from "../common/AlertBox";
+import { Loading } from "../common/Loading";
 import { useListings } from "@/context/ListingsContext";
+import { ListingItem } from "./ListingItem";
+import { DocumentData } from "firebase/firestore";
 
 /***** TYPES *****/
 interface ListingsProps {
 	forSale?: boolean;
 	forRent?: boolean;
+	listingsData?: IListings[] | DocumentData | null;
 }
 
 /***** COMPONENT-FUNCTION *****/
-export const Listings: FC<ListingsProps> = ({ forSale, forRent }): JSX.Element => {
+export const Listings: FC<ListingsProps> = ({ forSale, forRent, listingsData }): JSX.Element => {
+	/*** Variables */
 	const { isLoading, error, listings } = useListings();
-	let listingToRender = [];
+	let listingToRender = [] as IListings[] | DocumentData | null;
 
 	const forSaleListings = listings?.filter((item: IListings) => item.data.type === "sale");
 	const forRentListings = listings?.filter((item: IListings) => item.data.type === "rent");
 
+	// Render listing accoding to prop passed in
 	if (forRent) listingToRender = forRentListings;
 	if (forSale) listingToRender = forSaleListings;
+	if (listingsData) listingToRender = listingsData;
 
-	if (listings?.length === 0) return <AlertBox text="No listings found" />;
+	/*** Return statement ***/
+	if (listingToRender?.length === 0) return <AlertBox text="No listings found" />;
 	if (isLoading) return <Loading />;
 	if (error) return <AlertBox text={error} />;
-	/*** Return statement ***/
 	return (
 		<Container size="lg" mx="auto" my="xl">
-			<Grid>
+			<Grid grow>
 				{listingToRender?.map((item: IListings) => {
 					return (
 						<Grid.Col span={4} key={item?.id}>

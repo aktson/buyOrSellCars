@@ -1,6 +1,6 @@
 "use client";
 /***** IMPORTS *****/
-import { authenticate } from "@/components/authenticate";
+import { authenticate } from "@/functions/authenticate";
 import { Card } from "@/components/common/Card";
 import { Container, Stepper, Stack } from "@mantine/core";
 import dynamic from "next/dynamic";

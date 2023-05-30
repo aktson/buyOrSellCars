@@ -14,7 +14,7 @@ import dynamic from "next/dynamic";
 // import { signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { auth } from "@firebaseConfig";
-import { GoogleLogin } from "@/components/GoogleLogin";
+import { GoogleLogin } from "@/components/common/GoogleLogin";
 import { ULink } from "@/components/common/ULink";
 import { getAuth, setPersistence, signInWithEmailAndPassword, browserSessionPersistence } from "firebase/auth";
 

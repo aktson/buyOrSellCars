@@ -4,15 +4,15 @@ import { capitalize } from "@/functions/functions";
 import { IListings } from "@/types/types";
 import { Paper, Text, Stack, Badge, useMantineTheme, ActionIcon, Box, Flex, Modal, LoadingOverlay } from "@mantine/core";
 import Link from "next/link";
-import { FavouriteButton } from "./common/FavouriteButton";
+import { FavouriteButton } from "../common/FavouriteButton";
 import { MdDelete, MdModeEdit } from "react-icons/md";
 import { auth, db } from "@firebaseConfig";
 import { deleteDoc, doc } from "firebase/firestore";
 import { notifications } from "@mantine/notifications";
 import { FirebaseError } from "firebase/app";
 import { useDisclosure } from "@mantine/hooks";
-import { EditProperty } from "./EditProperty";
-import { UImage } from "./common/UImage";
+import { EditProperty } from "../edit/EditProperty";
+import { UImage } from "../common/UImage";
 
 /***** TYPES *****/
 interface ListingItemProps {

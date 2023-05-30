@@ -2,13 +2,8 @@
 /***** IMPORTS *****/
 import React, { FC } from "react";
 import { useListings } from "@/context/ListingsContext";
-import { ListingItem } from "@/components/ListingItem";
 import dynamic from "next/dynamic";
-import { Container, Grid } from "@mantine/core";
-import { IListings } from "@/types/types";
-import { AlertBox } from "@/components/common/AlertBox";
-import { Loading } from "@/components/common/Loading";
-import { Listings } from "@/components/Listings";
+import { Container } from "@mantine/core";
 import { ULink } from "@/components/common/ULink";
 import { Card } from "@/components/common/Card";
 

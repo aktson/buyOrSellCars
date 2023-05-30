@@ -3,7 +3,7 @@ import React, { FC, useState } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@firebaseConfig";
 import { Accordion, Button, Divider, FileInput, Flex, LoadingOverlay, NativeSelect, Stack, Switch, TextInput, Textarea } from "@mantine/core";
-import { RowFlexBox } from "./common/FlexBox/RowFlexBox";
+import { RowFlexBox } from "../common/FlexBox/RowFlexBox";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { editPropertySchema } from "@/yup/schema";

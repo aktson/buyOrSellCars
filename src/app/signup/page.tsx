@@ -18,7 +18,7 @@ import { FcGoogle } from "react-icons/fc";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "../../../firebase.config";
 import { ULink } from "@/components/common/ULink";
-import { GoogleLogin } from "@/components/GoogleLogin";
+import { GoogleLogin } from "@/components/common/GoogleLogin";
 
 /***** TYPES *****/
 interface SignUpProps {}

@@ -1,8 +1,6 @@
 "use client";
 /***** IMPORTS *****/
-import { Listings } from "@/components/Listings";
-import { useListings } from "@/context/ListingsContext";
-import { IListings } from "@/types/types";
+import { Listings } from "@/components/listings/Listings";
 import { Container } from "@mantine/core";
 import React, { FC } from "react";
 
