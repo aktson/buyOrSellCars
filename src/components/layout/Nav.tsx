@@ -2,10 +2,8 @@
 import React, { FC, MouseEventHandler } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { getInitials } from "@/functions/functions";
-import { ActionIcon, Avatar, Button, Flex, Menu, Paper, createStyles, useMantineTheme } from "@mantine/core";
+import { ActionIcon, Avatar, Button, Flex, Menu, Paper, createStyles } from "@mantine/core";
 import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import {
 	MdAccountCircle,
@@ -15,20 +13,20 @@ import {
 	MdKeyboardArrowDown,
 	MdLogin,
 	MdLogout,
-	MdLoyalty,
 	MdOutlineAddCircleOutline,
+	MdPerson2,
 	MdSell,
 } from "react-icons/md";
 import { auth } from "@firebaseConfig";
-import path from "path";
 import { ThemeToggler } from "../common/ThemeToggler";
-import { UImage } from "../common/UImage";
+import { NavButton } from "../common/NavButton";
 
 /***** TYPES *****/
 interface NavProps {
 	closeDrawer?: MouseEventHandler<HTMLDivElement> | undefined;
 }
 
+/*** styles */
 const useStyles = createStyles((theme) => ({
 	nav: {
 		display: "flex",
@@ -38,27 +36,15 @@ const useStyles = createStyles((theme) => ({
 			gap: "1em",
 		},
 	},
-
-	activeButton: {
-		pointerEvents: "none",
-	},
 }));
 
 /***** COMPONENT-FUNCTION *****/
 export const Nav: FC<NavProps> = ({ closeDrawer }): JSX.Element => {
 	/*** Variables***/
-	const pathname = usePathname();
-	const homePath = pathname === "/";
-	const createNew = pathname === "/createNew";
-	const signinPath = pathname === "/signin";
-	const forSalePath = pathname === "/forSale";
-	const forRentPath = pathname === "/forRent";
 	const { classes } = useStyles();
 	const { currentUser } = useAuth();
 	const router = useRouter();
-
 	const username = getInitials(currentUser?.displayName || "");
-	const theme = useMantineTheme();
 
 	/**
 	 * Function that logs out user and redirects to home firstName and lastName from fullName
@@ -68,51 +54,19 @@ export const Nav: FC<NavProps> = ({ closeDrawer }): JSX.Element => {
 		auth.signOut();
 		router.push("/");
 	};
-	console.log(currentUser?.photoURL);
-	/**
-	 * Function that check if path matches then makes color to blue else to gray
-	 * @param {string} path pass string of path to match
-	 * @returns {void}
-	 */
-	function getActivePath(path: string) {
-		return pathname === path ? "indigo" : `${theme.colorScheme === "dark" ? "gray.3" : "gray"}`;
-	}
+
 	/*** Return statement ***/
 	return (
 		<nav onClick={closeDrawer} className={classes.nav}>
-			<Button
-				leftIcon={<MdHome size={20} />}
-				color={getActivePath("/")}
-				variant="subtle"
-				className={homePath ? classes.activeButton : ""}
-				size="xs">
-				<Link href="/"> Home</Link>
-			</Button>
-
-			<Button
-				size="xs"
-				leftIcon={<MdSell size={20} />}
-				color={getActivePath("/forSale")}
-				variant="subtle"
-				className={forSalePath ? classes.activeButton : ""}>
-				<Link href="/forSale">For Sale</Link>
-			</Button>
-			<Button
-				size="xs"
-				leftIcon={<MdKey size={20} />}
-				color={getActivePath("/forRent")}
-				variant="subtle"
-				className={forRentPath ? classes.activeButton : ""}>
-				<Link href="/forRent">For Rent</Link>
-			</Button>
-			<Button
-				size="xs"
-				leftIcon={<MdOutlineAddCircleOutline size={20} />}
-				color={getActivePath("/createNew")}
-				variant="subtle"
-				className={createNew ? classes.activeButton : ""}>
-				<Link href="/createNew">Create New</Link>
-			</Button>
+			<NavButton href="/" icon={<MdHome size={20} />}>
+				Home
+			</NavButton>
+			<NavButton href="/forSale" icon={<MdSell size={20} />}>
+				For Sale
+			</NavButton>
+			<NavButton href="/forRent" icon={<MdKey size={20} />}>
+				For Rent
+			</NavButton>
 
 			{currentUser && (
 				<Menu shadow="md" width={200}>
@@ -138,29 +92,36 @@ export const Nav: FC<NavProps> = ({ closeDrawer }): JSX.Element => {
 					<Menu.Dropdown>
 						<Menu.Label>{currentUser.email}</Menu.Label>
 						<Menu.Divider />
-						<Menu.Item icon={<MdAccountCircle size={18} />} color={getActivePath("/profile")}>
-							<Link href="/profile">My Profile</Link>
+						<Menu.Item>
+							<NavButton href="/profile" icon={<MdPerson2 size={18} />}>
+								My Profile
+							</NavButton>
 						</Menu.Item>
-						<Menu.Item icon={<MdFavorite size={18} />} color={getActivePath("/favourite")}>
-							<Link href="/favourite">Favourites</Link>
+						<Menu.Item>
+							<NavButton href="/favourite" icon={<MdFavorite size={18} />}>
+								Favourites
+							</NavButton>
+						</Menu.Item>
+						<Menu.Item>
+							<NavButton href="/createNew" icon={<MdOutlineAddCircleOutline size={20} />}>
+								Create New
+							</NavButton>
 						</Menu.Item>
 
 						<Menu.Divider />
-						<Menu.Item icon={<MdLogout size={18} />} onClick={handleLogout} color="dimmed">
-							Sign Out
+						<Menu.Item onClick={handleLogout}>
+							<Button variant="subtle" leftIcon={<MdLogout size={18} />} color="gray" size="xs">
+								Sign out
+							</Button>
 						</Menu.Item>
 					</Menu.Dropdown>
 				</Menu>
 			)}
 
 			{!currentUser && (
-				<Button
-					leftIcon={<MdLogin size={20} />}
-					color={getActivePath("/signin")}
-					variant="subtle"
-					className={signinPath ? classes.activeButton : ""}>
-					<Link href="/signin">Sign In</Link>
-				</Button>
+				<NavButton href="/signin" icon={<MdLogin size={20} />}>
+					Sign In
+				</NavButton>
 			)}
 			<ThemeToggler />
 		</nav>
