@@ -22,7 +22,7 @@ import { Listings } from "@/components/listings/Listings";
 interface ProfileProps {}
 
 /***** COMPONENT-FUNCTION *****/
-export const Profile: FC<ProfileProps> = (): JSX.Element => {
+const Profile: FC<ProfileProps> = (): JSX.Element => {
 	/*** Variables */
 	const { currentUser } = useAuth();
 	const { listings } = useListings();
