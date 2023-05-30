@@ -6,6 +6,7 @@ import { ColorScheme, ColorSchemeProvider, MantineProvider } from "@mantine/core
 import { MultiStepFormProvider } from "./MultiStepFormContext";
 import { myTheme } from "@/app/styles/theme";
 import { ListingsProvider } from "./ListingsContext";
+import { useLocalStorage } from "@mantine/hooks";
 
 /***** TYPES *****/
 interface AllProviderProps {
@@ -15,7 +16,11 @@ interface AllProviderProps {
 /***** COMPONENT-FUNCTION *****/
 export const AllProvider: FC<AllProviderProps> = ({ children }): JSX.Element => {
 	/***States */
-	const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
+	const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
+		key: "mantine-color-scheme",
+		defaultValue: "light",
+		getInitialValueInEffect: true,
+	});
 
 	const toggleColorScheme = (value?: ColorScheme) => setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
 
