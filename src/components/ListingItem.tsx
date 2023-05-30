@@ -3,7 +3,6 @@ import React, { FC, useState } from "react";
 import { capitalize } from "@/functions/functions";
 import { IListings } from "@/types/types";
 import { Paper, Text, Stack, Badge, useMantineTheme, ActionIcon, Box, Flex, Modal, LoadingOverlay } from "@mantine/core";
-import Image from "next/image";
 import Link from "next/link";
 import { FavouriteButton } from "./common/FavouriteButton";
 import { MdDelete, MdModeEdit } from "react-icons/md";
@@ -14,7 +13,6 @@ import { FirebaseError } from "firebase/app";
 import { useDisclosure } from "@mantine/hooks";
 import { EditProperty } from "./EditProperty";
 import { UImage } from "./common/UImage";
-import { useListings } from "@/context/ListingsContext";
 
 /***** TYPES *****/
 interface ListingItemProps {
@@ -27,7 +25,6 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	/*** Variables ***/
-	const { listings, setListings } = useListings();
 	const theme = useMantineTheme();
 	const { title, imgUrls, price, city, type, address } = item?.data!;
 	const convertedPrice = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -35,6 +32,7 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 	const [opened, { open, close }] = useDisclosure(false);
 
 	/*** Functions */
+
 	/** Deletes listing
 	 * @param {id} id of listing
 	 * @return {void}
@@ -46,15 +44,12 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 		if (confirm) {
 			try {
 				await deleteDoc(doc(db, "listings", id));
-				const filterItems = listings?.filter((item) => item.id !== id);
-				if (filterItems) setListings(filterItems);
 			} catch (error) {
+				console.log(error);
 				if (error instanceof FirebaseError) {
 					notifications.show({ message: error.message, color: "red" });
-					console.log(error);
 				} else {
 					notifications.show({ message: "An error occurred", color: "red" });
-					console.log(error);
 				}
 			} finally {
 				setIsSubmitting(false);

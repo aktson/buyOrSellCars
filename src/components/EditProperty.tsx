@@ -37,7 +37,7 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId }): JSX.Element 
 	const { listings } = useListings();
 	const router = useRouter();
 
-	const listing = listings?.find((item) => item.id === listingId) as IListings;
+	const listing = listings?.find((item: IListings) => item.id === listingId) as IListings;
 
 	const handleFormSubmit = async (data: any) => {
 		setIsSubmitting(true);

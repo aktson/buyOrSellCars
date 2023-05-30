@@ -1,12 +1,11 @@
 /***** IMPORTS *****/
 import { useMultiStepForm } from "@/context/MultiStepFormContext";
-import { IListings } from "@/types/types";
-import { Button, Divider, Flex, LoadingOverlay, Stack, Text } from "@mantine/core";
+import { Button, Flex, LoadingOverlay, Stack, Text } from "@mantine/core";
 import React, { FC, useEffect, useState } from "react";
 import { MdChevronLeft, MdPublish } from "react-icons/md";
 import { SummaryItem } from "./SummaryItem";
 import Image from "next/image";
-import { addDoc, collection, setDoc, doc } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 import { db } from "@firebaseConfig";
 import { notifications } from "@mantine/notifications";
 import { FirebaseError } from "firebase/app";
@@ -16,44 +15,47 @@ import { useRouter } from "next/navigation";
 interface SummaryProps {}
 
 /***** COMPONENT-FUNCTION *****/
-export const Summary: FC<SummaryProps> = (): JSX.Element => {
+export const Summary: FC<SummaryProps> = (): JSX.Element | null => {
 	/*** States */
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	/*** Variables */
 	const router = useRouter();
-	const { prevStep, formData, setFormData } = useMultiStepForm();
+	const { prevStep, formData, setFormData, jumpToStep } = useMultiStepForm();
 
-	const handleFormSubmit = async (event: React.FormEvent) => {
+	/** Submits formdata and adds new document to "listings"
+	 * @param {fields} <IListings> fields
+	 * @return {void}
+	 */
+	async function handleFormSubmit(event: React.FormEvent) {
 		event.preventDefault();
 		setIsSubmitting(true);
 
 		try {
-			const docRef = doc(collection(db, "listings"));
-			await setDoc(docRef, formData);
+			const docRef = await addDoc(collection(db, "listings"), formData);
 
 			if (docRef) {
 				notifications.show({ message: "Listing successfully published", color: "green" });
 			}
 
-			router.push(`/listingSpecific/${docRef.id}`);
 			setFormData(null);
+			router.push(`/listingSpecific/${docRef.id}`);
 		} catch (error) {
+			console.log(error);
 			if (error instanceof FirebaseError) {
 				notifications.show({ message: error.message, color: "red" });
-				console.log(error);
 			} else {
 				notifications.show({ message: "An error occurred", color: "red" });
-				console.log(error);
 			}
 		} finally {
 			setIsSubmitting(false);
 		}
-	};
+	}
 
 	useEffect(() => {
-		if (!formData) return router.push("/createNew");
-	}, []);
+		if (!formData) return jumpToStep(0);
+	}, [formData]);
+
 	/*** Return statement ***/
 	return (
 		<form onSubmit={handleFormSubmit}>

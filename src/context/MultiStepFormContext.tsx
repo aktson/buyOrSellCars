@@ -12,6 +12,7 @@ interface MultiStepFormContextProps {
 	setFormData: React.Dispatch<React.SetStateAction<Partial<IListings["data"]> | null>>;
 	nextStep: Function;
 	prevStep: Function;
+	jumpToStep: Function;
 	currentIndex: number;
 	formSteps: JSX.Element[];
 }
@@ -36,6 +37,7 @@ const MultiStepFormContext = createContext<MultiStepFormContextProps>({
 	setFormData: () => {},
 	nextStep: () => {},
 	prevStep: () => {},
+	jumpToStep: () => {},
 	currentIndex: 0,
 	formSteps: [],
 });
@@ -61,8 +63,12 @@ export function MultiStepFormProvider({ children }: { children: ReactNode }) {
 		});
 	}
 
+	function jumpToStep(index: number) {
+		setCurrentIndex(index);
+	}
+
 	return (
-		<MultiStepFormContext.Provider value={{ formData, setFormData, nextStep, prevStep, currentIndex, formSteps }}>
+		<MultiStepFormContext.Provider value={{ formData, setFormData, nextStep, prevStep, currentIndex, formSteps, jumpToStep }}>
 			{children}
 		</MultiStepFormContext.Provider>
 	);

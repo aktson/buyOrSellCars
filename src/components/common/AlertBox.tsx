@@ -4,17 +4,19 @@ import React, { FC } from "react";
 import { MdOutlineError } from "react-icons/md";
 
 /***** TYPES *****/
-interface ErrorProps {
-	error?: any;
+interface AlertBoxProps {
+	text?: any;
+	color?: string;
+	title?: string;
 }
 
 /***** COMPONENT-FUNCTION *****/
-export const Error: FC<ErrorProps> = ({ error }): JSX.Element => {
+export const AlertBox: FC<AlertBoxProps> = ({ text, color }): JSX.Element => {
 	/*** Return statement ***/
 	return (
 		<Container my="xl" size="xs">
-			<Alert icon={<MdOutlineError size="1rem" />} title="Error!" color="red">
-				{error}
+			<Alert icon={<MdOutlineError size="1rem" />} title="Error!" color={color}>
+				{text}
 			</Alert>
 		</Container>
 	);
