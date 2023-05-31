@@ -22,7 +22,7 @@ export const propertyInfo = yup.object().shape({
 });
 
 export const propertyFacilities = yup.object().shape({
-	price: yup.number().typeError("Must be a number").required("Price is missing"),
+	price: yup.number().typeError("Must be a number").required("Price is missing").moreThan(0, "Price can not be 0 "),
 	bathrooms: yup.number().typeError("Must be a number").required("Please add number of bathrooms"),
 	bedrooms: yup.number().typeError("Must be a number").required("Please add number of bedrooms"),
 });
@@ -33,7 +33,7 @@ export const editPropertySchema = yup.object().shape({
 	address: yup.string().required("Please add address"),
 	city: yup.string().required("Please add city"),
 	type: yup.string().required("Please select type"),
-	price: yup.number().typeError("Must be a number").required("Price is missing"),
+	price: yup.number().typeError("Must be a number").required("Price is missing").moreThan(0, "Price can not be 0 "),
 	bathrooms: yup.number().typeError("Must be a number").required("Please add number of bathrooms"),
 	bedrooms: yup.number().typeError("Must be a number").required("Please add number of bedrooms"),
 });

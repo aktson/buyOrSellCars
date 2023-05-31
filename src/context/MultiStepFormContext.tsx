@@ -25,7 +25,7 @@ const INITIAL_FORMDATA: Partial<IListings["data"]> = {
 	bathrooms: 0,
 	bedrooms: 0,
 	imgUrls: [],
-	price: "",
+	price: 0,
 	userRef: "",
 	type: "",
 	furnished: false,
