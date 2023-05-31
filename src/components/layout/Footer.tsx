@@ -4,6 +4,7 @@ import { Container, Flex, Text, useMantineTheme } from "@mantine/core";
 import React, { FC } from "react";
 import { MdCopyright } from "react-icons/md";
 import { Logo } from "../common/Logo";
+import { ULink } from "../common/ULink";
 
 /***** TYPES *****/
 interface FooterProps {}
@@ -18,9 +19,14 @@ export const Footer: FC<FooterProps> = (): JSX.Element => {
 			<Container size="lg">
 				<Flex justify="space-between" p="md">
 					<Logo component="p" />
-					<Text variant="p" size="sm">
-						<MdCopyright /> 2023 Designed & Developed by AnkSon
-					</Text>
+					<Flex>
+						<Text variant="p" size="sm">
+							<MdCopyright /> 2023 Designed & Developed by
+						</Text>
+						<ULink href="https://ankitsoni.dev/" target="_blank" rel="noreferrer">
+							ANKSON
+						</ULink>
+					</Flex>
 				</Flex>
 			</Container>
 		</footer>

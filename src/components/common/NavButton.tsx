@@ -9,6 +9,7 @@ interface NavButtonProps {
 	icon?: JSX.Element;
 	href: string;
 	children: React.ReactNode;
+	component?: any;
 }
 
 /*** Styles */
@@ -19,7 +20,7 @@ const useStyles = createStyles({
 });
 
 /***** COMPONENT-FUNCTION *****/
-export const NavButton: FC<NavButtonProps> = ({ icon, href, children }): JSX.Element => {
+export const NavButton: FC<NavButtonProps> = ({ icon, href, children, component }): JSX.Element => {
 	const pathname = usePathname();
 	const theme = useMantineTheme();
 	const { classes } = useStyles();
@@ -27,6 +28,7 @@ export const NavButton: FC<NavButtonProps> = ({ icon, href, children }): JSX.Ele
 	/*** Return statement ***/
 	return (
 		<Button
+			component={component}
 			leftIcon={icon}
 			color={pathname === href ? "indigo" : `${theme.colorScheme === "dark" ? "gray.3" : "gray"}`}
 			variant="subtle"

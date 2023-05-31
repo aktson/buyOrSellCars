@@ -93,24 +93,24 @@ export const Nav: FC<NavProps> = ({ closeDrawer }): JSX.Element => {
 						<Menu.Label>{currentUser.email}</Menu.Label>
 						<Menu.Divider />
 						<Menu.Item>
-							<NavButton href="/profile" icon={<MdPerson2 size={18} />}>
+							<NavButton href="/profile" icon={<MdPerson2 size={18} />} component="div">
 								My Profile
 							</NavButton>
 						</Menu.Item>
 						<Menu.Item>
-							<NavButton href="/favourite" icon={<MdFavorite size={18} />}>
+							<NavButton href="/favourite" icon={<MdFavorite size={18} />} component="div">
 								Favourites
 							</NavButton>
 						</Menu.Item>
 						<Menu.Item>
-							<NavButton href="/createNew" icon={<MdOutlineAddCircleOutline size={20} />}>
+							<NavButton href="/createNew" icon={<MdOutlineAddCircleOutline size={20} />} component="div">
 								Create New
 							</NavButton>
 						</Menu.Item>
 
 						<Menu.Divider />
 						<Menu.Item onClick={handleLogout}>
-							<Button variant="subtle" leftIcon={<MdLogout size={18} />} color="gray" size="xs">
+							<Button variant="subtle" leftIcon={<MdLogout size={18} />} color="gray" size="xs" component="div">
 								Sign out
 							</Button>
 						</Menu.Item>

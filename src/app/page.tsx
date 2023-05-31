@@ -38,7 +38,7 @@ const Home: FC = (): JSX.Element => {
 							See more
 						</ULink>
 					</Flex>
-					<Listings listingsData={recentForSale} />
+					<Listings listings={recentForSale} />
 				</Stack>
 				<Stack my="xl" spacing={0}>
 					<Flex justify="space-between" align="center" px="md">
@@ -49,7 +49,7 @@ const Home: FC = (): JSX.Element => {
 							See more
 						</ULink>
 					</Flex>
-					<Listings listingsData={recentForRent} />
+					<Listings listings={recentForRent} />
 				</Stack>
 			</Container>
 		</section>

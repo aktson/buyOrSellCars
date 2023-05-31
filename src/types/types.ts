@@ -18,10 +18,10 @@ export interface IListings {
 		description?: string;
 		furnished: boolean;
 		title: string;
-		price: string;
+		price: number;
 		timestamp: {
-			seconds: string;
-			nanoseconds: string;
+			seconds: number;
+			nanoseconds: number;
 		};
 		address: string;
 		userRef: string;

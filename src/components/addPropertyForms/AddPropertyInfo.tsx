@@ -8,15 +8,9 @@ import { useForm } from "react-hook-form";
 import { MdChevronRight } from "react-icons/md";
 import { RowFlexBox } from "../common/FlexBox/RowFlexBox";
 
-/***** TYPES *****/
-interface AddPropertyInfoProps {
-	nextStep?: () => void;
-}
-
 /***** COMPONENT-FUNCTION *****/
-export const AddPropertyInfo: FC<AddPropertyInfoProps> = (): JSX.Element => {
+export const AddPropertyInfo: FC = (): JSX.Element => {
 	/*** Variables */
-
 	const { formData, setFormData, nextStep } = useMultiStepForm();
 	const {
 		register,

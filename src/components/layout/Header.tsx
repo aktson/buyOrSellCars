@@ -1,8 +1,7 @@
 "use client";
 /***** IMPORTS *****/
-import { Burger, Container, Divider, Drawer, Group, ScrollArea, Stack, Text, createStyles, rem, Box } from "@mantine/core";
+import { Burger, Container, Divider, Drawer, Group, ScrollArea, Stack, createStyles, rem, Box, TextInput } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import Link from "next/link";
 import React, { FC } from "react";
 import { Nav } from "./Nav";
 import dynamic from "next/dynamic";

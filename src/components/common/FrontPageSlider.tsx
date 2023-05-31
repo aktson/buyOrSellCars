@@ -41,7 +41,7 @@ export const FrontPageSlider: FC = (): JSX.Element => {
 								maxWidth: "550px",
 								background: "linear-gradient(112.1deg, rgba(32, 38, 57, 0.6) 11.4%, rgba(63, 76, 119, 0.3) 70.2%)",
 							}}>
-							<Text size="3em" color="white">
+							<Text size="2.5em" color="white">
 								{item?.data?.title}
 							</Text>
 							<Button rightIcon={<MdTrendingFlat size={18} />}>

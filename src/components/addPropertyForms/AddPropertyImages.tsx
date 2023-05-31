@@ -1,13 +1,14 @@
 /***** IMPORTS *****/
-import React, { FC, useRef, useState } from "react";
+import React, { FC, useState } from "react";
 import Image from "next/image";
 import { useMultiStepForm } from "@/context/MultiStepFormContext";
 import { ActionIcon, Button, FileInput, Flex, Stack } from "@mantine/core";
 import { MdChevronLeft, MdChevronRight, MdDelete, MdFileUpload } from "react-icons/md";
-import { auth } from "@firebaseConfig";
+import { auth, storage } from "@firebaseConfig";
 import { notifications } from "@mantine/notifications";
 import { serverTimestamp } from "firebase/firestore";
 import { storeImageToFirebase } from "@/functions/storeImageToFirebase";
+import { ref, deleteObject } from "firebase/storage";
 
 /***** TYPES *****/
 interface AddPropertyImagesProps {
@@ -18,7 +19,6 @@ interface AddPropertyImagesProps {
 export const AddPropertyImages: FC<AddPropertyImagesProps> = ({ showButtons = true }): JSX.Element => {
 	/*** States */
 	const [images, setImages] = useState<File[]>([]);
-
 
 	/*** Variables */
 	const { prevStep, nextStep, formData, setFormData } = useMultiStepForm();
@@ -45,9 +45,28 @@ export const AddPropertyImages: FC<AddPropertyImagesProps> = ({ showButtons = tr
 		}
 	};
 
-	const handleImageDelete = (image: string) => {
-		const filterImgUrls = formData?.imgUrls?.filter((img) => img !== image);
-		setFormData({ ...formData, imgUrls: filterImgUrls });
+	const handleImageDelete = async (image: string) => {
+		let confirm = window.confirm("Are you sure you want to delete?");
+		if (confirm) {
+			try {
+				const decodedUrl = decodeURIComponent(image);
+				const imageName = decodedUrl.substring(image.lastIndexOf("/") + 1, image.lastIndexOf("?"));
+				const imgUrlToDelete = imageName.substring(imageName.lastIndexOf("/") + 1, imageName.lastIndexOf("?"));
+				const imageRef = ref(storage, `images/${imgUrlToDelete}`);
+
+				if (imageRef) {
+					await deleteObject(imageRef);
+					const filterImgUrls = formData?.imgUrls?.filter((img) => img !== image);
+					setFormData({ ...formData, imgUrls: filterImgUrls });
+					setImages([]);
+
+					notifications.show({ message: "Images deleted", color: "green" });
+				}
+			} catch (error) {
+				console.log(error);
+				notifications.show({ message: "Unknown error occured", color: "red" });
+			}
+		}
 	};
 
 	/*** Return statement ***/
@@ -61,7 +80,7 @@ export const AddPropertyImages: FC<AddPropertyImagesProps> = ({ showButtons = tr
 					value={images}
 					onChange={setImages}
 					multiple
-						clearable
+					clearable
 				/>
 				<Flex>
 					<Button
