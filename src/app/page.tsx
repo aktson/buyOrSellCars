@@ -11,16 +11,8 @@ import { MdTrendingFlat } from "react-icons/md";
 import { Loading } from "@/components/common/Loading";
 import { AlertBox } from "@/components/common/AlertBox";
 import { FrontPageSlider } from "@/components/common/FrontPageSlider";
-import { Metadata } from "next";
 import { generatePageTitle } from "@/functions/functions";
 
-export const metadata: Metadata = {
-	title: "ankit soni",
-	openGraph: {
-		title: "Acme",
-		description: "Acme is a...",
-	},
-};
 /***** COMPONENT-FUNCTION *****/
 const Home: FC = (): JSX.Element => {
 	/*** Variables */
@@ -34,35 +26,37 @@ const Home: FC = (): JSX.Element => {
 	if (isLoading) return <Loading />;
 	if (error) return <AlertBox text={error} />;
 	return (
-		<section>
+		<>
 			<title>{generatePageTitle("Home")}</title>
-			<Container size="lg" mx="auto">
-				<FrontPageSlider />
-				<Space h="xl" />
-				<Stack my="xl" spacing={0}>
-					<Flex justify="space-between" align="center" px="md">
-						<Text component="h2" size="xl">
-							Recetly added for sale
-						</Text>
-						<ULink href="/forRent" rightIcon={<MdTrendingFlat size={18} />}>
-							See more
-						</ULink>
-					</Flex>
-					<Listings listings={recentForSale} />
-				</Stack>
-				<Stack my="xl" spacing={0}>
-					<Flex justify="space-between" align="center" px="md">
-						<Text component="h2" size="xl">
-							Recetly added For rent
-						</Text>
-						<ULink href="/forSale" rightIcon={<MdTrendingFlat size={18} />}>
-							See more
-						</ULink>
-					</Flex>
-					<Listings listings={recentForRent} />
-				</Stack>
-			</Container>
-		</section>
+			<section>
+				<Container size="lg" mx="auto">
+					<FrontPageSlider />
+					<Space h="xl" />
+					<Stack my="xl" spacing={0}>
+						<Flex justify="space-between" align="center" px="md">
+							<Text component="h2" size="xl">
+								Recetly added for sale
+							</Text>
+							<ULink href="/forRent" rightIcon={<MdTrendingFlat size={18} />}>
+								See more
+							</ULink>
+						</Flex>
+						<Listings listings={recentForSale} />
+					</Stack>
+					<Stack my="xl" spacing={0}>
+						<Flex justify="space-between" align="center" px="md">
+							<Text component="h2" size="xl">
+								Recetly added For rent
+							</Text>
+							<ULink href="/forSale" rightIcon={<MdTrendingFlat size={18} />}>
+								See more
+							</ULink>
+						</Flex>
+						<Listings listings={recentForRent} />
+					</Stack>
+				</Container>
+			</section>
+		</>
 	);
 };
 
