@@ -14,6 +14,7 @@ import { Loading } from "@/components/common/Loading";
 import { AlertBox } from "@/components/common/AlertBox";
 import { authenticate } from "@/functions/authenticate";
 import dynamic from "next/dynamic";
+import { generatePageTitle } from "@/functions/functions";
 
 /***** TYPES *****/
 interface pageProps {}
@@ -74,12 +75,15 @@ const Favourite: FC<pageProps> = (): JSX.Element => {
 	if (loading) return <Loading />;
 	if (error) return <AlertBox text={error} />;
 	return (
-		<Container size="lg" my="xl">
-			<Text component="h1" size="xl" mb="md">
-				Favourites
-			</Text>
-			{favouriteListings.length === 0 ? <Card>No items in favourites</Card> : <Listings listings={favouriteListings} grow={false} />}
-		</Container>
+		<>
+			<title>{generatePageTitle("Favourites")}</title>
+			<Container size="lg" my="xl">
+				<Text component="h1" size="xl" mb="md">
+					Favourites
+				</Text>
+				{favouriteListings.length === 0 ? <Card>No items in favourites</Card> : <Listings listings={favouriteListings} grow={false} />}
+			</Container>
+		</>
 	);
 };
 

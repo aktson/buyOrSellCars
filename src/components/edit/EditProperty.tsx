@@ -49,12 +49,11 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId }): JSX.Element 
 			notifications.show({ message: "Successfully updated!", color: "green" });
 			router.push(`/listingSpecific/${listingId}`);
 		} catch (error) {
+			console.log(error);
 			if (error instanceof FirebaseError) {
 				notifications.show({ message: error.message, color: "red" });
-				console.log(error);
 			} else {
 				notifications.show({ message: "An error occurred", color: "red" });
-				console.log(error);
 			}
 		} finally {
 			setIsSubmitting(false);

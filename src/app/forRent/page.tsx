@@ -3,6 +3,7 @@
 import { BreadCrumb } from "@/components/common/BreadCrumb";
 import { Listings } from "@/components/listings/Listings";
 import { useListings } from "@/context/ListingsContext";
+import { generatePageTitle } from "@/functions/functions";
 import { IListings } from "@/types/types";
 import { Container, Flex, Select } from "@mantine/core";
 import React, { FC, useEffect, useState } from "react";
@@ -64,24 +65,27 @@ const ForRent: FC = (): JSX.Element => {
 	}, [listings]);
 	/*** Return statement ***/
 	return (
-		<Container size="lg" mx="auto" my="xl">
-			<Flex px="sm" justify="space-between" align="center">
-				<BreadCrumb items={breadcrumbItems} />
-				<Select
-					onChange={handleOnChange}
-					placeholder="Sort By"
-					value={value}
-					data={[
-						{ value: "newest", label: "Newest" },
-						{ value: "oldest", label: "Oldest" },
-						{ value: "lowestPrice", label: "Lowest Price" },
-						{ value: "highestPrice", label: "Highest Price" },
-					]}
-				/>
-			</Flex>
+		<>
+			<title>{generatePageTitle("Properties for rent")}</title>
+			<Container size="lg" mx="auto" my="xl">
+				<Flex px="sm" justify="space-between" align="center">
+					<BreadCrumb items={breadcrumbItems} />
+					<Select
+						onChange={handleOnChange}
+						placeholder="Sort By"
+						value={value}
+						data={[
+							{ value: "newest", label: "Newest" },
+							{ value: "oldest", label: "Oldest" },
+							{ value: "lowestPrice", label: "Lowest Price" },
+							{ value: "highestPrice", label: "Highest Price" },
+						]}
+					/>
+				</Flex>
 
-			<Listings listings={listingToRender} />
-		</Container>
+				<Listings listings={listingToRender} />
+			</Container>
+		</>
 	);
 };
 export default ForRent;

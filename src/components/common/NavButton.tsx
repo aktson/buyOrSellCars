@@ -27,14 +27,16 @@ export const NavButton: FC<NavButtonProps> = ({ icon, href, children, component 
 
 	/*** Return statement ***/
 	return (
-		<Button
-			component={component}
-			leftIcon={icon}
-			color={pathname === href ? "indigo" : `${theme.colorScheme === "dark" ? "gray.3" : "gray"}`}
-			variant="subtle"
-			className={pathname === href ? classes.activeButton : ""}
-			size="xs">
-			<Link href={href}> {children}</Link>
-		</Button>
+		<Link href={href} style={{ paddingTop: "0.5em", paddingBottom: "0.5em" }}>
+			<Button
+				component={component}
+				leftIcon={icon}
+				color={pathname === href ? "indigo" : `${theme.colorScheme === "dark" ? "gray.3" : "gray"}`}
+				variant="subtle"
+				className={pathname === href ? classes.activeButton : ""}
+				size="xs">
+				{children}
+			</Button>
+		</Link>
 	);
 };

@@ -17,6 +17,7 @@ import { auth } from "@firebaseConfig";
 import { GoogleLogin } from "@/components/common/GoogleLogin";
 import { ULink } from "@/components/common/ULink";
 import { getAuth, setPersistence, signInWithEmailAndPassword, browserSessionPersistence } from "firebase/auth";
+import { generatePageTitle } from "@/functions/functions";
 
 /***** COMPONENT-FUNCTION *****/
 const Signin: FC = (): JSX.Element => {
@@ -46,19 +47,17 @@ const Signin: FC = (): JSX.Element => {
 		try {
 			setPersistence(auth, browserSessionPersistence);
 			const userCredential = await signInWithEmailAndPassword(auth, email, password);
-			console.log(auth.currentUser);
 			setCurrentUser(auth.currentUser);
 
 			if (userCredential.user) {
 				router.push("/");
 			}
 		} catch (error) {
+			console.log(error);
 			if (error instanceof FirebaseError) {
 				notifications.show({ message: error.message, color: "red" });
-				console.log(error);
 			} else {
 				notifications.show({ message: "An error occurred", color: "red" });
-				console.log(error);
 			}
 		} finally {
 			setIsSubmitting(false);
@@ -72,48 +71,51 @@ const Signin: FC = (): JSX.Element => {
 
 	/*** Return statement ***/
 	return (
-		<Container my="xl">
-			<Card mx="auto" width="400px">
-				<form onSubmit={handleSubmit(handleFormSubmit)}>
-					<Stack spacing="sm">
-						<h1>Sign In</h1>
-						<TextInput
-							{...register("email")}
-							id="email"
-							label="Email"
-							placeholder="Your email address"
-							radius="md"
-							error={errors.email && (errors.email.message as string)}
-						/>
+		<>
+			<title>{generatePageTitle("Sign In")}</title>
+			<Container my="xl">
+				<Card mx="auto" width="400px">
+					<form onSubmit={handleSubmit(handleFormSubmit)}>
+						<Stack spacing="sm">
+							<h1>Sign In</h1>
+							<TextInput
+								{...register("email")}
+								id="email"
+								label="Email"
+								placeholder="Your email address"
+								radius="md"
+								error={errors.email && (errors.email.message as string)}
+							/>
 
-						<PasswordInput
-							{...register("password")}
-							label="password"
-							id="password"
-							placeholder="Your password"
-							radius="md"
-							error={errors.password && (errors.password.message as string)}
-						/>
-					</Stack>
+							<PasswordInput
+								{...register("password")}
+								label="password"
+								id="password"
+								placeholder="Your password"
+								radius="md"
+								error={errors.password && (errors.password.message as string)}
+							/>
+						</Stack>
 
-					<Flex justify="flex-end" mt="xs">
-						<ULink href="/forgotPassword">forgot Password?</ULink>
-					</Flex>
-					<Button fullWidth={true} loading={isSubmitting} mt={"md"} type="submit">
-						{isSubmitting ? "signing in" : "Sign In"}
-					</Button>
-					<Divider label="Or" labelPosition="center" my="md" />
-					<GoogleLogin />
-					<Group mt={8}>
-						<Text fz="xs" ml="auto">
-							Don&apos;t have an account?
-							<ULink href="/signup">sign up</ULink>
-						</Text>
-					</Group>
-				</form>
-				<LoadingOverlay visible={isSubmitting} overlayBlur={2} />
-			</Card>
-		</Container>
+						<Flex justify="flex-end" mt="xs">
+							<ULink href="/forgotPassword">forgot Password?</ULink>
+						</Flex>
+						<Button fullWidth={true} loading={isSubmitting} mt={"md"} type="submit">
+							{isSubmitting ? "signing in" : "Sign In"}
+						</Button>
+						<Divider label="Or" labelPosition="center" my="md" />
+						<GoogleLogin />
+						<Group mt={8}>
+							<Text fz="xs" ml="auto">
+								Don&apos;t have an account?
+								<ULink href="/signup">sign up</ULink>
+							</Text>
+						</Group>
+					</form>
+					<LoadingOverlay visible={isSubmitting} overlayBlur={2} />
+				</Card>
+			</Container>
+		</>
 	);
 };
 

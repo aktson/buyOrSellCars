@@ -11,7 +11,16 @@ import { MdTrendingFlat } from "react-icons/md";
 import { Loading } from "@/components/common/Loading";
 import { AlertBox } from "@/components/common/AlertBox";
 import { FrontPageSlider } from "@/components/common/FrontPageSlider";
+import { Metadata } from "next";
+import { generatePageTitle } from "@/functions/functions";
 
+export const metadata: Metadata = {
+	title: "ankit soni",
+	openGraph: {
+		title: "Acme",
+		description: "Acme is a...",
+	},
+};
 /***** COMPONENT-FUNCTION *****/
 const Home: FC = (): JSX.Element => {
 	/*** Variables */
@@ -26,6 +35,7 @@ const Home: FC = (): JSX.Element => {
 	if (error) return <AlertBox text={error} />;
 	return (
 		<section>
+			<title>{generatePageTitle("Home")}</title>
 			<Container size="lg" mx="auto">
 				<FrontPageSlider />
 				<Space h="xl" />

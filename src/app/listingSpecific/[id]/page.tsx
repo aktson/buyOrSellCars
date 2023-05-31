@@ -8,7 +8,7 @@ import { IListings } from "@/types/types";
 import { LoadingSkeleton } from "@/components/common/LoadingSkeleton";
 import { ShareButton } from "@/components/common/ShareButton";
 import { ImageSlider } from "@/components/common/ImageSlider";
-import { capitalize, convertPrice } from "@/functions/functions";
+import { capitalize, convertPrice, generatePageTitle } from "@/functions/functions";
 import { FavouriteButton } from "@/components/common/FavouriteButton";
 import { MdBathroom, MdOutlineBedroomChild, MdLocalParking, MdChair } from "react-icons/md";
 import Link from "next/link";
@@ -70,95 +70,98 @@ const ListingSpecific: FC<ListingSpecificProps> = ({ params }): JSX.Element => {
 			</Container>
 		);
 	return (
-		<Container size="md" mx="auto" my="xl">
-			<BreadCrumb items={breadcrumbItems} style={{ marginBottom: "0.5em" }} />
+		<>
+			<title>{generatePageTitle(`${title}`)}</title>
+			<Container size="md" mx="auto" my="xl">
+				<BreadCrumb items={breadcrumbItems} style={{ marginBottom: "0.5em" }} />
 
-			{/* image slider  */}
-			<ImageSlider imgUrls={imgUrls} />
+				{/* image slider  */}
+				<ImageSlider imgUrls={imgUrls} />
 
-			{/* favourite and share button */}
-			<Flex mt="2em" justify="space-between" align="flex-end">
-				<Badge sx={{ maxWidth: "max-content" }} size="xl">
-					{type === "rent" ? "For rent" : "For sale"}
-				</Badge>
-				<Flex gap="md">
-					<FavouriteButton style={{ padding: "1em" }} variant="outline" color="gray" text={true} listingId={id} />
-					<ShareButton />
+				{/* favourite and share button */}
+				<Flex mt="2em" justify="space-between" align="flex-end">
+					<Badge sx={{ maxWidth: "max-content" }} size="xl">
+						{type === "rent" ? "For rent" : "For sale"}
+					</Badge>
+					<Flex gap="md">
+						<FavouriteButton style={{ padding: "1em" }} variant="outline" color="gray" text={true} listingId={id} />
+						<ShareButton />
+					</Flex>
 				</Flex>
-			</Flex>
 
-			{/* title and price of property */}
-			<Stack mt="xs" spacing={0}>
-				<Text size="3rem">{title}</Text>
-				<Text>
-					{capitalize(address)}, {capitalize(city)}
-				</Text>
-			</Stack>
-			<Flex justify="space-between" mt="md">
-				<Text size="2rem">
-					NOK {convertPrice(price)},- {type === "rent" && " " + "/ month"}
-				</Text>
-				{auth?.currentUser?.uid !== userRef && (
-					<Link href={`/contact/${userRef}?listingName=${title}&listingLocation=${location}`}>
-						<Button>Contact</Button>
-					</Link>
-				)}
-			</Flex>
-			{/* facilities */}
-			<Stack mt="3em">
-				<Text size="xl" fw={500}>
-					Facilities
-				</Text>
-				<Divider />
-				<Grid style={{ maxWidth: "500px" }} gutter="xl">
-					<Grid.Col span={6}>
-						<Flex justify="space-between">
-							<Flex gap="xs">
-								<MdBathroom size={18} />
-								Bathrooms
+				{/* title and price of property */}
+				<Stack mt="xs" spacing={0}>
+					<Text size="3rem">{title}</Text>
+					<Text>
+						{capitalize(address)}, {capitalize(city)}
+					</Text>
+				</Stack>
+				<Flex justify="space-between" mt="md">
+					<Text size="2rem">
+						NOK {convertPrice(price)},- {type === "rent" && " " + "/ month"}
+					</Text>
+					{auth?.currentUser?.uid !== userRef && (
+						<Link href={`/contact/${userRef}?listingName=${title}&listingLocation=${location}`}>
+							<Button>Contact</Button>
+						</Link>
+					)}
+				</Flex>
+				{/* facilities */}
+				<Stack mt="3em">
+					<Text size="xl" fw={500}>
+						Facilities
+					</Text>
+					<Divider />
+					<Grid style={{ maxWidth: "500px" }} gutter="xl">
+						<Grid.Col span={6}>
+							<Flex justify="space-between">
+								<Flex gap="xs">
+									<MdBathroom size={18} />
+									Bathrooms
+								</Flex>
+								<Text fw="bold">{bathrooms}</Text>
 							</Flex>
-							<Text fw="bold">{bathrooms}</Text>
-						</Flex>
-					</Grid.Col>
-					<Grid.Col span={6}>
-						<Flex justify="space-between">
-							<Flex gap="xs">
-								<MdOutlineBedroomChild />
-								Bedrooms
+						</Grid.Col>
+						<Grid.Col span={6}>
+							<Flex justify="space-between">
+								<Flex gap="xs">
+									<MdOutlineBedroomChild />
+									Bedrooms
+								</Flex>
+								<Text fw="bold">{bedrooms}</Text>
 							</Flex>
-							<Text fw="bold">{bedrooms}</Text>
-						</Flex>
-					</Grid.Col>
-					<Grid.Col span={6}>
-						<Flex justify="space-between">
-							<Flex gap="xs">
-								<MdChair size={18} />
-								Furnished
+						</Grid.Col>
+						<Grid.Col span={6}>
+							<Flex justify="space-between">
+								<Flex gap="xs">
+									<MdChair size={18} />
+									Furnished
+								</Flex>
+								<Text fw="bold">{furnished ? "Yes" : "No"}</Text>
 							</Flex>
-							<Text fw="bold">{furnished ? "Yes" : "No"}</Text>
-						</Flex>
-					</Grid.Col>
-					<Grid.Col span={6}>
-						<Flex justify="space-between">
-							<Flex gap="xs">
-								<MdLocalParking size={18} />
-								Parking
+						</Grid.Col>
+						<Grid.Col span={6}>
+							<Flex justify="space-between">
+								<Flex gap="xs">
+									<MdLocalParking size={18} />
+									Parking
+								</Flex>
+								<Text fw="bold">{parking ? "Yes" : "No"}</Text>
 							</Flex>
-							<Text fw="bold">{parking ? "Yes" : "No"}</Text>
-						</Flex>
-					</Grid.Col>
-				</Grid>
-			</Stack>
+						</Grid.Col>
+					</Grid>
+				</Stack>
 
-			{/* description of property */}
-			<Stack mt="3em">
-				<Text size="xl" fw={500}>
-					About Property
-				</Text>
-				<Divider />
-				<p>{description}</p>
-			</Stack>
-		</Container>
+				{/* description of property */}
+				<Stack mt="3em">
+					<Text size="xl" fw={500}>
+						About Property
+					</Text>
+					<Divider />
+					<p>{description}</p>
+				</Stack>
+			</Container>
+		</>
 	);
 };
 

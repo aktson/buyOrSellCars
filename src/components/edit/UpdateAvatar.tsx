@@ -72,12 +72,11 @@ export const UpdateAvatar: FC = (): JSX.Element => {
 				notifications.show({ message: "Image updated", color: "green" });
 			}
 		} catch (error) {
+			console.log(error);
 			if (error instanceof FirebaseError) {
 				notifications.show({ message: error.message, color: "red" });
-				console.log(error);
 			} else {
 				notifications.show({ message: "Coud not update profile details", color: "red" });
-				console.log(error);
 			}
 		} finally {
 			setIsSubmitting(false);

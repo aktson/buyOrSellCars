@@ -50,7 +50,7 @@ export const FavouriteButton: FC<FavouriteButtonProps> = ({ text = false, style,
 				const userData = userDocSnap.data();
 				setUser(userData);
 			} else {
-				console.log("User does not exist.");
+				notifications.show({ message: "User does not exist", color: "red" });
 			}
 		} catch (error) {
 			console.log(error);

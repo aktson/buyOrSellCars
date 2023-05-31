@@ -43,7 +43,7 @@ const Header: FC<HeaderProps> = (): JSX.Element => {
 	return (
 		<Box component="header" sx={{ boxShadow: theme.colorScheme === "dark" ? `0px 2px 8px ${theme.colors.dark[5]}` : theme.shadows.xs }}>
 			<Container size="lg">
-				<Group position="apart" p="md" align="center">
+				<Group position="apart" p="sm" align="center">
 					<Logo component="h1" />
 					<Group spacing={16} className={classes.hiddenMobile}>
 						<Nav />

@@ -17,6 +17,7 @@ import React, { FC } from "react";
 import { MdCheck, MdEdit } from "react-icons/md";
 import { IListings } from "@/types/types";
 import { Listings } from "@/components/listings/Listings";
+import { generatePageTitle } from "@/functions/functions";
 
 /***** TYPES *****/
 interface ProfileProps {}
@@ -70,60 +71,60 @@ const Profile: FC<ProfileProps> = (): JSX.Element => {
 			}
 		} catch (error) {
 			console.log(error);
-
 			if (error instanceof FirebaseError) {
 				notifications.show({ message: error.message, color: "red" });
-				console.log(error);
 			} else {
 				notifications.show({ message: "Coud not update profile details", color: "red" });
-				console.log(error);
 			}
 		}
 	};
 
 	/*** Return statement ***/
 	return (
-		<Container size="lg" my="xl">
-			<Stack>
-				<h1>My Profile</h1>
-				<Card width="700px">
-					<RowFlexBox>
-						<UpdateAvatar />
-						<form onSubmit={handleSubmit} style={{ width: "100%" }}>
-							<Stack mt="xl">
-								<div style={{ position: "relative" }}>
-									<TextInput
-										id="name"
-										radius="md"
-										sx={{ width: "100%" }}
-										defaultValue={formData.name || ""}
-										onChange={handleInputChange}
-										disabled={!changeDetails}
-									/>
-									<ActionIcon
-										variant="subtle"
-										color="gray"
-										sx={{ position: "absolute", right: 4, top: 4 }}
-										onClick={() => {
-											changeDetails && handleSubmit();
-											setChangeDetails((prevState) => !prevState);
-										}}>
-										{!changeDetails ? <MdEdit size={20} /> : <MdCheck size={20} />}
-									</ActionIcon>
-								</div>
-								<TextInput id="email" radius="md" defaultValue={formData.email || ""} disabled />
-							</Stack>
-						</form>
-					</RowFlexBox>
-				</Card>
-			</Stack>
-			<Stack my="xl">
-				<Text component="h2" size="xl">
-					My Listings
-				</Text>
-				{filterListings.length === 0 ? <Card>No listings posted</Card> : <Listings listings={filterListings} grow={false} />}
-			</Stack>
-		</Container>
+		<>
+			<title>{generatePageTitle("My Profile")}</title>
+			<Container size="lg" my="xl">
+				<Stack>
+					<h1>My Profile</h1>
+					<Card width="700px">
+						<RowFlexBox>
+							<UpdateAvatar />
+							<form onSubmit={handleSubmit} style={{ width: "100%" }}>
+								<Stack mt="xl">
+									<div style={{ position: "relative" }}>
+										<TextInput
+											id="name"
+											radius="md"
+											sx={{ width: "100%" }}
+											defaultValue={formData.name || ""}
+											onChange={handleInputChange}
+											disabled={!changeDetails}
+										/>
+										<ActionIcon
+											variant="subtle"
+											color="gray"
+											sx={{ position: "absolute", right: 4, top: 4 }}
+											onClick={() => {
+												changeDetails && handleSubmit();
+												setChangeDetails((prevState) => !prevState);
+											}}>
+											{!changeDetails ? <MdEdit size={20} /> : <MdCheck size={20} />}
+										</ActionIcon>
+									</div>
+									<TextInput id="email" radius="md" defaultValue={formData.email || ""} disabled />
+								</Stack>
+							</form>
+						</RowFlexBox>
+					</Card>
+				</Stack>
+				<Stack my="xl">
+					<Text component="h2" size="xl">
+						My Listings
+					</Text>
+					{filterListings.length === 0 ? <Card>No listings posted</Card> : <Listings listings={filterListings} grow={false} />}
+				</Stack>
+			</Container>
+		</>
 	);
 };
 

@@ -6,6 +6,7 @@ import { Container, Flex, Select } from "@mantine/core";
 import React, { FC, useEffect, useState } from "react";
 import { IListings } from "@/types/types";
 import { useListings } from "@/context/ListingsContext";
+import { generatePageTitle } from "@/functions/functions";
 
 /***** COMPONENT-FUNCTION *****/
 const ForSale: FC = (): JSX.Element => {
@@ -67,23 +68,26 @@ const ForSale: FC = (): JSX.Element => {
 
 	/*** Return statement ***/
 	return (
-		<Container size="lg" mx="auto" my="xl">
-			<Flex px="sm" justify="space-between" align="center">
-				<BreadCrumb items={breadcrumbItems} />
-				<Select
-					onChange={handleOnChange}
-					placeholder="Sort By"
-					value={value}
-					data={[
-						{ value: "newest", label: "Newest" },
-						{ value: "oldest", label: "Oldest" },
-						{ value: "lowestPrice", label: "Lowest Price" },
-						{ value: "highestPrice", label: "Highest Price" },
-					]}
-				/>
-			</Flex>
-			<Listings listings={listingToRender} />
-		</Container>
+		<>
+			<title>{generatePageTitle("Properties for sale")}</title>
+			<Container size="lg" mx="auto" my="xl">
+				<Flex px="sm" justify="space-between" align="center">
+					<BreadCrumb items={breadcrumbItems} />
+					<Select
+						onChange={handleOnChange}
+						placeholder="Sort By"
+						value={value}
+						data={[
+							{ value: "newest", label: "Newest" },
+							{ value: "oldest", label: "Oldest" },
+							{ value: "lowestPrice", label: "Lowest Price" },
+							{ value: "highestPrice", label: "Highest Price" },
+						]}
+					/>
+				</Flex>
+				<Listings listings={listingToRender} />
+			</Container>
+		</>
 	);
 };
 export default ForSale;

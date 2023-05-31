@@ -55,3 +55,12 @@ export function getInitials(fullName: string) {
 export const convertPrice = (price: number | string): string => {
 	return price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || "";
 };
+
+/** Generates page title with brand name
+ * @param {string} path
+ * @return {string}
+ */
+export function generatePageTitle(path: string) {
+	const brand = "Trade";
+	return path + " " + "|" + " " + brand;
+}

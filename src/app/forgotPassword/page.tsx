@@ -1,6 +1,7 @@
 "use client";
 /***** IMPORTS *****/
 import { Card } from "@/components/common/Card";
+import { generatePageTitle } from "@/functions/functions";
 import { auth } from "@firebaseConfig";
 import { Button, Container, Stack, TextInput, LoadingOverlay } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
@@ -55,28 +56,31 @@ const ForgotPassword: FC<ForgotPasswordProps> = (): JSX.Element => {
 
 	/*** Return statement ***/
 	return (
-		<Container my="xl">
-			<Card mx="auto" width="400px">
-				<form onSubmit={handleSubmit}>
-					<Stack spacing="xl">
-						<h1>Forgot Password</h1>
-						<TextInput
-							onChange={(e) => setEmail(e.target.value)}
-							label="Email"
-							id="email"
-							placeholder="Enter Your email address"
-							radius="md"
-							value={email}
-						/>
-					</Stack>
+		<>
+			<title>{generatePageTitle("Forgot password")}</title>
+			<Container my="xl">
+				<Card mx="auto" width="400px">
+					<form onSubmit={handleSubmit}>
+						<Stack spacing="xl">
+							<h1>Forgot Password</h1>
+							<TextInput
+								onChange={(e) => setEmail(e.target.value)}
+								label="Email"
+								id="email"
+								placeholder="Enter Your email address"
+								radius="md"
+								value={email}
+							/>
+						</Stack>
 
-					<Button fullWidth={true} loading={isSubmitting} mt={"xl"} type="submit">
-						Send Reset Link
-					</Button>
-				</form>
-				<LoadingOverlay visible={isSubmitting} overlayBlur={2} />
-			</Card>
-		</Container>
+						<Button fullWidth={true} loading={isSubmitting} mt={"xl"} type="submit">
+							Send Reset Link
+						</Button>
+					</form>
+					<LoadingOverlay visible={isSubmitting} overlayBlur={2} />
+				</Card>
+			</Container>
+		</>
 	);
 };
 export default dynamic(() => Promise.resolve(ForgotPassword), { ssr: false });

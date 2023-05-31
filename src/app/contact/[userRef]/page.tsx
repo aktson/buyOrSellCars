@@ -1,4 +1,5 @@
 /***** IMPORTS *****/
+import { generatePageTitle } from "@/functions/functions";
 import React, { FC } from "react";
 
 /***** TYPES *****/
@@ -8,9 +9,13 @@ interface ContactProps {
 
 /***** COMPONENT-FUNCTION *****/
 const Contact: FC<ContactProps> = ({ params }): JSX.Element => {
-	console.log(params);
 	/*** Return statement ***/
-	return <div>Contact</div>;
+	return (
+		<>
+			<title>{generatePageTitle("Contact")}</title>
+			<div>Contact</div>
+		</>
+	);
 };
 
 export default Contact;

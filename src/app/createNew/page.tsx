@@ -6,6 +6,7 @@ import { Container, Stepper, Stack } from "@mantine/core";
 import dynamic from "next/dynamic";
 import React, { FC } from "react";
 import { useMultiStepForm } from "@/context/MultiStepFormContext";
+import { generatePageTitle } from "@/functions/functions";
 
 /***** COMPONENT-FUNCTION *****/
 const CreateNew: FC = (): JSX.Element => {
@@ -14,21 +15,24 @@ const CreateNew: FC = (): JSX.Element => {
 
 	/*** Return statement ***/
 	return (
-		<Container size="md" my="xl" mx="auto">
-			<Card width="100%" mx="auto">
-				<Stack>
-					<Stepper active={currentIndex + 1} breakpoint="sm" p="sm" size="sm" iconSize={28}>
-						<Stepper.Step label="Property Details" />
-						<Stepper.Step label="Facilities " />
-						<Stepper.Step label="Images" />
-						<Stepper.Step label="Summary" />
-					</Stepper>
-					{formSteps.map((step, index) => (
-						<React.Fragment key={step.key}>{index === currentIndex && step}</React.Fragment>
-					))}
-				</Stack>
-			</Card>
-		</Container>
+		<>
+			<title>{generatePageTitle("Create new listing")}</title>
+			<Container size="md" my="xl" mx="auto">
+				<Card width="100%" mx="auto">
+					<Stack>
+						<Stepper active={currentIndex + 1} breakpoint="sm" p="sm" size="sm" iconSize={28}>
+							<Stepper.Step label="Property Details" />
+							<Stepper.Step label="Facilities " />
+							<Stepper.Step label="Images" />
+							<Stepper.Step label="Summary" />
+						</Stepper>
+						{formSteps.map((step, index) => (
+							<React.Fragment key={step.key}>{index === currentIndex && step}</React.Fragment>
+						))}
+					</Stack>
+				</Card>
+			</Container>
+		</>
 	);
 };
 
