@@ -78,7 +78,7 @@ const Favourite: FC<pageProps> = (): JSX.Element => {
 			<Text component="h1" size="xl" mb="md">
 				Favourites
 			</Text>
-			{favouriteListings.length === 0 ? <Card>No items in favourites</Card> : <Listings listingsData={favouriteListings} grow={false} />}
+			{favouriteListings.length === 0 ? <Card>No items in favourites</Card> : <Listings listings={favouriteListings} grow={false} />}
 		</Container>
 	);
 };
