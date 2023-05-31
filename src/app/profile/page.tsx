@@ -121,7 +121,7 @@ const Profile: FC<ProfileProps> = (): JSX.Element => {
 				<Text component="h2" size="xl">
 					My Listings
 				</Text>
-				<Listings listingsData={filterListings} />
+				{filterListings.length === 0 ? <Card>No listings posted</Card> : <Listings listings={filterListings} grow={false} />}
 			</Stack>
 		</Container>
 	);
