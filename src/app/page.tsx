@@ -12,8 +12,6 @@ import { Loading } from "@/components/common/Loading";
 import { AlertBox } from "@/components/common/AlertBox";
 import { FrontPageSlider } from "@/components/common/FrontPageSlider";
 import { generatePageTitle } from "@/functions/functions";
-import { useRecoilValue } from "recoil";
-import { allListingsQuery } from "@/state/atoms/atoms";
 
 /***** COMPONENT-FUNCTION *****/
 const Home: FC = (): JSX.Element => {
