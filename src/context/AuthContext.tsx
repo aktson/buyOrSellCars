@@ -2,9 +2,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { FirebaseUser } from "@/types/types";
 import { auth } from "@firebaseConfig";
-import { MantineProvider } from "@mantine/core";
-import { myTheme } from "@/app/styles/theme";
-import { MultiStepFormProvider } from "./MultiStepFormContext";
 
 interface AuthContextProps {
 	currentUser: FirebaseUser | null;

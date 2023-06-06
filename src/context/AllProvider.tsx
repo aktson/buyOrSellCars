@@ -6,11 +6,13 @@ import { ColorScheme, ColorSchemeProvider, MantineProvider } from "@mantine/core
 import { myTheme } from "@/app/styles/theme";
 import { ListingsProvider } from "./ListingsContext";
 import { useLocalStorage } from "@mantine/hooks";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 /***** TYPES *****/
 interface AllProviderProps {
 	children: React.ReactNode;
 }
+const queryClient = new QueryClient();
 
 /***** COMPONENT-FUNCTION *****/
 export const AllProvider: FC<AllProviderProps> = ({ children }): JSX.Element => {
@@ -26,11 +28,13 @@ export const AllProvider: FC<AllProviderProps> = ({ children }): JSX.Element => 
 	/*** Return statement ***/
 	return (
 		<AuthProvider>
-			<ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-				<MantineProvider theme={{ ...myTheme, colorScheme }} withNormalizeCSS withCSSVariables withGlobalStyles>
-					<ListingsProvider>{children}</ListingsProvider>
-				</MantineProvider>
-			</ColorSchemeProvider>
+			<QueryClientProvider client={queryClient}>
+				<ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+					<MantineProvider theme={{ ...myTheme, colorScheme }} withNormalizeCSS withCSSVariables withGlobalStyles>
+						<ListingsProvider>{children}</ListingsProvider>
+					</MantineProvider>
+				</ColorSchemeProvider>
+			</QueryClientProvider>
 		</AuthProvider>
 	);
 };

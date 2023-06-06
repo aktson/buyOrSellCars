@@ -13,6 +13,7 @@ import { FirebaseError } from "firebase/app";
 import { useDisclosure } from "@mantine/hooks";
 import { EditProperty } from "../edit/EditProperty";
 import { UImage } from "../common/UImage";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 /***** TYPES *****/
 interface ListingItemProps {
@@ -25,6 +26,7 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	/*** Variables ***/
+	const queryClient = useQueryClient();
 	const theme = useMantineTheme();
 	const { title, imgUrls, price, city, type, address } = item?.data!;
 	const isAdmin = auth.currentUser?.uid === item?.data.userRef;
@@ -36,7 +38,7 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 	 * @param {id} id of listing
 	 * @return {void}
 	 */
-	const handleDeleteListing = async (id: string) => {
+	const handleDeleteListing = async (id: string): Promise<void> => {
 		setIsSubmitting(true);
 		let confirm = window.confirm("Are you sure you want to Delete?");
 
@@ -55,6 +57,14 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 			}
 		}
 	};
+	// Invalidate and refetch
+	const deleteMutation = useMutation({
+		mutationFn: (id: string) => handleDeleteListing(id),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["listings"] });
+		},
+	});
+
 	/*** Return statement ***/
 	return (
 		<Paper
@@ -84,7 +94,7 @@ export const ListingItem: FC<ListingItemProps> = ({ item }): JSX.Element => {
 				{isAdmin && (
 					<Box sx={{ position: "absolute", top: "1em", right: "1em" }}>
 						<Flex gap="xs">
-							<ActionIcon variant="light" onClick={() => handleDeleteListing(item?.id || "")}>
+							<ActionIcon variant="light" onClick={() => deleteMutation.mutate(item?.id || "")}>
 								<MdDelete size={16} />
 							</ActionIcon>
 							<ActionIcon variant="light" onClick={open}>

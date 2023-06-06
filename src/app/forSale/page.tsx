@@ -71,7 +71,7 @@ const ForSale: FC = (): JSX.Element => {
 		<>
 			<title>{generatePageTitle("Properties for sale")}</title>
 			<Container size="lg" mx="auto" my="xl">
-				<Flex px="sm" justify="space-between" align="center">
+				<Flex py="sm" justify="space-between" align="center">
 					<BreadCrumb items={breadcrumbItems} />
 					<Select
 						onChange={handleOnChange}

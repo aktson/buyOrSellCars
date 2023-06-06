@@ -10,6 +10,7 @@ import { notifications } from "@mantine/notifications";
 import { FirebaseError } from "firebase/app";
 import { useRouter } from "next/navigation";
 import { usePropertyFormData } from "@/store/propertyFormStore";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 /***** COMPONENT-FUNCTION *****/
 export const Summary: FC = (): JSX.Element | null => {
@@ -17,6 +18,7 @@ export const Summary: FC = (): JSX.Element | null => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	/*** Variables */
+	const queryClient = useQueryClient();
 	const router = useRouter();
 	const { formData, prevStep, reset } = usePropertyFormData((state) => ({
 		formData: state.formData,
@@ -52,9 +54,16 @@ export const Summary: FC = (): JSX.Element | null => {
 		}
 	}
 
+	const addMutation = useMutation({
+		mutationFn: handleFormSubmit,
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["listings"] });
+		},
+	});
+
 	/*** Return statement ***/
 	return (
-		<form onSubmit={handleFormSubmit}>
+		<form onSubmit={addMutation.mutate}>
 			<Stack spacing="sm" my="xl">
 				<Text component="h2">Property Details</Text>
 				<Flex gap="md">

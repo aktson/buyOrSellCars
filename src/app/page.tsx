@@ -17,7 +17,7 @@ import { generatePageTitle } from "@/functions/functions";
 const Home: FC = (): JSX.Element => {
 	/*** Variables */
 	const { listings, error, isLoading } = useListings();
-
+	console.log(listings);
 	// render recent listings for recommendations
 	const recentForRent = listings?.filter((item: IListings) => item.data.type === "rent").slice(0, 3);
 	const recentForSale = listings?.filter((item: IListings) => item.data.type === "sale").slice(0, 3);
@@ -33,7 +33,7 @@ const Home: FC = (): JSX.Element => {
 					<FrontPageSlider />
 					<Space h="xl" />
 					<Stack my="xl" spacing={0}>
-						<Flex justify="space-between" align="center" px="md">
+						<Flex justify="space-between" align="center" py="sm">
 							<Text component="h2" size="xl">
 								Recetly added for sale
 							</Text>
@@ -44,7 +44,7 @@ const Home: FC = (): JSX.Element => {
 						<Listings listings={recentForSale} />
 					</Stack>
 					<Stack my="xl" spacing={0}>
-						<Flex justify="space-between" align="center" px="md">
+						<Flex justify="space-between" align="center" py="sm">
 							<Text component="h2" size="xl">
 								Recetly added For rent
 							</Text>

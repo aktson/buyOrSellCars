@@ -42,25 +42,13 @@ export interface SignInFormData {
 	password: string;
 }
 
-export interface ButtonProps {
-	children?: ReactNode;
-	disabled?: boolean;
-	className?: string | string[];
-	loading?: boolean;
-	onClick?: React.MouseEventHandler<HTMLButtonElement>;
-	fullWidth?: boolean;
-	type?: "button" | "reset" | "submit";
-	leftIcon?: JSX.Element;
-	color?: string;
-	isActive?: boolean;
-	style?: object;
-	compact?: boolean;
-	variant?: "red";
-}
-export interface IUserCollection {
+export interface IUser {
 	email: string;
 	name?: string;
 	photoUrl?: string;
-	favourites?: { id: string }[];
-	timeStamp: string;
+	favourites?: string[];
+	timestamp: {
+		seconds: number;
+		nanoseconds: number;
+	};
 }
