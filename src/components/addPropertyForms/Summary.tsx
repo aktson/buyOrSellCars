@@ -1,7 +1,6 @@
 /***** IMPORTS *****/
-import { useMultiStepForm } from "@/context/MultiStepFormContext";
 import { Button, Flex, LoadingOverlay, Stack, Text } from "@mantine/core";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import { MdChevronLeft, MdPublish } from "react-icons/md";
 import { SummaryItem } from "./SummaryItem";
 import Image from "next/image";
@@ -10,18 +9,20 @@ import { db } from "@firebaseConfig";
 import { notifications } from "@mantine/notifications";
 import { FirebaseError } from "firebase/app";
 import { useRouter } from "next/navigation";
-
-/***** TYPES *****/
-interface SummaryProps {}
+import { usePropertyFormData } from "@/store/propertyFormStore";
 
 /***** COMPONENT-FUNCTION *****/
-export const Summary: FC<SummaryProps> = (): JSX.Element | null => {
+export const Summary: FC = (): JSX.Element | null => {
 	/*** States */
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	/*** Variables */
 	const router = useRouter();
-	const { prevStep, formData, setFormData, jumpToStep } = useMultiStepForm();
+	const { formData, prevStep, reset } = usePropertyFormData((state) => ({
+		formData: state.formData,
+		prevStep: state.prevStep,
+		reset: state.reset,
+	}));
 
 	/** Submits formdata and adds new document to "listings"
 	 * @param {fields} <IListings> fields
@@ -37,8 +38,7 @@ export const Summary: FC<SummaryProps> = (): JSX.Element | null => {
 			if (docRef) {
 				notifications.show({ message: "Listing successfully published", color: "green" });
 			}
-
-			setFormData(null);
+			reset();
 			router.push(`/listingSpecific/${docRef.id}`);
 		} catch (error) {
 			console.log(error);
@@ -51,10 +51,6 @@ export const Summary: FC<SummaryProps> = (): JSX.Element | null => {
 			setIsSubmitting(false);
 		}
 	}
-
-	useEffect(() => {
-		if (!formData) return jumpToStep(0);
-	}, [formData]);
 
 	/*** Return statement ***/
 	return (

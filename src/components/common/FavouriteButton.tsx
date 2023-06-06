@@ -31,9 +31,9 @@ export const FavouriteButton: FC<FavouriteButtonProps> = ({ text = false, style,
 
 	useEffect(() => {
 		if (!currentUser) return setIsFavourite(false);
-		const isFavouriteExist = user?.favourites?.some((item: { id: string }) => item?.id === listingId);
+		const isFavouriteExist = user?.favourites?.some((item: string) => item === listingId);
 		setIsFavourite(isFavouriteExist);
-	}, [listingId, user, currentUser]);
+	}, [listingId, user?.favourites, currentUser]);
 
 	/*** Functions */
 	const fetchUser = async () => {
@@ -66,24 +66,28 @@ export const FavouriteButton: FC<FavouriteButtonProps> = ({ text = false, style,
 	React.useEffect(() => {
 		fetchUser();
 	}, [currentUser]);
+
 	const handleOnClick = async () => {
 		if (!currentUser) return router.push("/signin");
+
 		try {
 			// update in firestore
 			const userRef = doc(db, "users", auth?.currentUser?.uid || "");
 			if (isFavourite) {
-				// const filteredFavourites = user?.favourites.filter((item: { id: string }) => item.id !== listingId); alternative to arrayRemove remove item from favourite
+				// const filteredFavourites = user?.favourites.filter((item: string) => item !== listingId) || []; //alternative to arrayRemove remove item from favourite
 				await updateDoc(userRef, {
-					favourites: arrayRemove({ id: listingId }),
+					favourites: arrayRemove(listingId),
 				});
 				setIsFavourite((prev: boolean) => !prev);
 			} else {
 				await updateDoc(userRef, {
-					favourites: arrayUnion({ id: listingId }),
+					favourites: arrayUnion(listingId),
 				});
 				setIsFavourite((prev: boolean) => !prev);
 			}
-		} catch (error) {}
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	/*** Return statement ***/

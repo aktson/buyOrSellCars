@@ -1,7 +1,6 @@
 /***** IMPORTS *****/
 import React, { FC, useState } from "react";
 import Image from "next/image";
-import { useMultiStepForm } from "@/context/MultiStepFormContext";
 import { ActionIcon, Button, FileInput, Flex, Stack } from "@mantine/core";
 import { MdChevronLeft, MdChevronRight, MdDelete, MdFileUpload } from "react-icons/md";
 import { auth, storage } from "@firebaseConfig";
@@ -9,6 +8,7 @@ import { notifications } from "@mantine/notifications";
 import { serverTimestamp } from "firebase/firestore";
 import { storeImageToFirebase } from "@/functions/storeImageToFirebase";
 import { ref, deleteObject } from "firebase/storage";
+import { usePropertyFormData } from "@/store/propertyFormStore";
 
 /***** TYPES *****/
 interface AddPropertyImagesProps {
@@ -21,7 +21,12 @@ export const AddPropertyImages: FC<AddPropertyImagesProps> = ({ showButtons = tr
 	const [images, setImages] = useState<File[]>([]);
 
 	/*** Variables */
-	const { prevStep, nextStep, formData, setFormData } = useMultiStepForm();
+	const { formData, nextStep, setFormData, prevStep } = usePropertyFormData((state) => ({
+		formData: state.formData,
+		nextStep: state.nextStep,
+		setFormData: state.setFormData,
+		prevStep: state.prevStep,
+	}));
 
 	/*** Functions */
 
@@ -37,9 +42,8 @@ export const AddPropertyImages: FC<AddPropertyImagesProps> = ({ showButtons = tr
 
 		if (newImgUrls) {
 			setFormData({
-				...formData,
 				imgUrls: [...(formData?.imgUrls || []), ...newImgUrls],
-				timestamp: serverTimestamp() as any,
+				timestamp: serverTimestamp(),
 				userRef: auth?.currentUser?.uid,
 			});
 		}
@@ -57,7 +61,7 @@ export const AddPropertyImages: FC<AddPropertyImagesProps> = ({ showButtons = tr
 				if (imageRef) {
 					await deleteObject(imageRef);
 					const filterImgUrls = formData?.imgUrls?.filter((img) => img !== image);
-					setFormData({ ...formData, imgUrls: filterImgUrls });
+					setFormData({ imgUrls: filterImgUrls });
 					setImages([]);
 
 					notifications.show({ message: "Images deleted", color: "green" });
@@ -75,7 +79,7 @@ export const AddPropertyImages: FC<AddPropertyImagesProps> = ({ showButtons = tr
 			<Stack>
 				<FileInput
 					label="Images"
-					placeholder="Add atleat an image or multiple images to continue"
+					placeholder="Add atleast an image or multiple images to continue"
 					accept="image/png,image/jpeg"
 					value={images}
 					onChange={setImages}

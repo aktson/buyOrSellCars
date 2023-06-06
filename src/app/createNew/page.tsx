@@ -1,17 +1,23 @@
 "use client";
 /***** IMPORTS *****/
+import React, { FC } from "react";
 import { authenticate } from "@/functions/authenticate";
 import { Card } from "@/components/common/Card";
 import { Container, Stepper, Stack } from "@mantine/core";
 import dynamic from "next/dynamic";
-import React, { FC } from "react";
-import { useMultiStepForm } from "@/context/MultiStepFormContext";
 import { generatePageTitle } from "@/functions/functions";
+import { AddPropertyFacilities } from "@/components/addPropertyForms/AddPropertyFacilities";
+import { AddPropertyImages } from "@/components/addPropertyForms/AddPropertyImages";
+import { AddPropertyInfo } from "@/components/addPropertyForms/AddPropertyInfo";
+import { Summary } from "@/components/addPropertyForms/Summary";
+import { usePropertyFormData } from "@/store/propertyFormStore";
 
 /***** COMPONENT-FUNCTION *****/
 const CreateNew: FC = (): JSX.Element => {
 	/*** Variables */
-	const { formSteps, currentIndex } = useMultiStepForm();
+
+	const currentIndex = usePropertyFormData((state) => state.currentIndex) || 0;
+	const formSteps = [<AddPropertyInfo key={1} />, <AddPropertyFacilities key={2} />, <AddPropertyImages key={3} />, <Summary key={4} />];
 
 	/*** Return statement ***/
 	return (

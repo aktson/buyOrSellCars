@@ -22,9 +22,15 @@ export const storeImageToFirebase = async (image: any) => {
 				// Observe state change events such as progress, pause, and resume
 				// Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
 				const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-				notifications.show({ message: "Upload is " + progress + "% done", color: "blue", loading: true });
+				notifications.show({
+					id: "upload",
+					message: "Upload is in progress",
+					color: "blue",
+					loading: true,
+				});
 
 				console.log("Upload is " + progress + "% done");
+
 				switch (snapshot.state) {
 					case "paused":
 						console.log("Upload is paused");
@@ -44,6 +50,8 @@ export const storeImageToFirebase = async (image: any) => {
 				// For instance, get the download URL: https://firebasestorage.googleapis.com/...
 				getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
 					resolve(downloadURL);
+
+					notifications.hide("upload");
 					notifications.show({ message: "Images successfully uploaded", color: "green" });
 				});
 			}

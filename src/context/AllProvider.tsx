@@ -1,9 +1,8 @@
 "use client";
 /***** IMPORTS *****/
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import { AuthProvider } from "./AuthContext";
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from "@mantine/core";
-import { MultiStepFormProvider } from "./MultiStepFormContext";
 import { myTheme } from "@/app/styles/theme";
 import { ListingsProvider } from "./ListingsContext";
 import { useLocalStorage } from "@mantine/hooks";
@@ -29,9 +28,7 @@ export const AllProvider: FC<AllProviderProps> = ({ children }): JSX.Element => 
 		<AuthProvider>
 			<ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
 				<MantineProvider theme={{ ...myTheme, colorScheme }} withNormalizeCSS withCSSVariables withGlobalStyles>
-					<ListingsProvider>
-						<MultiStepFormProvider>{children}</MultiStepFormProvider>
-					</ListingsProvider>
+					<ListingsProvider>{children}</ListingsProvider>
 				</MantineProvider>
 			</ColorSchemeProvider>
 		</AuthProvider>

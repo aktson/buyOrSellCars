@@ -1,5 +1,4 @@
 /***** IMPORTS *****/
-import { useMultiStepForm } from "@/context/MultiStepFormContext";
 import { propertyFacilities } from "@/yup/schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, Stack, Switch, TextInput } from "@mantine/core";
@@ -7,16 +6,23 @@ import React, { FC } from "react";
 import { useForm } from "react-hook-form";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import { RowFlexBox } from "../common/FlexBox/RowFlexBox";
+import { usePropertyFormData } from "@/store/propertyFormStore";
 
 /***** COMPONENT-FUNCTION *****/
 export const AddPropertyFacilities: FC = (): JSX.Element => {
 	/*** Variables */
-	const { prevStep, nextStep, formData, setFormData } = useMultiStepForm();
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 	} = useForm({ resolver: yupResolver(propertyFacilities) });
+
+	const { formData, nextStep, setFormData, prevStep } = usePropertyFormData((state) => ({
+		formData: state.formData,
+		nextStep: state.nextStep,
+		setFormData: state.setFormData,
+		prevStep: state.prevStep,
+	}));
 
 	/*** Functions */
 
@@ -25,8 +31,8 @@ export const AddPropertyFacilities: FC = (): JSX.Element => {
 	 * @return {void}
 	 */
 	const handleFormSubmit = async (data: any) => {
-		setFormData({ ...formData, ...data });
-		nextStep?.();
+		setFormData(data);
+		nextStep();
 	};
 
 	/*** Return statement ***/

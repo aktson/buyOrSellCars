@@ -1,6 +1,6 @@
 "use client";
 /***** IMPORTS *****/
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import { Container, Text } from "@mantine/core";
 import { auth, db } from "@firebaseConfig";
 import { notifications } from "@mantine/notifications";
@@ -25,10 +25,10 @@ const Favourite: FC<pageProps> = (): JSX.Element => {
 	const [user, setUser] = useState<DocumentData | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<boolean | string | null>(null);
+	const [favourites, setFavourites] = useState<IListings[] | []>([]);
 
 	/*** Variables */
 	const { listings } = useListings();
-	const favouriteListings = listings?.filter((item: IListings) => user?.favourites.map((favorite: any) => favorite.id).includes(item.id));
 
 	/*** Functions */
 	/** Fetches user from user collection
@@ -66,10 +66,23 @@ const Favourite: FC<pageProps> = (): JSX.Element => {
 		}
 	};
 
+	/*** Effects */
 	//fetch use to find user favourite listings
 	useEffect(() => {
 		fetchUser();
 	}, []);
+
+	const filterFavourites = useCallback(
+		(item: IListings) => user?.favourites.map((favorite: any) => favorite).includes(item.id),
+		[user?.favourites]
+	);
+
+	// By memoizing the filtering function, the component will rerender only if the user?.favourites value changes,
+	// and the filtering will be performed efficiently.
+	useEffect(() => {
+		const favouriteListings = listings?.filter(filterFavourites);
+		if (favouriteListings?.length > 0) setFavourites(favouriteListings);
+	}, [filterFavourites, listings]);
 
 	/*** Return statement ***/
 	if (loading) return <Loading />;
@@ -81,7 +94,7 @@ const Favourite: FC<pageProps> = (): JSX.Element => {
 				<Text component="h1" size="xl" mb="md">
 					Favourites
 				</Text>
-				{favouriteListings.length === 0 ? <Card>No items in favourites</Card> : <Listings listings={favouriteListings} grow={false} />}
+				{favourites?.length === 0 ? <Card>No items in favourites</Card> : <Listings listings={favourites} grow={false} />}
 			</Container>
 		</>
 	);

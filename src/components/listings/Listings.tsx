@@ -24,16 +24,14 @@ export const Listings: FC<ListingsProps> = ({ listings, grow = true }): JSX.Elem
 	if (isLoading) return <Loading />;
 	if (error) return <AlertBox text={error} />;
 	return (
-		<Container size="lg" mx="auto" my="xl">
-			<Grid grow={grow}>
-				{listings?.map((item: IListings) => {
-					return (
-						<Grid.Col span={4} key={item?.id}>
-							<ListingItem item={item} />
-						</Grid.Col>
-					);
-				})}
-			</Grid>
-		</Container>
+		<Grid grow={grow}>
+			{listings?.map((item: IListings) => {
+				return (
+					<Grid.Col span={4} key={item?.id}>
+						<ListingItem item={item} />
+					</Grid.Col>
+				);
+			})}
+		</Grid>
 	);
 };

@@ -27,7 +27,7 @@ export const propertyFacilities = yup.object().shape({
 	bedrooms: yup.number().typeError("Must be a number").required("Please add number of bedrooms"),
 });
 
-export const editPropertySchema = yup.object().shape({
+export const editPropertySchema= yup.object().shape({
 	title: yup.string().required("Title is required"),
 	description: yup.string().required("Please add decription "),
 	address: yup.string().required("Please add address"),
