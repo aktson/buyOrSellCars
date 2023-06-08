@@ -1,11 +1,9 @@
 "use client";
 /***** IMPORTS *****/
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect } from "react";
 import { Badge, Button, Container, Divider, Flex, Grid, Stack, Text } from "@mantine/core";
-import { auth, db } from "@firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
+import { auth } from "@firebaseConfig";
 import { IListings } from "@/types/types";
-import { LoadingSkeleton } from "@/components/common/LoadingSkeleton";
 import { ShareButton } from "@/components/common/ShareButton";
 import { ImageSlider } from "@/components/common/ImageSlider";
 import { capitalize, convertPrice, generatePageTitle } from "@/functions/functions";
@@ -13,6 +11,10 @@ import { FavouriteButton } from "@/components/common/FavouriteButton";
 import { MdBathroom, MdOutlineBedroomChild, MdLocalParking, MdChair } from "react-icons/md";
 import Link from "next/link";
 import { BreadCrumb } from "@/components/common/BreadCrumb";
+import { useSingleListingQuery } from "@/hooks/listingHooks/useSingleListingQuery";
+import { Loading } from "@/components/common/Loading";
+import { AlertBox } from "@/components/common/AlertBox";
+import { useRouter } from "next/navigation";
 
 /***** TYPES *****/
 interface ListingSpecificProps {
@@ -21,67 +23,40 @@ interface ListingSpecificProps {
 
 /***** COMPONENT-FUNCTION *****/
 const ListingSpecific: FC<ListingSpecificProps> = ({ params }): JSX.Element => {
-	/*** States */
-	const [listing, setListing] = useState<IListings["data"] | {}>({});
-	const [loading, setLoading] = useState<boolean>(false);
-
 	/*** Variables */
 	const { id } = params;
-	const { title, imgUrls, address, city, price, description, type, bathrooms, bedrooms, parking, furnished, userRef } =
-		listing as IListings["data"];
-
-	/*** Functions */
-	/** Fetch listing to pre fill edit form
-	 * @param {event}
-	 * @return {void}
-	 */
-	async function getListing() {
-		try {
-			const docRef = doc(db, "listings", id);
-			const docSnap = await getDoc(docRef);
-			if (docSnap.exists()) {
-				setListing(docSnap.data());
-			}
-		} catch (error) {
-			console.log(error);
-		} finally {
-			setLoading(false);
-		}
-	}
-
-	/*** Effects */
-	// fetches single listing
-	useEffect(() => {
-		getListing();
-	}, [id]);
+	const router = useRouter();
+	const { listing, isLoading, error } = useSingleListingQuery(id);
 
 	// render breadcrumbItems
 	const breadcrumbItems = [
 		{ title: "Home", href: "/" },
-		{ title: `Properties for ${type === "rent" ? "rent" : "sale"}`, href: `${type === "rent" ? "/forRent" : "/forSale"}` },
-		{ title: title, href: "#" },
+		{ title: `Properties for ${listing?.type === "rent" ? "rent" : "sale"}`, href: `${listing?.type === "rent" ? "/forRent" : "/forSale"}` },
+		{ title: listing?.title, href: "#" },
 	];
 
+	/***Effects */
+	useEffect(() => {
+		if (!id) router.push("/");
+	}, [id, router]);
+
 	/*** Return statement ***/
-	if (loading)
-		return (
-			<Container size="lg" mx="auto" my="xl">
-				<LoadingSkeleton />{" "}
-			</Container>
-		);
+	if (!listing) return <AlertBox text={"No listing found"} />;
+	if (isLoading) return <Loading />;
+	if (error) return <AlertBox text={error} />;
 	return (
 		<>
-			<title>{generatePageTitle(`${title}`)}</title>
+			<title>{generatePageTitle(`${listing?.title}`)}</title>
 			<Container size="md" mx="auto" my="xl">
 				<BreadCrumb items={breadcrumbItems} style={{ marginBottom: "0.5em" }} />
 
 				{/* image slider  */}
-				<ImageSlider imgUrls={imgUrls} />
+				<ImageSlider imgUrls={listing?.imgUrls} />
 
 				{/* favourite and share button */}
 				<Flex mt="2em" justify="space-between" align="flex-end">
 					<Badge sx={{ maxWidth: "max-content" }} size="xl">
-						{type === "rent" ? "For rent" : "For sale"}
+						{listing?.type === "rent" ? "For rent" : "For sale"}
 					</Badge>
 					<Flex gap="md">
 						<FavouriteButton style={{ padding: "1em" }} variant="outline" color="gray" text={true} listingId={id} />
@@ -91,17 +66,17 @@ const ListingSpecific: FC<ListingSpecificProps> = ({ params }): JSX.Element => {
 
 				{/* title and price of property */}
 				<Stack mt="xs" spacing={0}>
-					<Text size="3rem">{title}</Text>
+					<Text size="3rem">{listing?.title}</Text>
 					<Text>
-						{capitalize(address)}, {capitalize(city)}
+						{capitalize(listing?.address)}, {capitalize(listing?.city)}
 					</Text>
 				</Stack>
 				<Flex justify="space-between" mt="md">
 					<Text size="2rem">
-						NOK {convertPrice(price)},- {type === "rent" && " " + "/ month"}
+						NOK {convertPrice(listing?.price)},- {listing?.type === "rent" && " " + "/ month"}
 					</Text>
-					{auth?.currentUser?.uid !== userRef && (
-						<Link href={`/contact/${userRef}?listingName=${title}&listingLocation=${location}`}>
+					{auth?.currentUser?.uid !== listing?.userRef && (
+						<Link href={`/contact/${listing?.userRef}?listingName=${listing?.title}&listingLocation=${listing?.location}`}>
 							<Button>Contact</Button>
 						</Link>
 					)}
@@ -119,7 +94,7 @@ const ListingSpecific: FC<ListingSpecificProps> = ({ params }): JSX.Element => {
 									<MdBathroom size={18} />
 									Bathrooms
 								</Flex>
-								<Text fw="bold">{bathrooms}</Text>
+								<Text fw="bold">{listing?.bathrooms}</Text>
 							</Flex>
 						</Grid.Col>
 						<Grid.Col span={6}>
@@ -128,7 +103,7 @@ const ListingSpecific: FC<ListingSpecificProps> = ({ params }): JSX.Element => {
 									<MdOutlineBedroomChild />
 									Bedrooms
 								</Flex>
-								<Text fw="bold">{bedrooms}</Text>
+								<Text fw="bold">{listing?.bedrooms}</Text>
 							</Flex>
 						</Grid.Col>
 						<Grid.Col span={6}>
@@ -137,7 +112,7 @@ const ListingSpecific: FC<ListingSpecificProps> = ({ params }): JSX.Element => {
 									<MdChair size={18} />
 									Furnished
 								</Flex>
-								<Text fw="bold">{furnished ? "Yes" : "No"}</Text>
+								<Text fw="bold">{listing?.furnished ? "Yes" : "No"}</Text>
 							</Flex>
 						</Grid.Col>
 						<Grid.Col span={6}>
@@ -146,7 +121,7 @@ const ListingSpecific: FC<ListingSpecificProps> = ({ params }): JSX.Element => {
 									<MdLocalParking size={18} />
 									Parking
 								</Flex>
-								<Text fw="bold">{parking ? "Yes" : "No"}</Text>
+								<Text fw="bold">{listing?.parking ? "Yes" : "No"}</Text>
 							</Flex>
 						</Grid.Col>
 					</Grid>
@@ -158,7 +133,7 @@ const ListingSpecific: FC<ListingSpecificProps> = ({ params }): JSX.Element => {
 						About Property
 					</Text>
 					<Divider />
-					<p>{description}</p>
+					<p>{listing?.description}</p>
 				</Stack>
 			</Container>
 		</>
