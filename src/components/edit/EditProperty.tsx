@@ -45,7 +45,7 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId, closeModal }): 
 		setIsSubmitting(true);
 
 		try {
-			const updatedData = { ...data, imgUrls: [...(listing?.data?.imgUrls || []), ...newImgUrls] };
+			const updatedData = { ...data, imgUrls: [...(listing?.imgUrls || []), ...newImgUrls] };
 			await editListingMutation.mutateAsync({ listingId, updatedData });
 			notifications.show({ message: "Successfully updated!", color: "green" });
 			closeModal();
