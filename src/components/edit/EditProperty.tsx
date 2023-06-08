@@ -26,9 +26,8 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId, closeModal }): 
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [newImgUrls, setnewImgUrls] = useState<String[]>([]);
 
-	const editListingMutation = useEditListingMutation();
-
 	/*** Variables */
+	const editListingMutation = useEditListingMutation();
 	const {
 		register,
 		handleSubmit,
@@ -92,7 +91,7 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId, closeModal }): 
 									{...register("type")}
 									label="Type"
 									placeholder="Select type of Property"
-									defaultValue={listing?.data?.type || ""}
+									defaultValue={listing?.type || ""}
 									sx={{ width: "100%" }}
 									data={[
 										{ value: "rent", label: "For Rent" },
@@ -106,7 +105,7 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId, closeModal }): 
 									label="Heading"
 									placeholder="Add advertisement headline"
 									sx={{ width: "100%" }}
-									defaultValue={listing?.data?.title}
+									defaultValue={listing?.title}
 									radius="md"
 									withAsterisk
 									error={errors?.title && (errors.title.message as string)}
@@ -116,7 +115,7 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId, closeModal }): 
 								{...register("description")}
 								label="Description"
 								placeholder="Add description of property"
-								defaultValue={listing?.data?.description}
+								defaultValue={listing?.description}
 								radius="md"
 								withAsterisk
 								error={errors?.description && (errors.description.message as string)}
@@ -126,7 +125,7 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId, closeModal }): 
 									{...register("address")}
 									label="Address"
 									placeholder="Add address of property"
-									defaultValue={listing?.data?.address}
+									defaultValue={listing?.address}
 									radius="md"
 									sx={{ width: "100%" }}
 									withAsterisk
@@ -137,7 +136,7 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId, closeModal }): 
 									label="City"
 									placeholder="Add city of property"
 									radius="md"
-									defaultValue={listing?.data?.city}
+									defaultValue={listing?.city}
 									sx={{ base: { width: "100%" }, sm: { width: "50%" } }}
 									withAsterisk
 									error={errors?.city && (errors.city.message as string)}
@@ -155,14 +154,14 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId, closeModal }): 
 						<Stack spacing="sm">
 							<Stack spacing="md">
 								<RowFlexBox columnOnSmall={false}>
-									<Switch label="Parking" defaultChecked={listing?.data?.parking} {...register("parking")} />
-									<Switch label="Furnished" defaultChecked={listing?.data?.furnished} {...register("furnished")} />
+									<Switch label="Parking" defaultChecked={listing?.parking} {...register("parking")} />
+									<Switch label="Furnished" defaultChecked={listing?.furnished} {...register("furnished")} />
 								</RowFlexBox>
 								<TextInput
 									{...register("price")}
 									label="Price"
 									placeholder="Add price of property"
-									defaultValue={listing?.data?.price}
+									defaultValue={listing?.price}
 									radius="md"
 									sx={{ width: "100%" }}
 									error={errors.price && (errors.price.message as string)}
@@ -171,7 +170,7 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId, closeModal }): 
 								<RowFlexBox>
 									<TextInput
 										{...register("bedrooms")}
-										defaultValue={listing?.data?.bedrooms}
+										defaultValue={listing?.bedrooms}
 										label="Bedrooms"
 										placeholder="Add number of bedrooms"
 										radius="md"
@@ -180,7 +179,7 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId, closeModal }): 
 									/>
 									<TextInput
 										{...register("bathrooms")}
-										defaultValue={listing?.data?.bathrooms}
+										defaultValue={listing?.bathrooms}
 										label="Bathrooms"
 										placeholder="Add number of bathrooms"
 										radius="md"
