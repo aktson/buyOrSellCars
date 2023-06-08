@@ -4,12 +4,10 @@ import React, { FC, useState } from "react";
 import { MdChevronLeft, MdPublish } from "react-icons/md";
 import { SummaryItem } from "./SummaryItem";
 import Image from "next/image";
-import { addDoc, collection } from "firebase/firestore";
-import { db } from "@firebaseConfig";
 import { notifications } from "@mantine/notifications";
 import { FirebaseError } from "firebase/app";
-import { useRouter } from "next/navigation";
 import { usePropertyFormData } from "@/store/propertyFormStore";
+import { useAddListingMutation } from "@/hooks/listingHooks/useAddListingMutation";
 
 /***** COMPONENT-FUNCTION *****/
 export const Summary: FC = (): JSX.Element | null => {
@@ -17,7 +15,7 @@ export const Summary: FC = (): JSX.Element | null => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	/*** Variables */
-	const router = useRouter();
+	const addListingsMutation = useAddListingMutation();
 	const { formData, prevStep, reset } = usePropertyFormData((state) => ({
 		formData: state.formData,
 		prevStep: state.prevStep,
@@ -31,15 +29,9 @@ export const Summary: FC = (): JSX.Element | null => {
 	async function handleFormSubmit(event: React.FormEvent) {
 		event.preventDefault();
 		setIsSubmitting(true);
-
 		try {
-			const docRef = await addDoc(collection(db, "listings"), formData);
-
-			if (docRef) {
-				notifications.show({ message: "Listing successfully published", color: "green" });
-			}
+			await addListingsMutation.mutateAsync({ formData });
 			reset();
-			router.push(`/listingSpecific/${docRef.id}`);
 		} catch (error) {
 			console.log(error);
 			if (error instanceof FirebaseError) {

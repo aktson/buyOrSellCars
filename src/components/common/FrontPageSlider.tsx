@@ -1,18 +1,19 @@
 /***** IMPORTS *****/
 import React, { FC } from "react";
-import { useListings } from "@/context/ListingsContext";
 import { IListings } from "@/types/types";
 import { Carousel } from "@mantine/carousel";
 import { Button, Stack, Text } from "@mantine/core";
 import Image from "next/image";
 import Link from "next/link";
 import { MdTrendingFlat } from "react-icons/md";
+import { DocumentData } from "firebase/firestore";
+
+interface FrontPageSliderProps {
+	listings?: IListings[] | DocumentData;
+}
 
 /***** COMPONENT-FUNCTION *****/
-export const FrontPageSlider: FC = (): JSX.Element => {
-	/*** VAriables */
-	const { listings } = useListings();
-
+export const FrontPageSlider: FC<FrontPageSliderProps> = ({ listings }): JSX.Element => {
 	/*** Return statement ***/
 	return (
 		<Carousel slideSize="100%" height={500} slideGap="md">
@@ -51,7 +52,6 @@ export const FrontPageSlider: FC = (): JSX.Element => {
 					</Carousel.Slide>
 				);
 			})}
-			{/* ...slides */}
 		</Carousel>
 	);
 };

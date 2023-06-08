@@ -1,22 +1,25 @@
 "use client";
 /***** IMPORTS *****/
+import { AlertBox } from "@/components/common/AlertBox";
 import { BreadCrumb } from "@/components/common/BreadCrumb";
+import { Skeletons } from "@/components/common/Skeletons";
 import { Listings } from "@/components/listings/Listings";
-import { useListings } from "@/context/ListingsContext";
 import { generatePageTitle } from "@/functions/functions";
+import { useListingsQuery } from "@/hooks/listingHooks/useListingsQuery";
 import { IListings } from "@/types/types";
 import { Container, Flex, Select } from "@mantine/core";
+import { DocumentData } from "firebase/firestore";
 import React, { FC, useEffect, useState } from "react";
 
 /***** COMPONENT-FUNCTION *****/
 const ForRent: FC = (): JSX.Element => {
+	const { listings, error, isLoading } = useListingsQuery("rent");
 	/*** States */
 	const [value, setValue] = useState<string | null>(null);
-	const [listingToRender, setListingToRender] = useState<IListings[] | []>([]);
+	const [listingToRender, setListingToRender] = useState<IListings[] | DocumentData>(listings || []);
 
 	/*** VAriables */
-	const { listings } = useListings();
-	const listingForRent = listings?.filter((item: IListings) => item.data.type === "rent");
+
 	// render breadcrumbItems
 	const breadcrumbItems = [
 		{ title: "Home", href: "/" },
@@ -54,21 +57,24 @@ const ForRent: FC = (): JSX.Element => {
 				setListingToRender(highestPriceListings);
 				break;
 			default:
-				setListingToRender(listingForRent);
+				setListingToRender(listings || []);
 				break;
 		}
 	};
 
-	/*** Effects */
+	/*** Effects ***/
 	useEffect(() => {
-		if (listingForRent) setListingToRender(listingForRent);
+		if (listings) setListingToRender(listings);
 	}, [listings]);
+
 	/*** Return statement ***/
+	if (isLoading) return <Skeletons />;
+	if (error) return <AlertBox text={error} />;
 	return (
 		<>
 			<title>{generatePageTitle("Properties for rent")}</title>
 			<Container size="lg" mx="auto" my="xl">
-				<Flex px="sm" justify="space-between" align="center">
+				<Flex py="sm" justify="space-between" align="center">
 					<BreadCrumb items={breadcrumbItems} />
 					<Select
 						onChange={handleOnChange}

@@ -1,6 +1,6 @@
 import { IListings } from "@/types/types";
 import { create } from "zustand";
-import { persist, createJSONStorage, devtools } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 
 export const formData: Partial<IListings["data"] | null> = {
 	title: "",

@@ -5,30 +5,29 @@ import { BreadCrumb } from "@/components/common/BreadCrumb";
 import { Container, Flex, Select } from "@mantine/core";
 import React, { FC, useEffect, useState } from "react";
 import { IListings } from "@/types/types";
-import { useListings } from "@/context/ListingsContext";
 import { generatePageTitle } from "@/functions/functions";
+import { useListingsQuery } from "@/hooks/listingHooks/useListingsQuery";
+import { DocumentData } from "firebase/firestore";
+import { Skeletons } from "@/components/common/Skeletons";
+import { AlertBox } from "@/components/common/AlertBox";
+import { useQueryClient } from "@tanstack/react-query";
 
 /***** COMPONENT-FUNCTION *****/
 const ForSale: FC = (): JSX.Element => {
+	//fetch listings
+	const { listings, error, isLoading } = useListingsQuery("sale");
+	const queryClient = useQueryClient();
+
 	/*** States */
 	const [value, setValue] = useState<string | null>(null);
-	const [listingToRender, setListingToRender] = useState<IListings[] | []>([]);
+	const [listingToRender, setListingToRender] = useState<IListings[] | DocumentData | []>([]);
 
+	/*** Variables */
 	// render breadcrumbItems
 	const breadcrumbItems = [
 		{ title: "Home", href: "/" },
 		{ title: "Properties for sale", href: "/forSale" },
 	];
-
-	/*** VAriables */
-	const { listings } = useListings();
-	const listingForSale = listings?.filter((item: IListings) => item.data.type === "sale");
-	// render breadcrumbItems
-
-	/*** Effects */
-	useEffect(() => {
-		if (listingForSale) setListingToRender(listingForSale);
-	}, [listings]);
 
 	/*** Functions ***/
 
@@ -61,17 +60,25 @@ const ForSale: FC = (): JSX.Element => {
 				setListingToRender(highestPriceListings);
 				break;
 			default:
-				setListingToRender(listingForSale);
+				setListingToRender(listings || []);
 				break;
 		}
 	};
 
+	/*** Effects ***/
+	useEffect(() => {
+		if (listings) setListingToRender(listings);
+	}, [listings]);
+
 	/*** Return statement ***/
+	if (isLoading) return <Skeletons />;
+	if (error) return <AlertBox text={error} />;
+
 	return (
 		<>
 			<title>{generatePageTitle("Properties for sale")}</title>
 			<Container size="lg" mx="auto" my="xl">
-				<Flex px="sm" justify="space-between" align="center">
+				<Flex py="sm" justify="space-between" align="center">
 					<BreadCrumb items={breadcrumbItems} />
 					<Select
 						onChange={handleOnChange}
