@@ -5,7 +5,6 @@ import { Card } from "@/components/common/Card";
 import { RowFlexBox } from "@/components/common/FlexBox/RowFlexBox";
 import { UpdateAvatar } from "@/components/edit/UpdateAvatar";
 import { useAuth } from "@/context/AuthContext";
-import { useListings } from "@/context/ListingsContext";
 import { auth, db } from "@firebaseConfig";
 import { ActionIcon, Container, Stack, TextInput, Text } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
@@ -15,9 +14,10 @@ import { doc, updateDoc } from "firebase/firestore";
 import dynamic from "next/dynamic";
 import React, { FC } from "react";
 import { MdCheck, MdEdit } from "react-icons/md";
-import { IListings } from "@/types/types";
 import { Listings } from "@/components/listings/Listings";
 import { generatePageTitle } from "@/functions/functions";
+import { useListingsQuery } from "@/hooks/listingHooks/useListingsQuery";
+import { IListings } from "@/types/types";
 
 /***** TYPES *****/
 interface ProfileProps {}
@@ -26,7 +26,8 @@ interface ProfileProps {}
 const Profile: FC<ProfileProps> = (): JSX.Element => {
 	/*** Variables */
 	const { currentUser } = useAuth();
-	const { listings } = useListings();
+	const { listings } = useListingsQuery();
+
 	const filterListings = listings?.filter((listing: IListings) => listing.data.userRef === auth.currentUser?.uid);
 
 	/*** States */
@@ -121,7 +122,7 @@ const Profile: FC<ProfileProps> = (): JSX.Element => {
 					<Text component="h2" size="xl">
 						My Listings
 					</Text>
-					{filterListings.length === 0 ? <Card>No listings posted</Card> : <Listings listings={filterListings} grow={false} />}
+					{filterListings?.length === 0 ? <Card>No listings posted</Card> : <Listings listings={filterListings} grow={false} />}
 				</Stack>
 			</Container>
 		</>

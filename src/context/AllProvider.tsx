@@ -31,7 +31,7 @@ export const AllProvider: FC<AllProviderProps> = ({ children }): JSX.Element => 
 			<QueryClientProvider client={queryClient}>
 				<ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
 					<MantineProvider theme={{ ...myTheme, colorScheme }} withNormalizeCSS withCSSVariables withGlobalStyles>
-						<ListingsProvider>{children}</ListingsProvider>
+						{children}
 					</MantineProvider>
 				</ColorSchemeProvider>
 			</QueryClientProvider>

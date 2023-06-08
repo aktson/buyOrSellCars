@@ -1,31 +1,32 @@
 /***** IMPORTS *****/
 import React, { FC, useState } from "react";
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "@firebaseConfig";
 import { Accordion, Button, Divider, FileInput, Flex, LoadingOverlay, NativeSelect, Stack, Switch, TextInput, Textarea } from "@mantine/core";
 import { RowFlexBox } from "../common/FlexBox/RowFlexBox";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { editPropertySchema } from "@/yup/schema";
-import { useListings } from "@/context/ListingsContext";
-import { IListings } from "@/types/types";
 import { MdFileUpload } from "react-icons/md";
 import { notifications } from "@mantine/notifications";
 import { FirebaseError } from "firebase/app";
-import { useRouter } from "next/navigation";
 import { storeImageToFirebase } from "@/functions/storeImageToFirebase";
+import { useEditListingMutation } from "@/hooks/listingHooks/useEditListingMutation";
+import { useSingleListingQuery } from "@/hooks/listingHooks/useSingleListingQuery";
+import { AlertBox } from "../common/AlertBox";
 
 /***** TYPES *****/
 interface EditPropertyProps {
 	listingId: string;
+	closeModal: () => void;
 }
 
 /***** COMPONENT-FUNCTION *****/
-export const EditProperty: FC<EditPropertyProps> = ({ listingId }): JSX.Element => {
+export const EditProperty: FC<EditPropertyProps> = ({ listingId, closeModal }): JSX.Element => {
 	/*** States */
 	const [images, setImages] = useState<File[]>([]);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [newImgUrls, setnewImgUrls] = useState<String[]>([]);
+
+	const editListingMutation = useEditListingMutation();
 
 	/*** Variables */
 	const {
@@ -33,21 +34,22 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId }): JSX.Element 
 		handleSubmit,
 		formState: { errors },
 	} = useForm({ resolver: yupResolver(editPropertySchema) });
+	const { listing, isLoading, error } = useSingleListingQuery(listingId);
 
-	const { listings } = useListings();
-	const router = useRouter();
+	/*** Functions */
 
-	const listing = listings?.find((item: IListings) => item.id === listingId) as IListings;
-
+	/** updates listing
+	 * @param {data} <IListings> data of listing
+	 * @return {void}
+	 */
 	const handleFormSubmit = async (data: any) => {
 		setIsSubmitting(true);
 
 		try {
-			const docRef = await doc(db, "listings", listingId);
 			const updatedData = { ...data, imgUrls: [...(listing?.data?.imgUrls || []), ...newImgUrls] };
-			await updateDoc(docRef, updatedData);
+			await editListingMutation.mutateAsync({ listingId, updatedData });
 			notifications.show({ message: "Successfully updated!", color: "green" });
-			router.push(`/listingSpecific/${listingId}`);
+			closeModal();
 		} catch (error) {
 			console.log(error);
 			if (error instanceof FirebaseError) {
@@ -74,6 +76,7 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId }): JSX.Element 
 	};
 
 	if (!listingId) return <p>No Listing found to update!</p>;
+	if (error) return <AlertBox text={error} />;
 	/*** Return statement ***/
 	return (
 		<form onSubmit={handleSubmit(handleFormSubmit)}>
@@ -89,7 +92,7 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId }): JSX.Element 
 									{...register("type")}
 									label="Type"
 									placeholder="Select type of Property"
-									defaultValue={listing?.data.type || ""}
+									defaultValue={listing?.data?.type || ""}
 									sx={{ width: "100%" }}
 									data={[
 										{ value: "rent", label: "For Rent" },
@@ -103,7 +106,7 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId }): JSX.Element 
 									label="Heading"
 									placeholder="Add advertisement headline"
 									sx={{ width: "100%" }}
-									defaultValue={listing?.data.title}
+									defaultValue={listing?.data?.title}
 									radius="md"
 									withAsterisk
 									error={errors?.title && (errors.title.message as string)}
@@ -113,7 +116,7 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId }): JSX.Element 
 								{...register("description")}
 								label="Description"
 								placeholder="Add description of property"
-								defaultValue={listing?.data.description}
+								defaultValue={listing?.data?.description}
 								radius="md"
 								withAsterisk
 								error={errors?.description && (errors.description.message as string)}
@@ -123,7 +126,7 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId }): JSX.Element 
 									{...register("address")}
 									label="Address"
 									placeholder="Add address of property"
-									defaultValue={listing?.data.address}
+									defaultValue={listing?.data?.address}
 									radius="md"
 									sx={{ width: "100%" }}
 									withAsterisk
@@ -134,7 +137,7 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId }): JSX.Element 
 									label="City"
 									placeholder="Add city of property"
 									radius="md"
-									defaultValue={listing?.data.city}
+									defaultValue={listing?.data?.city}
 									sx={{ base: { width: "100%" }, sm: { width: "50%" } }}
 									withAsterisk
 									error={errors?.city && (errors.city.message as string)}
@@ -219,7 +222,7 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId }): JSX.Element 
 					Submit
 				</Button>
 			</Flex>
-			<LoadingOverlay visible={isSubmitting} overlayBlur={1} />
+			<LoadingOverlay visible={isSubmitting || isLoading} overlayBlur={1} />
 		</form>
 	);
 };

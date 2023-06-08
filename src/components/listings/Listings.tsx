@@ -27,7 +27,7 @@ export const Listings: FC<ListingsProps> = ({ listings, grow = true }): JSX.Elem
 		<Grid grow={grow}>
 			{listings?.map((item: IListings) => {
 				return (
-					<Grid.Col span={4} key={item?.id}>
+					<Grid.Col md={6} lg={4} key={item?.id} mx="auto">
 						<ListingItem item={item} />
 					</Grid.Col>
 				);

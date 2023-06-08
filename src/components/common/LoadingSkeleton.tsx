@@ -9,9 +9,9 @@ interface LoadingSkeletonProps {}
 export const LoadingSkeleton: FC<LoadingSkeletonProps> = (): JSX.Element => {
 	/*** Return statement ***/
 	return (
-		<Paper shadow="xs" sx={{ maxWidth: "350px" }}>
-			<Skeleton height={200} mb="xl" />
-			<Stack p="xl">
+		<Paper shadow="xs" sx={{ maxWidth: "350px" }} mx="auto">
+			<Skeleton height={200} mb="sm" />
+			<Stack p="lg">
 				<Skeleton height={8} radius="xl" />
 				<Skeleton height={8} mt={6} radius="xl" />
 				<Skeleton height={8} mt={6} width="70%" radius="xl" />

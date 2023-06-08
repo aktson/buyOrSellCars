@@ -85,24 +85,24 @@
 
 // export default ListingsContext;
 
-import { ReactNode, createContext, useContext, useEffect } from "react";
+import { createContext, useContext, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { collection, query, onSnapshot, getDocs, DocumentData, orderBy } from "firebase/firestore";
 import { db } from "@firebaseConfig";
 import { IListings } from "@/types/types";
 import { FirebaseError } from "firebase/app";
 
-interface ListingsContextProps {
-	listings?: IListings[] | null | DocumentData;
-	isLoading: boolean;
-	error: string | null | FirebaseError | unknown;
-}
-
 const initialState = {
 	listings: null,
 	isLoading: false,
 	error: null,
 };
+
+interface ListingsContextProps {
+	listings?: IListings[] | null | DocumentData;
+	isLoading: boolean;
+	error: string | null | FirebaseError | unknown;
+}
 
 const ListingsContext = createContext<ListingsContextProps>(initialState);
 
@@ -126,20 +126,22 @@ const useListingsQuery = () => {
 	const queryClient = useQueryClient();
 	const { data: listings, isLoading, error } = useQuery(["listings"], fetchListings);
 
-	useEffect(() => {
-		const unsubscribe = onSnapshot(collection(db, "listings"), (snapshot) => {
-			const listingsData = snapshot.docs.map((doc) => ({
-				id: doc.id,
-				data: doc.data(),
-			}));
+	// useEffect(() => {
+	// 	const listingsRef = collection(db, "listings");
+	// 	const listingsQuery = query(listingsRef, orderBy("timestamp", "desc"));
 
-			queryClient.setQueryData(["listings"], listingsData);
-		});
+	// 	const unsubscribe = onSnapshot(listingsQuery, (snapshot) => {
+	// 		const listings = snapshot.docs.map((doc) => ({
+	// 			id: doc.id,
+	// 			data: doc.data(),
+	// 		}));
+	// 		queryClient.setQueryData(["listings"], listings);
+	// 	});
 
-		return () => {
-			unsubscribe();
-		};
-	}, []);
+	// 	return () => {
+	// 		unsubscribe();
+	// 	};
+	// }, []);
 
 	return {
 		listings,
@@ -148,10 +150,12 @@ const useListingsQuery = () => {
 	};
 };
 
-export const ListingsProvider = ({ children }: { children: ReactNode }) => {
+const ListingsProvider = ({ children }: { children: React.ReactNode }) => {
 	const { listings, isLoading, error } = useListingsQuery();
 
 	return <ListingsContext.Provider value={{ listings, isLoading, error }}>{children}</ListingsContext.Provider>;
 };
 
-export const useListings = () => useContext(ListingsContext);
+const useListings = () => useContext(ListingsContext);
+
+export { ListingsProvider, useListings };
