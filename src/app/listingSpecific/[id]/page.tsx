@@ -3,7 +3,6 @@
 import React, { FC, useEffect } from "react";
 import { Badge, Button, Container, Divider, Flex, Grid, Stack, Text } from "@mantine/core";
 import { auth } from "@firebaseConfig";
-import { IListings } from "@/types/types";
 import { ShareButton } from "@/components/common/ShareButton";
 import { ImageSlider } from "@/components/common/ImageSlider";
 import { capitalize, convertPrice, generatePageTitle } from "@/functions/functions";

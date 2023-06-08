@@ -12,6 +12,7 @@ import { storeImageToFirebase } from "@/functions/storeImageToFirebase";
 import { useEditListingMutation } from "@/hooks/listingHooks/useEditListingMutation";
 import { useSingleListingQuery } from "@/hooks/listingHooks/useSingleListingQuery";
 import { AlertBox } from "../common/AlertBox";
+import { Loading } from "../common/Loading";
 
 /***** TYPES *****/
 interface EditPropertyProps {
@@ -20,7 +21,7 @@ interface EditPropertyProps {
 }
 
 /***** COMPONENT-FUNCTION *****/
-export const EditProperty: FC<EditPropertyProps> = ({ listingId, closeModal }): JSX.Element => {
+export const EditProperty: FC<EditPropertyProps> = ({ listingId, closeModal }): JSX.Element | null => {
 	/*** States */
 	const [images, setImages] = useState<File[]>([]);
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -73,7 +74,8 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId, closeModal }): 
 
 		setnewImgUrls(newImgUrls);
 	};
-
+	if (!listing) return null;
+	if (isLoading) return <Loading />;
 	if (!listingId) return <p>No Listing found to update!</p>;
 	if (error) return <AlertBox text={error} />;
 	/*** Return statement ***/
@@ -91,7 +93,7 @@ export const EditProperty: FC<EditPropertyProps> = ({ listingId, closeModal }): 
 									{...register("type")}
 									label="Type"
 									placeholder="Select type of Property"
-									defaultValue={listing?.type || ""}
+									defaultValue={listing?.type}
 									sx={{ width: "100%" }}
 									data={[
 										{ value: "rent", label: "For Rent" },

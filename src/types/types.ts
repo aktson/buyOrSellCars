@@ -7,6 +7,7 @@ export interface FirebaseUser {
 	phoneNumber?: string | null;
 	photoURL?: string | null;
 	providerId: string;
+	favourites?: [];
 }
 export interface IListings {
 	id: string;

@@ -6,10 +6,11 @@ import { notifications } from "@mantine/notifications";
 import { FirebaseError } from "firebase/app";
 import { updateProfile } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { MdCancel, MdEdit, MdFileUpload } from "react-icons/md";
 import ImageIcon from "public/addImage.png";
 import { UImage } from "../common/UImage";
+import { useAuth } from "@/context/AuthContext";
 
 /***** Styles *****/
 const useStyles = createStyles((theme) => ({
@@ -41,12 +42,17 @@ export const UpdateAvatar: FC = (): JSX.Element => {
 	/*** States */
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [image, setImage] = useState<File | null>(null);
-	const [photoUrl, setPhotoUrl] = useState(auth.currentUser?.photoURL);
+	const [photoUrl, setPhotoUrl] = useState<string | "">("");
 
 	/*** Variables */
 	const { classes } = useStyles();
+	const { currentUser, setCurrentUser } = useAuth();
 	const file = image;
 	const imageName = file?.name || null;
+
+	useEffect(() => {
+		if (currentUser) setPhotoUrl(currentUser.photoURL || "");
+	}, [currentUser]);
 
 	/*** functions */
 	const handleImageUpload = async () => {
@@ -54,7 +60,6 @@ export const UpdateAvatar: FC = (): JSX.Element => {
 		setIsSubmitting(true);
 		try {
 			const imgUrl = (await storeImageToFirebase(image)) as string;
-
 			// update photoUrl in firebase
 			if (imgUrl) {
 				await updateProfile(auth?.currentUser as any, {
@@ -62,6 +67,12 @@ export const UpdateAvatar: FC = (): JSX.Element => {
 				});
 
 				setPhotoUrl(imgUrl);
+				setCurrentUser((prevUser) => {
+					if (prevUser) {
+						return { ...prevUser, photoURL: imgUrl };
+					}
+					return null;
+				});
 				setImage(null);
 				// update in firestore
 				const userRef = doc(db, "users", auth?.currentUser?.uid || "");
